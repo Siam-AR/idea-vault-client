@@ -16,7 +16,7 @@ import {
 import { FcGoogle } from "react-icons/fc";
 import NextLink from "next/link";
 import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -26,30 +26,7 @@ export default function LoginPage() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  // Initialize Google Sign-In
-  useEffect(() => {
-    // Load Google Sign-In script
-    const script = document.createElement("script");
-    script.src = "https://accounts.google.com/gsi/client";
-    script.async = true;
-    script.defer = true;
-    document.body.appendChild(script);
-
-    script.onload = () => {
-      if (window.google && window.google.accounts) {
-        window.google.accounts.id.initialize({
-          client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || "YOUR_GOOGLE_CLIENT_ID",
-          callback: handleGoogleResponse,
-        });
-      }
-    };
-
-    return () => {
-      document.body.removeChild(script);
-    };
-  }, []);
-
-  const handleGoogleResponse = async (response) => {
+  const handleGoogleResponse = useCallback(async (response) => {
     try {
       setError("");
       setIsLoading(true);
@@ -86,7 +63,32 @@ export default function LoginPage() {
       showToast(errorMsg, "error", 4000);
       setIsLoading(false);
     }
-  };
+  }, [googleLogin, showToast, router]);
+
+  // Initialize Google Sign-In
+  useEffect(() => {
+    // Load Google Sign-In script
+    const script = document.createElement("script");
+    script.src = "https://accounts.google.com/gsi/client";
+    script.async = true;
+    script.defer = true;
+    document.body.appendChild(script);
+
+    script.onload = () => {
+      if (window.google && window.google.accounts) {
+        window.google.accounts.id.initialize({
+          client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || "YOUR_GOOGLE_CLIENT_ID",
+          callback: handleGoogleResponse,
+        });
+      }
+    };
+
+    return () => {
+      if (document.body.contains(script)) {
+        document.body.removeChild(script);
+      }
+    };
+  }, [handleGoogleResponse]);
 
   const onSubmit = async (e) => {
     e.preventDefault();
