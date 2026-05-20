@@ -5,6 +5,7 @@ import {
   Avatar,
   Button,
   Dropdown,
+  Label,
   DropdownTrigger,
   DropdownMenu,
   DropdownItem,
@@ -12,7 +13,7 @@ import {
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useState } from "react";
-import { MdDarkMode, MdLightMode } from "react-icons/md";
+import { MdDarkMode, MdLightMode, MdLogout, MdPerson } from "react-icons/md";
 
 const Navbar = () => {
   const { user, logout, isAuthenticated } = useAuth();
@@ -44,7 +45,7 @@ const Navbar = () => {
       <nav className="flex items-center justify-between max-w-7xl mx-auto px-4">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 font-bold text-2xl">
-          <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center text-white">
+          <div className="w-10 h-10 bg-linear-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center text-white">
             V
           </div>
           <span>IdeaVault</span>
@@ -108,14 +109,40 @@ const Navbar = () => {
                   <span className="hidden sm:inline font-medium">{user?.name}</span>
                 </div>
               </DropdownTrigger>
-              <DropdownMenu aria-label="User Actions" className={isDarkMode ? "bg-slate-800 text-white" : ""}>
-                <DropdownItem key="profile" as={Link} href="/profile">
-                  Profile
-                </DropdownItem>
-                <DropdownItem key="logout" color="danger" onClick={handleSignOut}>
-                  Logout
-                </DropdownItem>
-              </DropdownMenu>
+              <Dropdown.Popover>
+                <div className="px-3 pt-3 pb-1">
+                  <div className="flex items-center gap-2">
+                    <Avatar size="sm">
+                      <Avatar.Image
+                        referrerPolicy="no-referrer"
+                        alt={user?.name || "User"}
+                        src={user?.image}
+                      />
+                      <Avatar.Fallback delayMs={600}>
+                        {user?.name?.charAt(0)?.toUpperCase() || "U"}
+                      </Avatar.Fallback>
+                    </Avatar>
+                    <div className="flex flex-col gap-0">
+                      <p className="text-sm leading-5 font-medium">{user?.name}</p>
+                      <p className="text-xs leading-none text-muted">{user?.email}</p>
+                    </div>
+                  </div>
+                </div>
+                <Dropdown.Menu aria-label="User Actions">
+                  <DropdownItem id="profile" textValue="Profile" as={Link} href="/profile">
+                    <div className="flex w-full items-center justify-between gap-2">
+                      <Label>Profile</Label>
+                      <MdPerson className="size-3.5 text-muted" />
+                    </div>
+                  </DropdownItem>
+                  <DropdownItem id="logout" textValue="Logout" variant="danger" onClick={handleSignOut}>
+                    <div className="flex w-full items-center justify-between gap-2">
+                      <Label>Logout</Label>
+                      <MdLogout className="size-3.5 text-danger" />
+                    </div>
+                  </DropdownItem>
+                </Dropdown.Menu>
+              </Dropdown.Popover>
             </Dropdown>
           ) : (
             <div className="flex items-center gap-2">
@@ -125,7 +152,7 @@ const Navbar = () => {
                 </Button>
               </Link>
               <Link href="/register">
-                <Button size="sm" className="bg-gradient-to-r from-purple-500 to-pink-500 text-white">
+                <Button size="sm" className="bg-linear-to-r from-purple-500 to-pink-500 text-white">
                   Register
                 </Button>
               </Link>
