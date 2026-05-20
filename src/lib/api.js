@@ -19,8 +19,20 @@ export const apiCall = async (endpoint, options = {}) => {
   });
 
   if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.message || "API request failed");
+    const contentType = response.headers.get("content-type") || "";
+    let message = `Request failed with status ${response.status}`;
+
+    if (contentType.includes("application/json")) {
+      const error = await response.json();
+      message = error.message || message;
+    } else {
+      const errorText = await response.text();
+      if (errorText) {
+        message = errorText;
+      }
+    }
+
+    throw new Error(message);
   }
 
   return response.json();
