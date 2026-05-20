@@ -1,0 +1,32 @@
+{
+  "name": "idea-vault-client",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "@better-auth/mongo-adapter": "^1.6.11",
+    "@heroui/react": "^3.0.5",
+    "@heroui/styles": "^3.0.5",
+    "better-auth": "^1.6.11",
+    "cors": "^2.8.6",
+    "jose-cjs": "^6.2.3",
+    "mongodb": "^7.2.0",
+    "next": "16.2.6",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "react-icons": "^5.6.0"
+  },
+  "devDependencies": {
+    "@gravity-ui/icons": "^2.18.0",
+    "@tailwindcss/postcss": "^4",
+    "babel-plugin-react-compiler": "1.0.0",
+    "eslint": "^9",
+    "eslint-config-next": "16.2.6",
+    "tailwindcss": "^4"
+  }
+}
