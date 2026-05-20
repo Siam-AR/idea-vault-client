@@ -16,15 +16,77 @@ import {
 import { FcGoogle } from "react-icons/fc";
 import NextLink from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function RegisterPage() {
   const router = useRouter();
-  const { register } = useAuth();
+  const { register, googleLogin } = useAuth();
   const { showToast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+
+  // Initialize Google Sign-In
+  useEffect(() => {
+    // Load Google Sign-In script
+    const script = document.createElement("script");
+    script.src = "https://accounts.google.com/gsi/client";
+    script.async = true;
+    script.defer = true;
+    document.body.appendChild(script);
+
+    script.onload = () => {
+      if (window.google && window.google.accounts) {
+        window.google.accounts.id.initialize({
+          client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || "YOUR_GOOGLE_CLIENT_ID",
+          callback: handleGoogleResponse,
+        });
+      }
+    };
+
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
+
+  const handleGoogleResponse = async (response) => {
+    try {
+      setError("");
+      setIsLoading(true);
+
+      // Decode JWT token to get user info
+      const base64Url = response.credential.split(".")[1];
+      const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+      const jsonPayload = decodeURIComponent(
+        atob(base64)
+          .split("")
+          .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+          .join("")
+      );
+
+      const userData = JSON.parse(jsonPayload);
+
+      // Call backend with Google OAuth data
+      await googleLogin({
+        name: userData.name,
+        email: userData.email,
+        image: userData.picture,
+        googleId: userData.sub,
+      });
+
+      setSuccess("Google sign up successful! Redirecting...");
+      showToast("Registration successful!", "success", 2000);
+
+      setTimeout(() => {
+        router.push("/");
+      }, 1500);
+    } catch (err) {
+      const errorMsg = err.message || "Google sign up failed. Please try again.";
+      setError(errorMsg);
+      showToast(errorMsg, "error", 4000);
+      setIsLoading(false);
+    }
+  };
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -53,8 +115,26 @@ export default function RegisterPage() {
     }
   };
 
-  const handleGoogleSignUp = async () => {
-    showToast("Google sign up coming soon!", "info", 3000);
+  const handleGoogleSignUp = () => {
+    if (window.google && window.google.accounts) {
+      // Trigger the One Tap UI or sign-in prompt
+      window.google.accounts.id.prompt((notification) => {
+        if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+          // Fallback to One Tap if prompt not displayed
+          window.google.accounts.id.renderButton(
+            document.getElementById("google-signup-btn"),
+            {
+              type: "standard",
+              size: "large",
+              theme: "outline",
+              text: "signup_with",
+            }
+          );
+        }
+      });
+    } else {
+      showToast("Google Sign-Up not ready. Please refresh the page.", "error", 3000);
+    }
   };
 
   return (

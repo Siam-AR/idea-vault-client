@@ -38,6 +38,11 @@ export const authAPI = {
     body: JSON.stringify(data),
   }),
 
+  googleLogin: (data) => apiCall("/auth/google", {
+    method: "POST",
+    body: JSON.stringify(data),
+  }),
+
   getUser: () => apiCall("/auth/user"),
 
   updateUser: (data) => apiCall("/auth/user", {
