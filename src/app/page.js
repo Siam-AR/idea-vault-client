@@ -4,6 +4,8 @@ import { Button } from "@heroui/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import Loader from "@/components/Loader";
+import TrendingIdeas from "@/components/TrendingIdeas";
+import { ideasAPI } from "@/lib/api";
 import { Autoplay, EffectFade, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -39,6 +41,9 @@ const slides = [
 
 export default function Home() {
   const [loading, setLoading] = useState(true);
+  const [featuredIdeas, setFeaturedIdeas] = useState([]);
+  const [ideasLoading, setIdeasLoading] = useState(true);
+  const [ideasError, setIdeasError] = useState("");
 
   useEffect(() => {
     const preload = async () => {
@@ -58,6 +63,37 @@ export default function Home() {
     preload();
   }, []);
 
+  useEffect(() => {
+    let mounted = true;
+
+    const loadFeaturedIdeas = async () => {
+      try {
+        setIdeasLoading(true);
+        const data = await ideasAPI.getFeatured();
+
+        if (mounted) {
+          setFeaturedIdeas(Array.isArray(data) ? data : []);
+          setIdeasError("");
+        }
+      } catch (error) {
+        if (mounted) {
+          setIdeasError(error?.message || "Failed to load trending ideas.");
+          setFeaturedIdeas([]);
+        }
+      } finally {
+        if (mounted) {
+          setIdeasLoading(false);
+        }
+      }
+    };
+
+    loadFeaturedIdeas();
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
   if (loading) {
     return (
       <div className="h-[75vh]">
@@ -67,7 +103,7 @@ export default function Home() {
   }
 
   return (
-    <div className="px-4 py-6 md:py-8">
+    <div className="px-4 py-6 md:py-8 space-y-10">
       <div className="relative rounded-xl overflow-hidden">
         <Swiper
           modules={[Autoplay, Pagination, EffectFade]}
@@ -113,6 +149,12 @@ export default function Home() {
           ))}
         </Swiper>
       </div>
+
+      <TrendingIdeas
+        ideas={featuredIdeas}
+        loading={ideasLoading}
+        error={ideasError}
+      />
     </div>
   );
 }
