@@ -9,6 +9,7 @@ import {
     Card,
     Input,
     Modal,
+    ModalBackdrop,
     ModalBody,
     ModalContainer,
     ModalDialog,
@@ -53,6 +54,11 @@ const formatBudget = (budget) => {
     return budget;
 };
 
+const fetchUserIdeas = async () => {
+    const data = await ideasAPI.getUserIdeas();
+    return Array.isArray(data) ? data : [];
+};
+
 export default function MyIdeaPage() {
     const router = useRouter();
     const { loading, isAuthenticated } = useAuth();
@@ -79,7 +85,7 @@ export default function MyIdeaPage() {
         const fetchIdeas = async () => {
             try {
                 setPageLoading(true);
-                const data = await ideasAPI.getUserIdeas();
+                const data = await fetchUserIdeas();
 
                 if (!active) return;
 
@@ -177,7 +183,17 @@ export default function MyIdeaPage() {
             showToast("Idea updated successfully.", "success", 2500);
             setIsEditOpen(false);
             setSelectedIdea(null);
-            await loadIdeas();
+            setIdeas((prev) =>
+                prev.map((idea) =>
+                    idea._id === selectedIdea._id
+                        ? {
+                              ...idea,
+                              ...payload,
+                              tags: payload.tags,
+                          }
+                        : idea,
+                ),
+            );
         } catch (updateError) {
             const message = updateError?.message || "Unable to update idea right now.";
             showToast(message, "error", 3500);
@@ -335,13 +351,14 @@ export default function MyIdeaPage() {
                 )}
             </div>
 
-            <Modal isOpen={isEditOpen} onOpenChange={setIsEditOpen} size="5xl" scrollBehavior="inside">
-                <ModalContainer>
-                    {(onClose) => (
-                        <ModalDialog>
-                            <ModalHeader className="flex flex-col gap-1">Update Idea</ModalHeader>
-                            <ModalBody>
-                                <form onSubmit={handleUpdate} className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <Modal isOpen={isEditOpen} onOpenChange={setIsEditOpen}>
+                <ModalBackdrop>
+                    <ModalContainer placement="center" size="5xl" scroll="inside">
+                        {(onClose) => (
+                            <ModalDialog className="sm:max-w-5xl">
+                                <ModalHeader className="flex flex-col gap-1">Update Idea</ModalHeader>
+                                <ModalBody>
+                                    <form onSubmit={handleUpdate} className="grid grid-cols-1 gap-4 md:grid-cols-2">
                                     <label className="block md:col-span-2">
                                         <span className="mb-2 block text-sm font-medium text-slate-700">Idea Title *</span>
                                         <Input name="title" value={editForm.title} onChange={handleEditChange} />
@@ -403,42 +420,45 @@ export default function MyIdeaPage() {
                                         <TextArea name="proposedSolution" value={editForm.proposedSolution} onChange={handleEditChange} minRows={4} />
                                     </label>
 
-                                    <div className="md:col-span-2 flex flex-wrap gap-3 pt-2">
-                                        <Button type="submit" color="primary" isLoading={submitting} isDisabled={submitting}>
-                                            Save Changes
-                                        </Button>
-                                        <Button type="button" variant="bordered" onPress={onClose} isDisabled={submitting}>
-                                            Cancel
-                                        </Button>
-                                    </div>
-                                </form>
-                            </ModalBody>
-                        </ModalDialog>
-                    )}
-                </ModalContainer>
+                                        <div className="md:col-span-2 flex flex-wrap gap-3 pt-2">
+                                            <Button type="submit" color="primary" isLoading={submitting} isDisabled={submitting}>
+                                                Save Changes
+                                            </Button>
+                                            <Button type="button" variant="bordered" onPress={onClose} isDisabled={submitting}>
+                                                Cancel
+                                            </Button>
+                                        </div>
+                                    </form>
+                                </ModalBody>
+                            </ModalDialog>
+                        )}
+                    </ModalContainer>
+                </ModalBackdrop>
             </Modal>
 
             <Modal isOpen={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
-                <ModalContainer>
-                    {(onClose) => (
-                        <ModalDialog>
-                            <ModalHeader>Delete Idea</ModalHeader>
-                            <ModalBody>
-                                <p className="text-sm text-slate-600">
-                                    Are you sure you want to delete <span className="font-semibold text-slate-900">{selectedIdeaPreview?.title || "this idea"}</span>? This action cannot be undone.
-                                </p>
-                            </ModalBody>
-                            <ModalFooter>
-                                <Button variant="bordered" onPress={onClose} isDisabled={submitting}>
-                                    Cancel
-                                </Button>
-                                <Button color="danger" onPress={handleDelete} isLoading={submitting} isDisabled={submitting}>
-                                    Delete
-                                </Button>
-                            </ModalFooter>
-                        </ModalDialog>
-                    )}
-                </ModalContainer>
+                <ModalBackdrop>
+                    <ModalContainer placement="center" size="md">
+                        {(onClose) => (
+                            <ModalDialog>
+                                <ModalHeader>Delete Idea</ModalHeader>
+                                <ModalBody>
+                                    <p className="text-sm text-slate-600">
+                                        Are you sure you want to delete <span className="font-semibold text-slate-900">{selectedIdeaPreview?.title || "this idea"}</span>? This action cannot be undone.
+                                    </p>
+                                </ModalBody>
+                                <ModalFooter>
+                                    <Button variant="bordered" onPress={onClose} isDisabled={submitting}>
+                                        Cancel
+                                    </Button>
+                                    <Button color="danger" onPress={handleDelete} isLoading={submitting} isDisabled={submitting}>
+                                        Delete
+                                    </Button>
+                                </ModalFooter>
+                            </ModalDialog>
+                        )}
+                    </ModalContainer>
+                </ModalBackdrop>
             </Modal>
         </div>
     );
