@@ -1,5 +1,6 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import RouteTitleManager from "@/components/RouteTitleManager";
 import { AuthProvider } from "@/lib/auth-context";
 import { ToastProvider } from "@/lib/toast-context";
@@ -32,6 +33,7 @@ export default function RootLayout({ children }) {
             <RouteTitleManager />
             <Navbar />
             {children}
+            <Footer />
           </ToastProvider>
         </AuthProvider>
       </body>
