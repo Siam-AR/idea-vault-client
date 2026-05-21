@@ -37,6 +37,15 @@ export default function TrendingIdeas({
           {ideas.map((idea) => (
             <article
               key={idea._id}
+              role="button"
+              tabIndex={0}
+              onClick={() => window.location.assign(`/ideas/${idea._id}`)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter" || event.key === " ") {
+                  event.preventDefault();
+                  window.location.assign(`/ideas/${idea._id}`);
+                }
+              }}
               className="group flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg"
             >
               <div
@@ -80,7 +89,7 @@ export default function TrendingIdeas({
                 </div>
 
                 <div className="mt-auto pt-5">
-                  <Link href="/ideas" className="inline-flex w-full">
+                  <Link href={`/ideas/${idea._id}`} className="inline-flex w-full">
                     <Button className="w-full" color="primary">
                       View Details
                     </Button>
