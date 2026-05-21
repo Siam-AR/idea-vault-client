@@ -71,6 +71,8 @@ export const ideasAPI = {
     const params = new URLSearchParams();
     if (filters.category) params.append("category", filters.category);
     if (filters.search) params.append("search", filters.search);
+    if (filters.dateFrom) params.append("dateFrom", filters.dateFrom);
+    if (filters.dateTo) params.append("dateTo", filters.dateTo);
     return apiCall(`/ideas?${params.toString()}`);
   },
 
