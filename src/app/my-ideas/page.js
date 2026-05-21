@@ -15,11 +15,15 @@ import {
     ModalDialog,
     ModalFooter,
     ModalHeader,
+    ModalCloseTrigger,
+    ModalHeading,
+    Label,
+    Surface,
     TextArea,
 } from "@heroui/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
-import { FaCalendarAlt, FaEdit, FaMoneyBillWave, FaTrash, FaUser } from "react-icons/fa";
+import { FaCalendarAlt, FaEdit, FaMoneyBillWave, FaTag, FaTrash, FaUser } from "react-icons/fa";
 
 const CATEGORY_OPTIONS = ["Tech", "Health", "AI", "Education", "Finance", "SaaS", "Environment"];
 
@@ -355,77 +359,150 @@ export default function MyIdeaPage() {
                 <ModalBackdrop>
                     <ModalContainer placement="center" size="5xl" scroll="inside">
                         {(onClose) => (
-                            <ModalDialog className="sm:max-w-5xl">
-                                <ModalHeader className="flex flex-col gap-1">Update Idea</ModalHeader>
-                                <ModalBody>
-                                    <form onSubmit={handleUpdate} className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                                    <label className="block md:col-span-2">
-                                        <span className="mb-2 block text-sm font-medium text-slate-700">Idea Title *</span>
-                                        <Input name="title" value={editForm.title} onChange={handleEditChange} />
-                                    </label>
+                            <ModalDialog className="overflow-hidden border border-slate-200 bg-white shadow-[0_30px_100px_rgba(15,23,42,0.18)] sm:max-w-5xl">
+                                <ModalCloseTrigger className="right-4 top-4 text-slate-500 transition hover:text-slate-900" />
+                                <ModalHeader className="border-b border-slate-100 bg-linear-to-br from-slate-50 via-white to-cyan-50/40 px-6 py-6 md:px-8 md:py-7">
+                                    <div className="flex items-start gap-4">
+                                        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-linear-to-br from-cyan-500 to-blue-600 text-white shadow-lg shadow-cyan-500/25">
+                                            <FaEdit className="text-lg" />
+                                        </div>
+                                        <div className="min-w-0">
+                                            <ModalHeading className="text-3xl font-black tracking-tight text-slate-900">Update Idea</ModalHeading>
+                                            <p className="mt-1.5 text-sm leading-6 text-slate-600">
+                                                Refine the details below so your idea reads clearly and professionally.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </ModalHeader>
+                                <ModalBody className="px-4 py-4 md:px-6 md:py-6">
+                                    <form onSubmit={handleUpdate} className="rounded-[1.75rem] border border-slate-200 bg-white p-5 shadow-sm md:p-6">
+                                        <div className="grid gap-5 md:grid-cols-2">
+                                            <div className="md:col-span-2">
+                                                <Label className="mb-2 block text-sm font-semibold text-slate-700">Idea Title *</Label>
+                                                <Input
+                                                    name="title"
+                                                    value={editForm.title}
+                                                    onChange={handleEditChange}
+                                                    placeholder="Enter a clear, concise title"
+                                                    className="w-full"
+                                                />
+                                            </div>
 
-                                    <label className="block md:col-span-2">
-                                        <span className="mb-2 block text-sm font-medium text-slate-700">Short Description *</span>
-                                        <TextArea name="shortDescription" value={editForm.shortDescription} onChange={handleEditChange} minRows={3} />
-                                    </label>
+                                            <div className="md:col-span-2">
+                                                <Label className="mb-2 block text-sm font-semibold text-slate-700">Short Description *</Label>
+                                                <TextArea
+                                                    name="shortDescription"
+                                                    value={editForm.shortDescription}
+                                                    onChange={handleEditChange}
+                                                    minRows={3}
+                                                    placeholder="One or two lines that summarize the idea"
+                                                    className="w-full"
+                                                />
+                                            </div>
 
-                                    <label className="block md:col-span-2">
-                                        <span className="mb-2 block text-sm font-medium text-slate-700">Detailed Description *</span>
-                                        <TextArea name="detailedDescription" value={editForm.detailedDescription} onChange={handleEditChange} minRows={4} />
-                                    </label>
+                                            <div className="md:col-span-2">
+                                                <Label className="mb-2 block text-sm font-semibold text-slate-700">Detailed Description *</Label>
+                                                <TextArea
+                                                    name="detailedDescription"
+                                                    value={editForm.detailedDescription}
+                                                    onChange={handleEditChange}
+                                                    minRows={5}
+                                                    placeholder="Explain the problem, the solution, and the value"
+                                                    className="w-full"
+                                                />
+                                            </div>
 
-                                    <label className="block">
-                                        <span className="mb-2 block text-sm font-medium text-slate-700">Category *</span>
-                                        <select
-                                            name="category"
-                                            value={editForm.category}
-                                            onChange={handleEditChange}
-                                            className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none"
-                                        >
-                                            {CATEGORY_OPTIONS.map((category) => (
-                                                <option key={category} value={category}>
-                                                    {category}
-                                                </option>
-                                            ))}
-                                        </select>
-                                    </label>
+                                            <div>
+                                                <Label className="mb-2 block text-sm font-semibold text-slate-700">Category *</Label>
+                                                <select
+                                                    name="category"
+                                                    value={editForm.category}
+                                                    onChange={handleEditChange}
+                                                    className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-sm text-slate-900 outline-none transition focus:border-cyan-400 focus:bg-white focus:ring-4 focus:ring-cyan-500/10"
+                                                >
+                                                    {CATEGORY_OPTIONS.map((category) => (
+                                                        <option key={category} value={category}>
+                                                            {category}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            </div>
 
-                                    <label className="block">
-                                        <span className="mb-2 block text-sm font-medium text-slate-700">Tags (optional)</span>
-                                        <Input name="tags" value={editForm.tags} onChange={handleEditChange} />
-                                    </label>
+                                            <div>
+                                                <Label className="mb-2 block text-sm font-semibold text-slate-700">Tags (optional)</Label>
+                                                <Input
+                                                    name="tags"
+                                                    value={editForm.tags}
+                                                    onChange={handleEditChange}
+                                                    placeholder="AI, SaaS, productivity"
+                                                    className="w-full"
+                                                />
+                                            </div>
 
-                                    <label className="block md:col-span-2">
-                                        <span className="mb-2 block text-sm font-medium text-slate-700">Image URL *</span>
-                                        <Input name="imageURL" value={editForm.imageURL} onChange={handleEditChange} />
-                                    </label>
+                                            <div className="md:col-span-2">
+                                                <Label className="mb-2 block text-sm font-semibold text-slate-700">Image URL *</Label>
+                                                <Input
+                                                    name="imageURL"
+                                                    value={editForm.imageURL}
+                                                    onChange={handleEditChange}
+                                                    placeholder="https://..."
+                                                    className="w-full"
+                                                />
+                                            </div>
 
-                                    <label className="block">
-                                        <span className="mb-2 block text-sm font-medium text-slate-700">Estimated Budget</span>
-                                        <Input name="estimatedBudget" value={editForm.estimatedBudget} onChange={handleEditChange} />
-                                    </label>
+                                            <div>
+                                                <Label className="mb-2 block text-sm font-semibold text-slate-700">Estimated Budget</Label>
+                                                <Input
+                                                    name="estimatedBudget"
+                                                    value={editForm.estimatedBudget}
+                                                    onChange={handleEditChange}
+                                                    placeholder="$10,000"
+                                                    className="w-full"
+                                                />
+                                            </div>
 
-                                    <label className="block">
-                                        <span className="mb-2 block text-sm font-medium text-slate-700">Target Audience *</span>
-                                        <Input name="targetAudience" value={editForm.targetAudience} onChange={handleEditChange} />
-                                    </label>
+                                            <div>
+                                                <Label className="mb-2 block text-sm font-semibold text-slate-700">Target Audience *</Label>
+                                                <Input
+                                                    name="targetAudience"
+                                                    value={editForm.targetAudience}
+                                                    onChange={handleEditChange}
+                                                    placeholder="Students, founders, teams..."
+                                                    className="w-full"
+                                                />
+                                            </div>
 
-                                    <label className="block md:col-span-2">
-                                        <span className="mb-2 block text-sm font-medium text-slate-700">Problem Statement *</span>
-                                        <TextArea name="problemStatement" value={editForm.problemStatement} onChange={handleEditChange} minRows={4} />
-                                    </label>
+                                            <div className="md:col-span-2">
+                                                <Label className="mb-2 block text-sm font-semibold text-slate-700">Problem Statement *</Label>
+                                                <TextArea
+                                                    name="problemStatement"
+                                                    value={editForm.problemStatement}
+                                                    onChange={handleEditChange}
+                                                    minRows={4}
+                                                    placeholder="What pain point does this solve?"
+                                                    className="w-full"
+                                                />
+                                            </div>
 
-                                    <label className="block md:col-span-2">
-                                        <span className="mb-2 block text-sm font-medium text-slate-700">Proposed Solution *</span>
-                                        <TextArea name="proposedSolution" value={editForm.proposedSolution} onChange={handleEditChange} minRows={4} />
-                                    </label>
+                                            <div className="md:col-span-2">
+                                                <Label className="mb-2 block text-sm font-semibold text-slate-700">Proposed Solution *</Label>
+                                                <TextArea
+                                                    name="proposedSolution"
+                                                    value={editForm.proposedSolution}
+                                                    onChange={handleEditChange}
+                                                    minRows={4}
+                                                    placeholder="Describe the idea or approach"
+                                                    className="w-full"
+                                                />
+                                            </div>
+                                        </div>
 
-                                        <div className="md:col-span-2 flex flex-wrap gap-3 pt-2">
-                                            <Button type="submit" color="primary" isLoading={submitting} isDisabled={submitting}>
-                                                Save Changes
-                                            </Button>
-                                            <Button type="button" variant="bordered" onPress={onClose} isDisabled={submitting}>
+                                        <div className="mt-6 flex flex-wrap items-center justify-end gap-3 border-t border-slate-100 pt-5">
+                                            <Button type="button" variant="bordered" onPress={onClose} isDisabled={submitting} className="border-slate-300 text-slate-700">
                                                 Cancel
+                                            </Button>
+                                            <Button type="submit" color="primary" isLoading={submitting} isDisabled={submitting} className="bg-linear-to-r from-cyan-500 to-blue-600 text-white shadow-lg shadow-cyan-500/20">
+                                                Save Changes
                                             </Button>
                                         </div>
                                     </form>
@@ -440,18 +517,31 @@ export default function MyIdeaPage() {
                 <ModalBackdrop>
                     <ModalContainer placement="center" size="md">
                         {(onClose) => (
-                            <ModalDialog>
-                                <ModalHeader>Delete Idea</ModalHeader>
-                                <ModalBody>
-                                    <p className="text-sm text-slate-600">
-                                        Are you sure you want to delete <span className="font-semibold text-slate-900">{selectedIdeaPreview?.title || "this idea"}</span>? This action cannot be undone.
+                            <ModalDialog className="overflow-hidden border border-slate-200 bg-white shadow-[0_30px_100px_rgba(15,23,42,0.18)]">
+                                <ModalCloseTrigger className="right-4 top-4 text-slate-500 transition hover:text-slate-900" />
+                                <ModalHeader className="border-b border-slate-100 bg-linear-to-br from-rose-50 to-white px-6 py-6">
+                                    <div className="flex items-start gap-4">
+                                        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-rose-500 text-white shadow-lg shadow-rose-500/20">
+                                            <FaTrash />
+                                        </div>
+                                        <div>
+                                            <ModalHeading className="text-2xl font-black tracking-tight text-slate-900">Delete Idea</ModalHeading>
+                                            <p className="mt-1 text-sm leading-6 text-slate-600">
+                                                This action permanently removes the idea from your dashboard.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </ModalHeader>
+                                <ModalBody className="px-6 py-5">
+                                    <p className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-4 text-sm leading-6 text-rose-800">
+                                        Are you sure you want to delete <span className="font-semibold text-rose-950">{selectedIdeaPreview?.title || "this idea"}</span>? This action cannot be undone.
                                     </p>
                                 </ModalBody>
-                                <ModalFooter>
-                                    <Button variant="bordered" onPress={onClose} isDisabled={submitting}>
+                                <ModalFooter className="border-t border-slate-100 bg-slate-50 px-6 py-4">
+                                    <Button variant="bordered" onPress={onClose} isDisabled={submitting} className="border-slate-300 text-slate-700">
                                         Cancel
                                     </Button>
-                                    <Button color="danger" onPress={handleDelete} isLoading={submitting} isDisabled={submitting}>
+                                    <Button color="danger" onPress={handleDelete} isLoading={submitting} isDisabled={submitting} className="bg-rose-600 text-white shadow-lg shadow-rose-500/20">
                                         Delete
                                     </Button>
                                 </ModalFooter>
