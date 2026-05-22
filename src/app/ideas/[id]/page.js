@@ -1,10 +1,14 @@
-import { Button } from "@heroui/react";
-import IdeaComments from "@/components/IdeaComments";
-import Link from "next/link";
-import { notFound } from "next/navigation";
-import { FaArrowLeft, FaCalendarAlt, FaCommentDots, FaFire, FaMoneyBillWave, FaUser } from "react-icons/fa";
+"use client";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+import Loader from "@/components/Loader";
+import IdeaComments from "@/components/IdeaComments";
+import { ideasAPI } from "@/lib/api";
+import { useAuth } from "@/lib/auth-context";
+import { Button } from "@heroui/react";
+import Link from "next/link";
+import { useParams, useRouter } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
+import { FaArrowLeft, FaCalendarAlt, FaCommentDots, FaFire, FaMoneyBillWave, FaUser } from "react-icons/fa";
 
 const formatDate = (value) => {
   if (!value) return "Recently";
@@ -37,59 +41,109 @@ const toTagList = (tags) => {
   if (!tags) return [];
   if (Array.isArray(tags)) return tags.filter(Boolean);
   if (typeof tags === "string") {
-    return tags
-      .split(",")
-      .map((tag) => tag.trim())
-      .filter(Boolean);
+    return tags.split(",").map((tag) => tag.trim()).filter(Boolean);
   }
 
   return [];
 };
 
-async function getIdea(id) {
-  try {
-    const response = await fetch(`${API_URL}/ideas/${id}`, {
-      cache: "no-store",
-    });
+export default function IdeaDetailsPage() {
+  const router = useRouter();
+  const params = useParams();
+  const { loading: authLoading, isAuthenticated } = useAuth();
+  const [idea, setIdea] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-    if (response.status === 404) {
-      return null;
+  const ideaId = params?.id;
+
+  useEffect(() => {
+    if (!authLoading && !isAuthenticated) {
+      router.push("/login");
+    }
+  }, [authLoading, isAuthenticated, router]);
+
+  useEffect(() => {
+    let active = true;
+
+    const loadIdea = async () => {
+      try {
+        setLoading(true);
+        const data = await ideasAPI.getById(ideaId);
+
+        if (!active) return;
+
+        setIdea(data);
+        setError("");
+      } catch (fetchError) {
+        if (!active) return;
+
+        setIdea(null);
+        setError(fetchError?.message || "Unable to load this idea right now.");
+      } finally {
+        if (active) {
+          setLoading(false);
+        }
+      }
+    };
+
+    if (authLoading) return undefined;
+    if (!isAuthenticated) return undefined;
+    if (ideaId) {
+      loadIdea();
     }
 
-    if (!response.ok) {
-      throw new Error(`Request failed with status ${response.status}`);
-    }
+    return () => {
+      active = false;
+    };
+  }, [authLoading, isAuthenticated, ideaId]);
 
-    return response.json();
-  } catch (error) {
-    if (String(error?.message || "").toLowerCase().includes("404")) {
-      return null;
-    }
+  const tags = useMemo(() => toTagList(idea?.tags), [idea]);
+  const likesCount = Array.isArray(idea?.likes) ? idea.likes.length : idea?.likes || 0;
 
-    throw error;
+  const details = [
+    { label: "Category", value: idea?.category || "Uncategorized" },
+    { label: "Estimated Budget", value: formatBudget(idea?.estimatedBudget) },
+    { label: "Target Audience", value: idea?.targetAudience || "Not specified" },
+    { label: "Created On", value: formatDate(idea?.createdAt) },
+    { label: "Author", value: idea?.userName || "Anonymous builder" },
+    { label: "Email", value: idea?.userEmail || "Not shared" },
+  ];
+
+  const insightCards = [
+    {
+      title: "Problem Statement",
+      body: idea?.problemStatement || "This idea does not include a problem statement yet.",
+    },
+    {
+      title: "Proposed Solution",
+      body: idea?.proposedSolution || "The proposed solution has not been added yet.",
+    },
+    {
+      title: "Detailed Description",
+      body: idea?.detailedDescription || idea?.description || "The author has not added a detailed description yet.",
+    },
+  ];
+
+  if (authLoading || loading) {
+    return (
+      <div className="px-4 py-10 min-h-screen">
+        <Loader message="Loading idea details..." />
+      </div>
+    );
   }
-}
 
-export default async function IdeaDetailsPage({ params }) {
-  const { id } = await params;
-
-  const idea = await getIdea(id).catch((error) => {
-    return { error: error?.message || "Unable to load this idea right now." };
-  });
-
-  if (!idea) {
-    notFound();
+  if (!isAuthenticated) {
+    return null;
   }
 
-  if (idea.error) {
+  if (error) {
     return (
       <div className="px-4 py-10 text-slate-900">
         <div className="mx-auto max-w-4xl rounded-[2rem] border border-rose-200 bg-white p-8 shadow-[0_20px_70px_rgba(15,23,42,0.08)]">
-          <p className="text-sm font-semibold uppercase tracking-[0.24em] text-rose-500">
-            Idea Details
-          </p>
+          <p className="text-sm font-semibold uppercase tracking-[0.24em] text-rose-500">Idea Details</p>
           <h1 className="mt-3 text-3xl font-black text-slate-900">Could not load idea details</h1>
-          <p className="mt-3 text-sm leading-7 text-slate-600">{idea.error}</p>
+          <p className="mt-3 text-sm leading-7 text-slate-600">{error}</p>
           <div className="mt-6 flex gap-3">
             <Link href="/ideas">
               <Button color="primary">Back to Ideas</Button>
@@ -100,35 +154,9 @@ export default async function IdeaDetailsPage({ params }) {
     );
   }
 
-  const tags = toTagList(idea.tags);
-  const likesCount = Array.isArray(idea.likes) ? idea.likes.length : idea.likes || 0;
-
-  const details = [
-    { label: "Category", value: idea.category || "Uncategorized" },
-    { label: "Estimated Budget", value: formatBudget(idea.estimatedBudget) },
-    { label: "Target Audience", value: idea.targetAudience || "Not specified" },
-    { label: "Created On", value: formatDate(idea.createdAt) },
-    { label: "Author", value: idea.userName || "Anonymous builder" },
-    { label: "Email", value: idea.userEmail || "Not shared" },
-  ];
-
-  const insightCards = [
-    {
-      title: "Problem Statement",
-      body: idea.problemStatement || "This idea does not include a problem statement yet.",
-    },
-    {
-      title: "Proposed Solution",
-      body: idea.proposedSolution || "The proposed solution has not been added yet.",
-    },
-    {
-      title: "Detailed Description",
-      body:
-        idea.detailedDescription ||
-        idea.description ||
-        "The author has not added a detailed description yet.",
-    },
-  ];
+  if (!idea) {
+    return null;
+  }
 
   return (
     <div className="px-4 py-6 md:py-10 text-slate-900">
@@ -173,9 +201,7 @@ export default async function IdeaDetailsPage({ params }) {
               <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
                 {details.map((detail) => (
                   <div key={detail.label} className="rounded-3xl border border-slate-200 bg-slate-50 p-5">
-                    <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-700">
-                      {detail.label}
-                    </p>
+                    <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-700">{detail.label}</p>
                     <p className="mt-3 text-sm leading-7 text-slate-700">{detail.value}</p>
                   </div>
                 ))}
@@ -184,9 +210,7 @@ export default async function IdeaDetailsPage({ params }) {
               <div className="mt-8 grid gap-4 md:grid-cols-2">
                 {insightCards.map((card) => (
                   <div key={card.title} className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-                    <p className="text-sm font-semibold uppercase tracking-[0.22em] text-cyan-700">
-                      {card.title}
-                    </p>
+                    <p className="text-sm font-semibold uppercase tracking-[0.22em] text-cyan-700">{card.title}</p>
                     <p className="mt-3 text-sm leading-7 text-slate-600">{card.body}</p>
                   </div>
                 ))}
@@ -197,17 +221,14 @@ export default async function IdeaDetailsPage({ params }) {
                   <p className="text-sm font-semibold uppercase tracking-[0.22em] text-cyan-700">Tags</p>
                   <div className="mt-3 flex flex-wrap gap-3">
                     {tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-sm text-slate-700"
-                      >
+                      <span key={tag} className="rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-sm text-slate-700">
                         #{tag}
                       </span>
                     ))}
                   </div>
                 </div>
               )}
-              {/* Comments section (client-side) */}
+
               <IdeaComments ideaId={idea._id} initialCount={idea.commentCount} />
             </div>
           </article>
@@ -239,22 +260,6 @@ export default async function IdeaDetailsPage({ params }) {
                 <p className="mt-3 text-sm leading-7 text-slate-600">
                   This idea is ready for comments, validation, and iteration. Explore the concept, review the problem it solves, and use community feedback to refine it further.
                 </p>
-              </div>
-
-              <div className="mt-6 rounded-3xl border border-slate-200 bg-slate-50 p-5">
-                <p className="text-sm font-semibold uppercase tracking-[0.22em] text-cyan-700">Contact</p>
-                <div className="mt-3 space-y-2 text-sm text-slate-600">
-                  <p>{idea.userName || "Anonymous builder"}</p>
-                  <p>{idea.userEmail || "No email shared"}</p>
-                </div>
-              </div>
-
-              <div className="mt-6">
-                <Link href="/ideas" className="inline-flex w-full">
-                  <Button className="w-full bg-linear-to-r from-cyan-500 to-blue-600 text-white shadow-lg shadow-cyan-500/20">
-                    Browse More Ideas
-                  </Button>
-                </Link>
               </div>
             </div>
           </aside>
