@@ -1,4 +1,5 @@
 import { Button } from "@heroui/react";
+import IdeaComments from "@/components/IdeaComments";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { FaArrowLeft, FaCalendarAlt, FaCommentDots, FaFire, FaMoneyBillWave, FaUser } from "react-icons/fa";
@@ -206,6 +207,8 @@ export default async function IdeaDetailsPage({ params }) {
                   </div>
                 </div>
               )}
+              {/* Comments section (client-side) */}
+              <IdeaComments ideaId={idea._id} initialCount={idea.commentCount} />
             </div>
           </article>
 
