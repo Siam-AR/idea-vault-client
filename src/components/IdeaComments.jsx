@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { Button, Input, TextArea } from "@heroui/react";
-import { FaRegCommentDots, FaEdit, FaTrash } from "react-icons/fa";
+import { useCallback, useEffect, useState } from "react";
+import { Button, Input, Modal, ModalBackdrop, ModalBody, ModalContainer, ModalDialog, ModalFooter, ModalHeader, ModalCloseTrigger, ModalHeading, TextArea } from "@heroui/react";
+import { FaRegCommentDots, FaEdit, FaTrash, FaExclamationTriangle } from "react-icons/fa";
 import { commentsAPI } from "@/lib/api";
 import { useAuth } from "@/lib/auth-context";
 import { useToast } from "@/lib/toast-context";
@@ -44,8 +44,10 @@ export default function IdeaComments({ ideaId, initialCount = 0 }) {
   const [text, setText] = useState("");
   const [editingId, setEditingId] = useState(null);
   const [editingText, setEditingText] = useState("");
+  const [deleteTarget, setDeleteTarget] = useState(null);
+  const [deleteOpen, setDeleteOpen] = useState(false);
 
-  const fetchComments = async () => {
+  const fetchComments = useCallback(async () => {
     try {
       setLoading(true);
       const data = await commentsAPI.getByIdeaId(ideaId);
@@ -55,12 +57,36 @@ export default function IdeaComments({ ideaId, initialCount = 0 }) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [ideaId, showToast]);
 
   useEffect(() => {
-    fetchComments();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ideaId]);
+    let active = true;
+
+    const loadComments = async () => {
+      try {
+        setLoading(true);
+        const data = await commentsAPI.getByIdeaId(ideaId);
+
+        if (!active) return;
+
+        setComments(Array.isArray(data) ? data : []);
+      } catch (err) {
+        if (!active) return;
+
+        showToast(err?.message || "Unable to load comments.", "error");
+      } finally {
+        if (active) {
+          setLoading(false);
+        }
+      }
+    };
+
+    loadComments();
+
+    return () => {
+      active = false;
+    };
+  }, [ideaId, showToast]);
 
   const handleAdd = async () => {
     if (!isAuthenticated) {
@@ -73,8 +99,8 @@ export default function IdeaComments({ ideaId, initialCount = 0 }) {
     setSubmitting(true);
     try {
       const payload = { ideaId, text: trimmed };
-      const created = await commentsAPI.create(payload);
-      setComments((prev) => [created, ...prev]);
+      await commentsAPI.create(payload);
+      await fetchComments();
       setText("");
       showToast("Comment added.", "success");
     } catch (err) {
@@ -99,8 +125,8 @@ export default function IdeaComments({ ideaId, initialCount = 0 }) {
     if (!trimmed) return;
     setSubmitting(true);
     try {
-      const updated = await commentsAPI.update(id, { text: trimmed });
-      setComments((prev) => prev.map((c) => (c._id === id ? updated : c)));
+      await commentsAPI.update(id, { text: trimmed });
+      await fetchComments();
       showToast("Comment updated.", "success");
       cancelEdit();
     } catch (err) {
@@ -110,13 +136,25 @@ export default function IdeaComments({ ideaId, initialCount = 0 }) {
     }
   };
 
-  const deleteComment = async (id) => {
-    if (!confirm("Delete this comment?")) return;
+  const openDeleteModal = (comment) => {
+    setDeleteTarget(comment);
+    setDeleteOpen(true);
+  };
+
+  const closeDeleteModal = () => {
+    setDeleteOpen(false);
+    setDeleteTarget(null);
+  };
+
+  const deleteComment = async () => {
+    if (!deleteTarget) return;
+
     setSubmitting(true);
     try {
-      await commentsAPI.delete(id);
-      setComments((prev) => prev.filter((c) => c._id !== id));
+      await commentsAPI.delete(deleteTarget._id);
+      await fetchComments();
       showToast("Comment deleted.", "success");
+      closeDeleteModal();
     } catch (err) {
       showToast(err?.message || "Unable to delete comment.", "error");
     } finally {
@@ -168,7 +206,7 @@ export default function IdeaComments({ ideaId, initialCount = 0 }) {
                             <Button variant="bordered" size="sm" onPress={() => startEdit(c)}>
                               <FaEdit />
                             </Button>
-                            <Button variant="bordered" color="danger" size="sm" onPress={() => deleteComment(c._id)}>
+                            <Button variant="bordered" color="danger" size="sm" onPress={() => openDeleteModal(c)}>
                               <FaTrash />
                             </Button>
                           </>
@@ -196,6 +234,44 @@ export default function IdeaComments({ ideaId, initialCount = 0 }) {
           </div>
         </div>
       </div>
+
+      <Modal isOpen={deleteOpen} onOpenChange={(open) => (open ? setDeleteOpen(true) : closeDeleteModal())}>
+        <ModalBackdrop>
+          <ModalContainer placement="center" size="md">
+            {(onClose) => (
+              <ModalDialog className="overflow-hidden border border-slate-200 bg-white shadow-[0_30px_100px_rgba(15,23,42,0.18)]">
+                <ModalCloseTrigger className="right-4 top-4 text-slate-500 transition hover:text-slate-900" />
+                <ModalHeader className="border-b border-slate-100 bg-linear-to-br from-rose-50 to-white px-6 py-6">
+                  <div className="flex items-start gap-4">
+                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-rose-500 text-white shadow-lg shadow-rose-500/20">
+                      <FaExclamationTriangle />
+                    </div>
+                    <div>
+                      <ModalHeading className="text-2xl font-black tracking-tight text-slate-900">Delete Comment</ModalHeading>
+                      <p className="mt-1 text-sm leading-6 text-slate-600">This action cannot be undone.</p>
+                    </div>
+                  </div>
+                </ModalHeader>
+
+                <ModalBody className="px-6 py-5">
+                  <p className="mt-4 whitespace-pre-wrap rounded-2xl border border-rose-200 bg-rose-50 px-4 py-4 text-sm leading-6 text-slate-700">
+                    {deleteTarget?.text || ""}
+                  </p>
+                </ModalBody>
+
+                <ModalFooter className="border-t border-slate-100 bg-slate-50 px-6 py-4">
+                  <Button variant="bordered" onPress={onClose} isDisabled={submitting} className="border-slate-300 text-slate-700">
+                    Cancel
+                  </Button>
+                  <Button color="danger" onPress={deleteComment} isLoading={submitting} isDisabled={submitting} className="bg-rose-600 text-white shadow-lg shadow-rose-500/20">
+                    Delete
+                  </Button>
+                </ModalFooter>
+              </ModalDialog>
+            )}
+          </ModalContainer>
+        </ModalBackdrop>
+      </Modal>
     </section>
   );
 }
