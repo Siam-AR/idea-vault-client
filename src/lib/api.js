@@ -99,6 +99,8 @@ export const ideasAPI = {
 export const commentsAPI = {
   getByIdeaId: (ideaId) => apiCall(`/comments/${ideaId}`),
 
+  getMyComments: () => apiCall("/comments/me"),
+
   create: (data) => apiCall("/comments", {
     method: "POST",
     body: JSON.stringify(data),
