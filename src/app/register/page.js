@@ -14,11 +14,12 @@ import {
   Link,
 } from "@heroui/react";
 import NextLink from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useEffect, useCallback } from "react";
 
 export default function RegisterPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { register, googleLogin } = useAuth();
   const { showToast } = useToast();
   const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
@@ -26,6 +27,7 @@ export default function RegisterPage() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [googleError, setGoogleError] = useState("");
+  const redirectTo = searchParams.get("redirectTo") || "/";
 
   const handleGoogleResponse = useCallback(async (response) => {
     try {
@@ -56,7 +58,7 @@ export default function RegisterPage() {
       showToast("Registration successful!", "success", 2000);
 
       setTimeout(() => {
-        router.push("/");
+        router.push(redirectTo);
       }, 1500);
     } catch (err) {
       const errorMsg = err.message || "Google sign up failed. Please try again.";
@@ -64,7 +66,7 @@ export default function RegisterPage() {
       showToast(errorMsg, "error", 4000);
       setIsLoading(false);
     }
-  }, [googleLogin, showToast, router]);
+  }, [googleLogin, showToast, router, redirectTo]);
 
   // Initialize Google Sign-In
   useEffect(() => {
@@ -145,7 +147,7 @@ export default function RegisterPage() {
       showToast("Registration successful!", "success", 2000);
 
       setTimeout(() => {
-        router.push("/");
+        router.push(redirectTo);
       }, 1500);
     } catch (err) {
       const errorMsg = err.message || "Registration failed. Please try again.";
@@ -289,7 +291,7 @@ export default function RegisterPage() {
             Already have an account?
             <Link
               as={NextLink}
-              href="/login"
+              href={`/login${redirectTo !== "/" ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""}`}
               className="text-purple-600 hover:text-purple-700 font-semibold ml-1"
             >
               Log In

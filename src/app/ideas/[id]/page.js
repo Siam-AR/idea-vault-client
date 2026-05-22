@@ -6,7 +6,7 @@ import { ideasAPI } from "@/lib/api";
 import { useAuth } from "@/lib/auth-context";
 import { Button } from "@heroui/react";
 import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { FaArrowLeft, FaCalendarAlt, FaCommentDots, FaFire, FaMoneyBillWave, FaUser } from "react-icons/fa";
 
@@ -50,6 +50,7 @@ const toTagList = (tags) => {
 export default function IdeaDetailsPage() {
   const router = useRouter();
   const params = useParams();
+  const pathname = usePathname();
   const { loading: authLoading, isAuthenticated } = useAuth();
   const [idea, setIdea] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -59,9 +60,9 @@ export default function IdeaDetailsPage() {
 
   useEffect(() => {
     if (!authLoading && !isAuthenticated) {
-      router.push("/login");
+      router.push(`/login?redirectTo=${encodeURIComponent(pathname || `/ideas/${ideaId}`)}`);
     }
-  }, [authLoading, isAuthenticated, router]);
+  }, [authLoading, isAuthenticated, router, pathname, ideaId]);
 
   useEffect(() => {
     let active = true;
