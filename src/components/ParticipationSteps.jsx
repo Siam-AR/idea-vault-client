@@ -23,14 +23,14 @@ export default function ParticipationSteps() {
 
   return (
     <section className="max-w-7xl mx-auto mt-10">
-      <div className="rounded-2xl border border-slate-200 bg-white/70 backdrop-blur-md p-8 shadow-sm">
+      <div className="rounded-2xl surface-panel-soft p-8 shadow-sm">
 
         {/* Header */}
         <div className="text-center">
-          <h3 className="text-2xl font-semibold text-slate-900">
+          <h3 className="text-2xl font-semibold text-theme">
             Participation Steps
           </h3>
-          <p className="mt-2 text-sm text-slate-600">
+          <p className="mt-2 text-sm text-theme-muted">
             A simple sequence to get meaningful engagement from the community.
           </p>
         </div>
@@ -43,7 +43,7 @@ export default function ParticipationSteps() {
             return (
               <div
                 key={i}
-                className="group relative flex flex-col items-center text-center rounded-xl border border-slate-100 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
+                  className="group relative flex flex-col items-center text-center rounded-xl surface-card p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
               >
                 {/* Step number */}
                 <div className="absolute top-3 right-3 text-xs font-medium text-slate-300">
@@ -51,22 +51,22 @@ export default function ParticipationSteps() {
                 </div>
 
                 {/* Icon */}
-                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-tr from-indigo-500 to-blue-500 text-white shadow-sm">
+                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-linear-to-tr from-indigo-500 to-blue-500 text-white shadow-sm">
                   <Icon className="h-5 w-5" />
                 </div>
 
                 {/* Title */}
-                <h4 className="mt-4 text-sm font-semibold text-slate-900">
+                <h4 className="mt-4 text-sm font-semibold text-theme">
                   {s.title}
                 </h4>
 
                 {/* Text */}
-                <p className="mt-2 text-xs leading-relaxed text-slate-600">
+                <p className="mt-2 text-xs leading-relaxed text-theme-muted">
                   {s.text}
                 </p>
 
                 {/* Hover hint */}
-                <div className="absolute bottom-3 opacity-0 group-hover:opacity-100 transition text-[10px] text-indigo-600">
+                <div className="absolute bottom-3 opacity-0 group-hover:opacity-100 transition text-[10px] text-indigo-600 dark:text-indigo-300">
                   Learn more →
                 </div>
               </div>

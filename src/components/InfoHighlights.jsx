@@ -38,14 +38,14 @@ export default function InfoHighlights() {
 
   return (
     <section className="max-w-7xl mx-auto mt-12">
-      <div className="rounded-2xl border border-slate-200 bg-white/70 backdrop-blur-md p-8 shadow-sm">
+      <div className="rounded-2xl surface-panel-soft p-8 shadow-sm">
 
         {/* Header */}
         <div className="text-center">
-          <h3 className="text-2xl font-bold text-slate-900">
+          <h3 className="text-2xl font-bold text-theme">
             Quick Tips
           </h3>
-          <p className="mt-2 text-sm text-slate-600">
+          <p className="mt-2 text-sm text-theme-muted">
             Short, actionable recommendations to get more useful feedback.
           </p>
         </div>
@@ -58,7 +58,7 @@ export default function InfoHighlights() {
             return (
               <div
                 key={idx}
-                className="group relative flex gap-4 rounded-xl border border-slate-100 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
+                  className="group relative flex gap-4 rounded-xl surface-card p-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
               >
                 {/* Icon */}
                 <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-gradient-to-tr from-indigo-500 to-purple-500 text-white shadow-sm">
@@ -67,16 +67,16 @@ export default function InfoHighlights() {
 
                 {/* Content */}
                 <div>
-                  <h4 className="text-sm font-semibold text-slate-900">
+                  <h4 className="text-sm font-semibold text-theme">
                     {it.title}
                   </h4>
-                  <p className="mt-1 text-xs leading-relaxed text-slate-600">
+                  <p className="mt-1 text-xs leading-relaxed text-theme-muted">
                     {it.desc}
                   </p>
                 </div>
 
                 {/* Hover badge */}
-                <span className="absolute right-3 top-3 hidden rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-medium text-slate-500 group-hover:block">
+                <span className="absolute right-3 top-3 hidden rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-medium text-slate-500 group-hover:block dark:bg-slate-800 dark:text-slate-300">
                   Tip
                 </span>
               </div>

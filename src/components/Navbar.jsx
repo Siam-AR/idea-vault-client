@@ -12,20 +12,17 @@ import {
 } from "@heroui/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React, { useState } from "react";
+import React from "react";
 import { MdDarkMode, MdLightMode, MdLogout, MdPerson } from "react-icons/md";
+import { useTheme } from "@/lib/theme-context";
 
 const Navbar = () => {
   const { user, logout, isAuthenticated } = useAuth();
+  const { isDarkMode, toggleTheme } = useTheme();
   const pathname = usePathname();
-  const [isDarkMode, setIsDarkMode] = useState(false);
 
   const handleSignOut = () => {
     logout();
-  };
-
-  const toggleTheme = () => {
-    setIsDarkMode(!isDarkMode);
   };
 
   const isActive = (href) => pathname === href;

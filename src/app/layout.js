@@ -3,8 +3,10 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import RouteTitleManager from "@/components/RouteTitleManager";
 import { AuthProvider } from "@/lib/auth-context";
+import { ThemeProvider } from "@/lib/theme-context";
 import { ToastProvider } from "@/lib/toast-context";
 import "./globals.css";
+import Script from "next/script";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,14 +31,28 @@ export default function RootLayout({ children }) {
       suppressHydrationWarning
     >
       <body className="min-h-full container mx-auto" suppressHydrationWarning>
-        <AuthProvider>
-          <ToastProvider>
-            <RouteTitleManager />
-            <Navbar />
-            {children}
-            <Footer />
-          </ToastProvider>
-        </AuthProvider>
+        <Script id="theme-init" strategy="beforeInteractive">
+          {`(() => {
+            try {
+              const storageKey = 'ideaVaultTheme';
+              const savedTheme = window.localStorage.getItem(storageKey);
+              const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+              const theme = savedTheme === 'dark' || savedTheme === 'light' ? savedTheme : (systemPrefersDark ? 'dark' : 'light');
+              document.documentElement.dataset.theme = theme;
+              document.documentElement.style.colorScheme = theme;
+            } catch (error) {}
+          })();`}
+        </Script>
+        <ThemeProvider>
+          <AuthProvider>
+            <ToastProvider>
+              <RouteTitleManager />
+              <Navbar />
+              {children}
+              <Footer />
+            </ToastProvider>
+          </AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

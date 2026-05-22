@@ -143,8 +143,8 @@ export default function IdeaPage() {
 
     return (
         <div className="px-4 py-6 md:py-10 text-slate-900">
-            <section className="relative overflow-hidden rounded-[2rem] border border-slate-200 bg-white px-5 py-7 shadow-[0_20px_70px_rgba(15,23,42,0.08)] md:px-8 md:py-10">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(99,102,241,0.10),transparent_34%),radial-gradient(circle_at_top_right,rgba(6,182,212,0.08),transparent_30%),linear-gradient(135deg,rgba(255,255,255,1),rgba(248,250,252,1))]" />
+            <section className="ideas-hero relative overflow-hidden rounded-[2rem] border border-slate-200 bg-white px-5 py-7 shadow-[0_20px_70px_rgba(15,23,42,0.08)] md:px-8 md:py-10">
+                <div className="ideas-hero-bg absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(99,102,241,0.10),transparent_34%),radial-gradient(circle_at_top_right,rgba(6,182,212,0.08),transparent_30%),linear-gradient(135deg,rgba(255,255,255,1),rgba(248,250,252,1))]" />
                 <div className="relative z-10 grid gap-8 lg:grid-cols-[1.2fr_0.8fr] lg:items-end">
                     <div className="space-y-5">
                         <span className="inline-flex items-center gap-2 rounded-full border border-cyan-500/15 bg-cyan-50 px-4 py-2 text-xs font-semibold uppercase tracking-[0.28em] text-cyan-700">
@@ -166,7 +166,7 @@ export default function IdeaPage() {
                                 { value: totalIdeasCount, label: "Total ideas available", icon: FaFilter },
                                 { value: ideas.length, label: "Filtered ideas available", icon: FaSearch }
                             ].map((stat) => (
-                                <div key={stat.label} className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+                                <div key={stat.label} className="ideas-hero-stat rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
                                     <stat.icon className="text-cyan-600" />
                                     <p className="mt-3 text-2xl font-bold text-slate-900">{stat.value}</p>
                                     <p className="text-sm text-slate-600">{stat.label}</p>
@@ -175,14 +175,14 @@ export default function IdeaPage() {
                         </div>
                     </div>
 
-                    <div className="rounded-3xl border border-slate-200 bg-slate-50 p-5 shadow-sm md:p-6">
+                    <div className="ideas-hero-filters rounded-3xl border border-slate-200 bg-slate-50 p-5 shadow-sm md:p-6">
                         <p className="text-sm font-semibold uppercase tracking-[0.24em] text-cyan-700">
                             Filters
                         </p>
                         <div className="mt-4 space-y-4">
                             <label className="block">
                                 <span className="mb-2 block text-sm font-medium text-slate-700">Search by title</span>
-                                <div className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-slate-700 shadow-sm">
+                                <div className="ideas-hero-input flex items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-slate-700 shadow-sm">
                                     <FaSearch className="shrink-0 text-slate-400" />
                                     <input
                                         value={searchValue}

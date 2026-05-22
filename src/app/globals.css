@@ -1,6 +1,143 @@
 @import "tailwindcss";
 @import "@heroui/styles";
 
+:root {
+  color-scheme: light;
+  --page-bg: #f8fafc;
+  --page-text: #0f172a;
+  --surface-bg: rgba(255, 255, 255, 0.88);
+  --surface-border: rgba(226, 232, 240, 1);
+  --surface-muted: rgba(248, 250, 252, 1);
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page-bg: #020617;
+  --page-text: #e2e8f0;
+  --surface-bg: rgba(15, 23, 42, 0.92);
+  --surface-border: rgba(51, 65, 85, 1);
+  --surface-muted: rgba(15, 23, 42, 0.72);
+}
+
+html, body {
+  background: var(--page-bg);
+  color: var(--page-text);
+}
+
+body {
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.surface-panel {
+  background: var(--surface-bg);
+  border: 1px solid var(--surface-border);
+  box-shadow: 0 20px 70px rgba(15, 23, 42, 0.08);
+}
+
+.surface-panel-soft {
+  background: var(--surface-muted);
+  border: 1px solid var(--surface-border);
+  backdrop-filter: blur(12px);
+}
+
+.surface-card {
+  background: var(--surface-bg);
+  border: 1px solid var(--surface-border);
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+}
+
+.surface-input {
+  background: var(--surface-bg);
+  border: 1px solid var(--surface-border);
+  color: var(--page-text);
+}
+
+.text-theme {
+  color: var(--page-text);
+}
+
+.text-theme-muted {
+  color: color-mix(in srgb, var(--page-text) 68%, transparent);
+}
+
+.border-theme {
+  border-color: var(--surface-border);
+}
+
+:root[data-theme="dark"] .bg-white,
+:root[data-theme="dark"] .bg-white\/70,
+:root[data-theme="dark"] .bg-white\/90,
+:root[data-theme="dark"] .bg-slate-50,
+:root[data-theme="dark"] .bg-slate-100,
+:root[data-theme="dark"] .bg-slate-200 {
+  background-color: var(--surface-bg) !important;
+}
+
+:root[data-theme="dark"] .border-slate-100,
+:root[data-theme="dark"] .border-slate-200 {
+  border-color: var(--surface-border) !important;
+}
+
+:root[data-theme="dark"] .text-slate-900,
+:root[data-theme="dark"] .text-slate-800,
+:root[data-theme="dark"] .text-slate-700 {
+  color: #e2e8f0 !important;
+}
+
+:root[data-theme="dark"] .text-slate-600,
+:root[data-theme="dark"] .text-slate-500 {
+  color: #94a3b8 !important;
+}
+
+:root[data-theme="dark"] .from-slate-50 {
+  --tw-gradient-from: rgba(15, 23, 42, 0.95) var(--tw-gradient-from-position);
+  --tw-gradient-to: rgba(30, 41, 59, 0.9) var(--tw-gradient-to-position);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+
+:root[data-theme="dark"] .to-white {
+  --tw-gradient-to: rgba(15, 23, 42, 0.9) var(--tw-gradient-to-position);
+}
+
+:root[data-theme="dark"] .from-white {
+  --tw-gradient-from: rgba(15, 23, 42, 0.9) var(--tw-gradient-from-position);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+
+:root[data-theme="dark"] .bg-slate-900 {
+  background-color: #020617 !important;
+}
+
+:root[data-theme="dark"] .bg-slate-950 {
+  background-color: #020617 !important;
+}
+
+:root[data-theme="dark"] .ideas-hero {
+  border-color: rgba(51, 65, 85, 1);
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.98), rgba(30, 41, 59, 0.94));
+  box-shadow: 0 24px 80px rgba(2, 6, 23, 0.45);
+}
+
+:root[data-theme="dark"] .ideas-hero-bg {
+  background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.12), transparent 34%),
+    radial-gradient(circle at top right, rgba(34, 211, 238, 0.08), transparent 30%),
+    linear-gradient(135deg, rgba(15, 23, 42, 1), rgba(30, 41, 59, 0.98)) !important;
+}
+
+:root[data-theme="dark"] .ideas-hero-stat,
+:root[data-theme="dark"] .ideas-hero-filters,
+:root[data-theme="dark"] .ideas-hero-input {
+  background-color: rgba(15, 23, 42, 0.92) !important;
+  border-color: rgba(51, 65, 85, 1) !important;
+  box-shadow: 0 12px 32px rgba(2, 6, 23, 0.28) !important;
+}
+
+:root[data-theme="dark"] .ideas-hero input,
+:root[data-theme="dark"] .ideas-hero select,
+:root[data-theme="dark"] .ideas-hero button {
+  color: #e2e8f0;
+}
+
 @keyframes slideIn {
   from {
     transform: translateX(400px);
