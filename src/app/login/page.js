@@ -226,6 +226,16 @@ export default function LoginPage() {
             <FieldError />
           </TextField>
 
+          <div className="text-right">
+            <Link
+              as={NextLink}
+              href="/forgot-password"
+              className="text-sm text-purple-600 hover:text-purple-700 font-medium"
+            >
+              Forgot Password?
+            </Link>
+          </div>
+
           <div className="flex gap-2">
             <Button
               type="submit"

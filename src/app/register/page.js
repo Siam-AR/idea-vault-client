@@ -295,6 +295,16 @@ export default function RegisterPage() {
               Log In
             </Link>
           </p>
+          <p className="text-sm mt-2 text-gray-600">
+            Forgot your password?
+            <Link
+              as={NextLink}
+              href="/forgot-password"
+              className="text-purple-600 hover:text-purple-700 font-semibold ml-1"
+            >
+              Reset it
+            </Link>
+          </p>
         </div>
       </div>
     </Card>
