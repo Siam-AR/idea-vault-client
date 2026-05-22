@@ -13,7 +13,6 @@ import {
   TextField,
   Link,
 } from "@heroui/react";
-import { FcGoogle } from "react-icons/fc";
 import NextLink from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useEffect, useCallback } from "react";
@@ -22,9 +21,11 @@ export default function LoginPage() {
   const router = useRouter();
   const { login, googleLogin } = useAuth();
   const { showToast } = useToast();
+  const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [googleError, setGoogleError] = useState("");
 
   const handleGoogleResponse = useCallback(async (response) => {
     try {
@@ -67,7 +68,9 @@ export default function LoginPage() {
 
   // Initialize Google Sign-In
   useEffect(() => {
-    // Load Google Sign-In script
+    if (!googleClientId) return;
+
+    // Load Google Sign-In script only when client ID is present
     const script = document.createElement("script");
     script.src = "https://accounts.google.com/gsi/client";
     script.async = true;
@@ -75,11 +78,48 @@ export default function LoginPage() {
     document.body.appendChild(script);
 
     script.onload = () => {
-      if (window.google && window.google.accounts) {
-        window.google.accounts.id.initialize({
-          client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || "YOUR_GOOGLE_CLIENT_ID",
-          callback: handleGoogleResponse,
-        });
+      try {
+        if (window.google && window.google.accounts) {
+          setGoogleError("");
+          window.google.accounts.id.initialize({
+            client_id: googleClientId,
+            callback: handleGoogleResponse,
+          });
+          // Render a visible Google button into the container so users can click to sign in
+          try {
+            const container = document.getElementById("google-signin-btn");
+            if (container) {
+              window.google.accounts.id.renderButton(container, {
+                type: "standard",
+                theme: "outline",
+                size: "large",
+                text: "signin_with",
+              });
+            }
+          } catch (err) {
+            // ignore render errors
+            console.warn('Google renderButton failed', err);
+          }
+
+          // Also prompt One Tap
+          try {
+            window.google.accounts.id.prompt((notification) => {
+              if (notification?.isNotDisplayed?.() || notification?.isSkippedMoment?.()) {
+                const reason = notification?.getNotDisplayedReason?.() || notification?.getSkippedReason?.() || "blocked_by_browser_or_origin";
+                setGoogleError(
+                  `Google sign-in is blocked (${reason}). Add http://localhost:3000 to Authorized JavaScript origins in Google Cloud Console.`
+                );
+              }
+            });
+          } catch (err) {
+            setGoogleError("Google sign-in prompt failed. Check Google Cloud origin settings.");
+            console.warn('Google prompt failed', err);
+          }
+        }
+      } catch (err) {
+        // swallow initialization errors during dev to avoid crashing the page
+        setGoogleError("Google sign-in failed to initialize. Check the client ID and authorized origins.");
+        console.warn('Google Sign-In initialization error', err);
       }
     };
 
@@ -88,7 +128,7 @@ export default function LoginPage() {
         document.body.removeChild(script);
       }
     };
-  }, [handleGoogleResponse]);
+  }, [handleGoogleResponse, googleClientId]);
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -112,28 +152,6 @@ export default function LoginPage() {
       setError(errorMsg);
       showToast(errorMsg, "error", 4000);
       setIsLoading(false);
-    }
-  };
-
-  const handleGoogleSignIn = () => {
-    if (window.google && window.google.accounts) {
-      // Trigger the One Tap UI or sign-in prompt
-      window.google.accounts.id.prompt((notification) => {
-        if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-          // Fallback to One Tap if prompt not displayed
-          window.google.accounts.id.renderButton(
-            document.getElementById("google-signin-btn"),
-            {
-              type: "standard",
-              size: "large",
-              theme: "outline",
-              text: "signin_with",
-            }
-          );
-        }
-      });
-    } else {
-      showToast("Google Sign-In not ready. Please refresh the page.", "error", 3000);
     }
   };
 
@@ -172,6 +190,7 @@ export default function LoginPage() {
               placeholder="john@example.com"
               disabled={isLoading}
               className="w-full"
+              suppressHydrationWarning
             />
             <FieldError />
           </TextField>
@@ -199,6 +218,7 @@ export default function LoginPage() {
               placeholder="Enter your password"
               disabled={isLoading}
               className="w-full"
+              suppressHydrationWarning
             />
             <Description>
               Must be at least 6 characters with uppercase and lowercase letters
@@ -209,7 +229,7 @@ export default function LoginPage() {
           <div className="flex gap-2">
             <Button
               type="submit"
-              className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white"
+              className="w-full bg-linear-to-r from-purple-500 to-pink-500 text-white"
               isDisabled={isLoading}
               isLoading={isLoading}
             >
@@ -220,14 +240,14 @@ export default function LoginPage() {
 
         <div className="text-center my-4 text-gray-600">Or continue with</div>
 
-        <Button
-          onClick={handleGoogleSignIn}
-          variant="outline"
-          className="w-full"
-          isDisabled={isLoading}
-        >
-          <FcGoogle /> Sign In With Google
-        </Button>
+        {/* Container for Google-rendered button (fallback / visible button) */}
+        <div id="google-signin-btn" className="mt-3" />
+
+        {!googleClientId && (
+          <p className="mt-3 text-sm text-amber-700 bg-amber-50 border border-amber-200 rounded-lg p-3">
+            Google sign-in is not configured. Add NEXT_PUBLIC_GOOGLE_CLIENT_ID to enable it.
+          </p>
+        )}
 
         <div className="mt-6 text-center">
           <p className="text-sm text-gray-600">
