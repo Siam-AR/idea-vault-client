@@ -23,7 +23,7 @@ import {
 } from "@heroui/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
-import { FaCalendarAlt, FaEdit, FaMoneyBillWave, FaTag, FaTrash, FaUser } from "react-icons/fa";
+import { FaCalendarAlt, FaEdit, FaEye, FaMoneyBillWave, FaTag, FaTrash, FaUser } from "react-icons/fa";
 
 const CATEGORY_OPTIONS = ["Tech", "Health", "AI", "Education", "Finance", "SaaS", "Environment"];
 
@@ -132,6 +132,10 @@ export default function MyIdeaPage() {
     const openDeleteModal = (idea) => {
         setSelectedIdea(idea);
         setIsDeleteOpen(true);
+    };
+
+    const openIdeaDetails = (ideaId) => {
+        router.push(`/ideas/${ideaId}`);
     };
 
     const handleEditChange = (event) => {
@@ -331,6 +335,14 @@ export default function MyIdeaPage() {
                                     </div>
 
                                     <div className="mt-auto pt-5 flex gap-3">
+                                        <Button
+                                            className="flex-1 border border-slate-200 bg-white text-slate-700 shadow-sm"
+                                            variant="bordered"
+                                            startContent={<FaEye />}
+                                            onPress={() => openIdeaDetails(idea._id)}
+                                        >
+                                            View Details
+                                        </Button>
                                         <Button
                                             className="flex-1 bg-linear-to-r from-cyan-500 to-blue-600 text-white"
                                             startContent={<FaEdit />}
