@@ -15,9 +15,9 @@ import {
 } from "@heroui/react";
 import NextLink from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState, useEffect, useCallback } from "react";
+import { Suspense, useState, useEffect, useCallback } from "react";
 
-export default function LoginPage() {
+function LoginPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { login, googleLogin } = useAuth();
@@ -275,5 +275,13 @@ export default function LoginPage() {
         </div>
       </div>
     </Card>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div className="mx-auto mt-8 max-w-2xl px-4 text-center text-sm text-slate-600">Loading sign in page...</div>}>
+      <LoginPageContent />
+    </Suspense>
   );
 }

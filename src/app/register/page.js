@@ -15,9 +15,9 @@ import {
 } from "@heroui/react";
 import NextLink from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState, useEffect, useCallback } from "react";
+import { Suspense, useState, useEffect, useCallback } from "react";
 
-export default function RegisterPage() {
+function RegisterPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { register, googleLogin } = useAuth();
@@ -310,5 +310,13 @@ export default function RegisterPage() {
         </div>
       </div>
     </Card>
+  );
+}
+
+export default function RegisterPage() {
+  return (
+    <Suspense fallback={<div className="mx-auto mt-8 max-w-2xl px-4 text-center text-sm text-slate-600">Loading sign up page...</div>}>
+      <RegisterPageContent />
+    </Suspense>
   );
 }
