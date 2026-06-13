@@ -4,7 +4,7 @@ IdeaVault is a startup idea sharing platform where users can publish ideas, expl
 
 ## Live Site
 
-Live Site URL: COMMING SOON
+Live Site URL: https://idea-vault-client-lilac.vercel.app/
 
 ## Key Features
 
