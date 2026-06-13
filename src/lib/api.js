@@ -1,8 +1,12 @@
 // API utility for making requests to Express server
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+const getApiBaseUrl = () =>
+  process.env.NEXT_PUBLIC_API_URL ||
+  process.env.NEXT_PUBLIC_SERVER_URL ||
+  (typeof window !== "undefined" ? window.location.origin : "");
 
 export const apiCall = async (endpoint, options = {}) => {
   const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  const apiBaseUrl = getApiBaseUrl();
   
   const headers = {
     "Content-Type": "application/json",
@@ -13,7 +17,7 @@ export const apiCall = async (endpoint, options = {}) => {
     headers.Authorization = `Bearer ${token}`;
   }
 
-  const response = await fetch(`${API_URL}${endpoint}`, {
+  const response = await fetch(`${apiBaseUrl}${endpoint}`, {
     ...options,
     headers,
   });

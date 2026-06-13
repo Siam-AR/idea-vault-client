@@ -28,6 +28,7 @@ function LoginPageContent() {
   const [success, setSuccess] = useState("");
   const [googleError, setGoogleError] = useState("");
   const redirectTo = searchParams.get("redirectTo") || "/";
+  const getOriginLabel = () => (typeof window !== "undefined" ? window.location.origin : "this site");
 
   const handleGoogleResponse = useCallback(async (response) => {
     try {
@@ -109,7 +110,7 @@ function LoginPageContent() {
               if (notification?.isNotDisplayed?.() || notification?.isSkippedMoment?.()) {
                 const reason = notification?.getNotDisplayedReason?.() || notification?.getSkippedReason?.() || "blocked_by_browser_or_origin";
                 setGoogleError(
-                  `Google sign-in is blocked (${reason}). Add http://localhost:3000 to Authorized JavaScript origins in Google Cloud Console.`
+                  `Google sign-in is blocked (${reason}). Add ${getOriginLabel()} to Authorized JavaScript origins in Google Cloud Console.`
                 );
               }
             });
