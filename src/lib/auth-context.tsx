@@ -1,0 +1,138 @@
+"use client";
+
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { authAPI } from './api';
+import type { AuthResponse, User } from '@/types';
+
+interface AuthContextValue {
+  user: User | null;
+  token: string | null;
+  loading: boolean;
+  error: string | null;
+  register: (data: Record<string, unknown>) => Promise<AuthResponse>;
+  login: (data: Record<string, unknown>) => Promise<AuthResponse>;
+  googleLogin: (data: Record<string, unknown>) => Promise<AuthResponse>;
+  logout: () => void;
+  updateProfile: (data: Partial<User>) => Promise<void>;
+  isAuthenticated: boolean;
+}
+
+const AuthContext = createContext<AuthContextValue | undefined>(undefined);
+
+export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+  const [user, setUser] = useState<User | null>(null);
+  const [token, setToken] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const savedToken = localStorage.getItem('token');
+      if (savedToken) {
+        try {
+          setToken(savedToken);
+          const { user: userData } = await authAPI.getUser();
+          setUser(userData || null);
+        } catch {
+          localStorage.removeItem('token');
+          setToken(null);
+          setUser(null);
+        }
+      }
+      setLoading(false);
+    };
+
+    checkAuth();
+  }, []);
+
+  const register = async (data: Record<string, unknown>): Promise<AuthResponse> => {
+    try {
+      setError(null);
+      const response = await authAPI.register(data);
+      localStorage.setItem('token', response.token || '');
+      setToken(response.token || null);
+      setUser(response.user || null);
+      return response;
+    } catch (err) {
+      const errorMsg = err instanceof Error ? err.message : 'Registration failed';
+      setError(errorMsg);
+      throw err;
+    }
+  };
+
+  const login = async (data: Record<string, unknown>): Promise<AuthResponse> => {
+    try {
+      setError(null);
+      const response = await authAPI.login(data);
+      localStorage.setItem('token', response.token || '');
+      setToken(response.token || null);
+      setUser(response.user || null);
+      return response;
+    } catch (err) {
+      const errorMsg = err instanceof Error ? err.message : 'Login failed';
+      setError(errorMsg);
+      throw err;
+    }
+  };
+
+  const googleLogin = async (data: Record<string, unknown>): Promise<AuthResponse> => {
+    try {
+      setError(null);
+      const response = await authAPI.googleLogin(data);
+      localStorage.setItem('token', response.token || '');
+      setToken(response.token || null);
+      setUser(response.user || null);
+      return response;
+    } catch (err) {
+      const errorMsg = err instanceof Error ? err.message : 'Google login failed';
+      setError(errorMsg);
+      throw err;
+    }
+  };
+
+  const logout = () => {
+    localStorage.removeItem('token');
+    setToken(null);
+    setUser(null);
+    setError(null);
+  };
+
+  const updateProfile = async (data: Partial<User>): Promise<void> => {
+    try {
+      setError(null);
+      await authAPI.updateUser(data);
+      setUser((currentUser) => (currentUser ? { ...currentUser, ...data } : currentUser));
+    } catch (err) {
+      const errorMsg = err instanceof Error ? err.message : 'Update failed';
+      setError(errorMsg);
+      throw err;
+    }
+  };
+
+  return (
+    <AuthContext.Provider
+      value={{
+        user,
+        token,
+        loading,
+        error,
+        register,
+        login,
+        googleLogin,
+        logout,
+        updateProfile,
+        isAuthenticated: !!user,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
+};
+
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+};
