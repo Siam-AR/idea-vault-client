@@ -2,10 +2,11 @@
 
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
+import React from "react";
 
 const BASE_TITLE = "IdeaVault";
 
-const ROUTE_TITLES = {
+const ROUTE_TITLES: Record<string, string> = {
   "/": "Home",
   "/ideas": "Ideas",
   "/add-idea": "Add Idea",
@@ -17,14 +18,14 @@ const ROUTE_TITLES = {
   "/profile/update-profile": "Update Profile",
 };
 
-const normalizeSegment = (segment) =>
+const normalizeSegment = (segment: string) =>
   segment
     .split("-")
     .filter(Boolean)
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ");
 
-const getTitleFromPath = (pathname) => {
+const getTitleFromPath = (pathname: string) => {
   if (ROUTE_TITLES[pathname]) {
     return ROUTE_TITLES[pathname];
   }
