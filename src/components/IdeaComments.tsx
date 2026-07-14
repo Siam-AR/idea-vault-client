@@ -131,7 +131,7 @@ export default function IdeaComments({ ideaId, initialCount = 0 }: IdeaCommentsP
   };
 
   const startEdit = (comment: Comment) => {
-    setEditingId(comment._id);
+    setEditingId(comment._id ?? null);
     setEditingText(comment.text || "");
   };
 
@@ -168,7 +168,7 @@ export default function IdeaComments({ ideaId, initialCount = 0 }: IdeaCommentsP
   };
 
   const deleteComment = async () => {
-    if (!deleteTarget) return;
+    if (!deleteTarget || !deleteTarget._id) return;
 
     setSubmitting(true);
     try {
@@ -201,7 +201,7 @@ export default function IdeaComments({ ideaId, initialCount = 0 }: IdeaCommentsP
                 placeholder={isAuthenticated ? "Write a comment..." : "Log in to write a comment"}
                 value={text}
                 onChange={(e) => setText(e.target.value)}
-                isDisabled={submitting || !isAuthenticated}
+                disabled={submitting || !isAuthenticated}
               />
               <Button variant="primary" onPress={handleAdd} isDisabled={submitting || !isAuthenticated}>
                 Post
@@ -229,7 +229,7 @@ export default function IdeaComments({ ideaId, initialCount = 0 }: IdeaCommentsP
                             <Button variant="outline" size="sm" onPress={() => startEdit(comment)}>
                               <FaEdit />
                             </Button>
-                            <Button variant="outline" color="danger" size="sm" onPress={() => openDeleteModal(comment)}>
+                            <Button variant="danger" size="sm" onPress={() => openDeleteModal(comment)}>
                               <FaTrash />
                             </Button>
                           </>
@@ -245,7 +245,11 @@ export default function IdeaComments({ ideaId, initialCount = 0 }: IdeaCommentsP
                             <Button variant="outline" onPress={cancelEdit}>
                               Cancel
                             </Button>
-                            <Button variant="primary" onPress={() => saveEdit(comment._id)} isDisabled={submitting}>
+                            <Button
+                              variant="primary"
+                              onPress={() => comment._id && saveEdit(comment._id)}
+                              isDisabled={submitting || !comment._id}
+                            >
                               Save
                             </Button>
                           </div>

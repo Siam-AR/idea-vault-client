@@ -157,6 +157,19 @@ export default function IdeaDetailsPage() {
     return null;
   }
 
+  const currentIdeaId = idea._id ?? idea.id;
+  if (!currentIdeaId) {
+    return (
+      <div className="px-4 py-10 text-slate-900">
+        <div className="mx-auto max-w-4xl rounded-[2rem] border border-rose-200 bg-white p-8 shadow-[0_20px_70px_rgba(15,23,42,0.08)]">
+          <p className="text-sm font-semibold uppercase tracking-[0.24em] text-rose-500">Invalid idea</p>
+          <h1 className="mt-3 text-3xl font-black text-slate-900">Idea identifier is missing</h1>
+          <p className="mt-3 text-sm leading-7 text-slate-600">Unable to show comments because this idea has no valid identifier.</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="px-4 py-6 md:py-10 text-slate-900">
       <div className="mx-auto max-w-7xl">
@@ -228,7 +241,7 @@ export default function IdeaDetailsPage() {
                 </div>
               )}
 
-              <IdeaComments ideaId={idea._id} initialCount={idea.commentCount} />
+              <IdeaComments ideaId={currentIdeaId} initialCount={idea.commentCount} />
             </div>
           </article>
 

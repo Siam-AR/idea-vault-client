@@ -104,7 +104,7 @@ const Navbar: React.FC = () => {
             <Dropdown>
               <DropdownTrigger>
                 <div className="flex items-center gap-2 cursor-pointer">
-                  <Avatar as="button" className="transition-transform" size="sm">
+                  <Avatar className="transition-transform" size="sm">
                     <Avatar.Image referrerPolicy="no-referrer" alt={user?.name || "User"} src={user?.image} />
                     <Avatar.Fallback>{user?.name?.charAt(0)?.toUpperCase()}</Avatar.Fallback>
                   </Avatar>
@@ -131,7 +131,7 @@ const Navbar: React.FC = () => {
                   </div>
                 </div>
                 <Dropdown.Menu aria-label="User Actions">
-                  <DropdownItem id="profile" textValue="Profile" as={Link} href="/profile">
+                  <DropdownItem id="profile" textValue="Profile" href="/profile">
                     <div className="flex w-full items-center justify-between gap-2">
                       <Label>Profile</Label>
                       <MdPerson className="size-3.5 text-muted" />
