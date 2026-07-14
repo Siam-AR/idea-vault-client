@@ -11,10 +11,18 @@ export interface IdeaFilters {
   dateTo?: string;
 }
 
-const getApiBaseUrl = (): string =>
-  process.env.NEXT_PUBLIC_API_URL ||
-  process.env.NEXT_PUBLIC_SERVER_URL ||
-  (typeof window !== 'undefined' ? window.location.origin : '');
+const getApiBaseUrl = (): string => {
+  const explicitUrl = process.env.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_SERVER_URL;
+  if (explicitUrl) {
+    return explicitUrl.replace(/\/$/, '');
+  }
+
+  if (typeof window !== 'undefined') {
+    return window.location.origin;
+  }
+
+  throw new Error('API base URL is not configured. Set NEXT_PUBLIC_API_URL or NEXT_PUBLIC_SERVER_URL.');
+};
 
 export const apiCall = async <T = unknown>(endpoint: string, options: ApiCallOptions = {}): Promise<T> => {
   const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
@@ -29,9 +37,11 @@ export const apiCall = async <T = unknown>(endpoint: string, options: ApiCallOpt
     headers.Authorization = `Bearer ${token}`;
   }
 
-  const response = await fetch(`${apiBaseUrl}${endpoint}`, {
+  const url = new URL(endpoint, apiBaseUrl).toString();
+  const response = await fetch(url, {
     ...options,
     headers,
+    mode: 'cors',
   });
 
   if (!response.ok) {
