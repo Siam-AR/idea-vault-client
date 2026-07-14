@@ -26,6 +26,9 @@ export interface Comment {
     category?: string;
     authorName?: string;
   };
+  ideaTitle?: string;
+  ideaCategory?: string;
+  ideaAuthorName?: string;
   createdAt?: string;
   updatedAt?: string;
 }

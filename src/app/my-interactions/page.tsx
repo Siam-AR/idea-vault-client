@@ -178,9 +178,11 @@ export default function MyInteractionPage() {
                 <div className="flex items-start justify-between gap-4 border-b border-slate-100 p-5">
                   <div>
                     <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-700">Commented idea</p>
-                    <h2 className="mt-2 text-xl font-bold tracking-tight text-slate-900">{comment.idea?.title || "Unknown idea"}</h2>
+                    <h2 className="mt-2 text-xl font-bold tracking-tight text-slate-900">
+                      {comment.idea?.title || comment.ideaTitle || "Unknown idea"}
+                    </h2>
                     <p className="mt-2 text-sm text-slate-500">
-                      {comment.idea?.category || "Uncategorized"} · by {comment.idea?.authorName || "Anonymous builder"}
+                      {comment.idea?.category || comment.ideaCategory || "Uncategorized"} · by {comment.idea?.authorName || comment.ideaAuthorName || "Anonymous builder"}
                     </p>
                   </div>
                   <div className="rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2 text-right text-xs text-slate-500">
