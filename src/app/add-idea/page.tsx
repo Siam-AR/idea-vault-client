@@ -5,11 +5,25 @@ import { useAuth } from "@/lib/auth-context";
 import { useToast } from "@/lib/toast-context";
 import { Button, Card } from "@heroui/react";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useMemo, useState } from "react";
+import type { User } from "@/types";
 
 const CATEGORIES = ["Tech", "Health", "AI", "Education", "Finance", "SaaS", "Environment"];
 
-const initialState = {
+interface AddIdeaForm {
+  title: string;
+  shortDescription: string;
+  detailedDescription: string;
+  category: string;
+  tags: string;
+  imageURL: string;
+  estimatedBudget: string;
+  targetAudience: string;
+  problemStatement: string;
+  proposedSolution: string;
+}
+
+const initialState: AddIdeaForm = {
   title: "",
   shortDescription: "",
   detailedDescription: "",
@@ -22,7 +36,7 @@ const initialState = {
   proposedSolution: "",
 };
 
-const isValidHttpUrl = (value) => {
+const isValidHttpUrl = (value: string): boolean => {
   try {
     const parsed = new URL(value);
     return parsed.protocol === "http:" || parsed.protocol === "https:";
@@ -36,7 +50,7 @@ export default function AddIdeaPage() {
   const { user, loading, isAuthenticated } = useAuth();
   const { showToast } = useToast();
 
-  const [form, setForm] = useState(initialState);
+  const [form, setForm] = useState<AddIdeaForm>(initialState);
   const [submitting, setSubmitting] = useState(false);
   const [formError, setFormError] = useState("");
 
@@ -47,7 +61,7 @@ export default function AddIdeaPage() {
   }, [loading, isAuthenticated, router]);
 
   const requiredMissing = useMemo(() => {
-    const requiredFields = [
+    const requiredFields: Array<keyof AddIdeaForm> = [
       "title",
       "shortDescription",
       "detailedDescription",
@@ -61,12 +75,13 @@ export default function AddIdeaPage() {
     return requiredFields.some((key) => !String(form[key] || "").trim());
   }, [form]);
 
-  const handleChange = (event) => {
+  const handleChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = event.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+    const key = name as keyof AddIdeaForm;
+    setForm((prev) => ({ ...prev, [key]: value }));
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setFormError("");
 
@@ -100,8 +115,8 @@ export default function AddIdeaPage() {
       targetAudience: form.targetAudience.trim(),
       problemStatement: form.problemStatement.trim(),
       proposedSolution: form.proposedSolution.trim(),
-      userName: user?.name || "Anonymous",
-      userEmail: user?.email || "",
+      userName: (user as User | null)?.name || "Anonymous",
+      userEmail: (user as User | null)?.email || "",
     };
 
     try {
@@ -113,7 +128,7 @@ export default function AddIdeaPage() {
       router.push("/ideas");
       router.refresh();
     } catch (error) {
-      const message = error?.message || "Unable to submit idea right now.";
+      const message = (error as Error)?.message || "Unable to submit idea right now.";
       setFormError(message);
       showToast(message, "error", 3500);
     } finally {
@@ -138,9 +153,7 @@ export default function AddIdeaPage() {
       <Card className="mx-auto max-w-4xl border border-slate-200 p-6 md:p-8 shadow-sm">
         <div className="mb-6 space-y-2">
           <h1 className="text-2xl md:text-3xl font-bold text-slate-900">Add A Startup Idea</h1>
-          <p className="text-sm text-slate-600">
-            Share your concept with the community and get real feedback.
-          </p>
+          <p className="text-sm text-slate-600">Share your concept with the community and get real feedback.</p>
         </div>
 
         {formError && (
@@ -270,21 +283,10 @@ export default function AddIdeaPage() {
           </label>
 
           <div className="md:col-span-2 flex flex-wrap gap-3 pt-2">
-            <Button
-              type="submit"
-              color="primary"
-              isLoading={submitting}
-              isDisabled={submitting}
-            >
+            <Button type="submit" variant="primary" isDisabled={submitting}>
               {submitting ? "Submitting..." : "Submit Idea"}
             </Button>
-
-            <Button
-              type="button"
-              variant="bordered"
-              onPress={() => router.push("/ideas")}
-              isDisabled={submitting}
-            >
+            <Button type="button" variant="outline" onPress={() => router.push("/ideas")} isDisabled={submitting}>
               Cancel
             </Button>
           </div>

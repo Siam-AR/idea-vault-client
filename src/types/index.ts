@@ -1,7 +1,9 @@
 export interface User {
   _id?: string;
+  id?: string;
   name?: string;
   email?: string;
+  image?: string;
   avatar?: string;
   role?: string;
   createdAt?: string;
@@ -10,23 +12,45 @@ export interface User {
 
 export interface Comment {
   _id?: string;
-  content: string;
+  id?: string;
+  text?: string;
+  content?: string;
   ideaId?: string;
   userId?: string;
+  userName?: string;
+  userEmail?: string;
   user?: User;
+  idea?: {
+    _id?: string;
+    title?: string;
+    category?: string;
+    authorName?: string;
+  };
   createdAt?: string;
   updatedAt?: string;
 }
 
 export interface Idea {
   _id?: string;
-  title: string;
-  description: string;
+  id?: string;
+  title?: string;
+  description?: string;
+  shortDescription?: string;
+  detailedDescription?: string;
   category?: string;
-  tags?: string[];
+  tags?: string[] | string;
+  imageURL?: string;
+  estimatedBudget?: number | string;
+  targetAudience?: string;
+  problemStatement?: string;
+  proposedSolution?: string;
+  likes?: number | string[];
+  userName?: string;
+  userEmail?: string;
   author?: User;
   authorId?: string;
   comments?: Comment[];
+  commentCount?: number;
   createdAt?: string;
   updatedAt?: string;
 }

@@ -1,10 +1,10 @@
 "use client";
 
-import { useAuth } from "@/lib/auth-context";
-import { useToast } from "@/lib/toast-context";
-import { Button, Card, Input, Label, TextField } from "@heroui/react";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useAuth } from '@/lib/auth-context';
+import { useToast } from '@/lib/toast-context';
+import { Button, Card, Input, Label, TextField } from '@heroui/react';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 export default function UpdateProfilePage() {
   const router = useRouter();
@@ -12,51 +12,51 @@ export default function UpdateProfilePage() {
   const { showToast } = useToast();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [name, setName] = useState("");
-  const [image, setImage] = useState("");
-  const [error, setError] = useState("");
+  const [name, setName] = useState('');
+  const [image, setImage] = useState('');
+  const [error, setError] = useState('');
 
   useEffect(() => {
     if (!loading && !isAuthenticated) {
-      router.push("/login");
+      router.push('/login');
       return;
     }
 
     if (user) {
-      setName(user.name || "");
-      setImage(user.image || "");
+      setName(user.name || '');
+      setImage(user.image || '');
     }
   }, [loading, isAuthenticated, user, router]);
 
-  const validateImageUrl = (url) => {
+  const validateImageUrl = (url: string) => {
     if (!url.trim()) {
       return true;
     }
 
     try {
       const parsed = new URL(url);
-      return parsed.protocol === "http:" || parsed.protocol === "https:";
+      return parsed.protocol === 'http:' || parsed.protocol === 'https:';
     } catch {
       return false;
     }
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setError("");
+    setError('');
 
     const trimmedName = name.trim();
     const trimmedImage = image.trim();
 
     if (trimmedName.length < 2) {
-      setError("Name must be at least 2 characters.");
-      showToast("Name must be at least 2 characters.", "error", 3000);
+      setError('Name must be at least 2 characters.');
+      showToast('Name must be at least 2 characters.', 'error', 3000);
       return;
     }
 
     if (!validateImageUrl(trimmedImage)) {
-      setError("Please provide a valid image URL.");
-      showToast("Please provide a valid image URL.", "error", 3000);
+      setError('Please provide a valid image URL.');
+      showToast('Please provide a valid image URL.', 'error', 3000);
       return;
     }
 
@@ -68,13 +68,13 @@ export default function UpdateProfilePage() {
         image: trimmedImage,
       });
 
-      showToast("Profile updated successfully.", "success", 2500);
-      router.push("/profile");
+      showToast('Profile updated successfully.', 'success', 2500);
+      router.push('/profile');
       router.refresh();
     } catch (updateError) {
-      const message = updateError?.message || "Unable to update user information.";
+      const message = updateError instanceof Error ? updateError.message : 'Unable to update user information.';
       setError(message);
-      showToast(message, "error", 3500);
+      showToast(message, 'error', 3500);
     } finally {
       setIsSubmitting(false);
     }
@@ -109,27 +109,19 @@ export default function UpdateProfilePage() {
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <TextField className="w-full" name="name" type="text" isRequired>
             <Label>Name</Label>
-            <Input
-              value={name}
-              onChange={(event) => setName(event.target.value)}
-              placeholder="Enter your name"
-            />
+            <Input value={name} onChange={(event) => setName(event.target.value)} placeholder="Enter your name" />
           </TextField>
 
           <TextField className="w-full" name="image" type="url">
             <Label>Image URL</Label>
-            <Input
-              value={image}
-              onChange={(event) => setImage(event.target.value)}
-              placeholder="https://example.com/image.jpg"
-            />
+            <Input value={image} onChange={(event) => setImage(event.target.value)} placeholder="https://example.com/image.jpg" />
           </TextField>
 
           <div className="flex items-center gap-3 pt-2">
-            <Button type="submit" color="primary" isLoading={isSubmitting} isDisabled={isSubmitting}>
+            <Button type="submit" variant="primary" isDisabled={isSubmitting}>
               Update Information
             </Button>
-            <Button type="button" variant="bordered" onPress={() => router.push("/profile")}> 
+            <Button type="button" variant="outline" onPress={() => router.push('/profile')}>
               Back to profile
             </Button>
           </div>

@@ -9,8 +9,9 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { FaCommentDots, FaEye, FaRegCommentDots, FaUserEdit } from "react-icons/fa";
+import type { Comment } from "@/types";
 
-const formatDate = (value) => {
+const formatDate = (value?: string) => {
   if (!value) return "Recently";
 
   const date = new Date(value);
@@ -23,7 +24,7 @@ const formatDate = (value) => {
   });
 };
 
-const formatTime = (value) => {
+const formatTime = (value?: string) => {
   if (!value) return "";
 
   const date = new Date(value);
@@ -35,7 +36,7 @@ const formatTime = (value) => {
   });
 };
 
-const normalizeCommentText = (text) => {
+const normalizeCommentText = (text?: string) => {
   const value = String(text || "").trim();
   if (!value) return "No comment text provided.";
   return value;
@@ -46,7 +47,7 @@ export default function MyInteractionPage() {
   const { loading, isAuthenticated, user } = useAuth();
   const { showToast } = useToast();
 
-  const [comments, setComments] = useState([]);
+  const [comments, setComments] = useState<Comment[]>([]);
   const [pageLoading, setPageLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -71,7 +72,7 @@ export default function MyInteractionPage() {
       } catch (fetchError) {
         if (!active) return;
 
-        const message = fetchError?.message || "Unable to load your interactions right now.";
+        const message = (fetchError as Error)?.message || "Unable to load your interactions right now.";
         setComments([]);
         setError(message);
         showToast(message, "error", 3500);
@@ -94,13 +95,14 @@ export default function MyInteractionPage() {
   const stats = useMemo(() => {
     const totalComments = comments.length;
     const latestComment = comments[0];
+
     return {
       totalComments,
       latestActivity: latestComment ? formatDate(latestComment.updatedAt || latestComment.createdAt) : "No activity yet",
     };
   }, [comments]);
 
-  const openIdeaDetails = (ideaId) => {
+  const openIdeaDetails = (ideaId?: string) => {
     if (!ideaId) return;
     router.push(`/ideas/${ideaId}`);
   };
@@ -162,29 +164,21 @@ export default function MyInteractionPage() {
               Start participating in idea discussions and your comments will appear here.
             </p>
             <div className="mt-6 flex justify-center gap-3">
-              <Button color="primary" onPress={() => router.push("/ideas")}>
-                Browse Ideas
-              </Button>
-              <Button variant="bordered" onPress={() => router.push("/my-ideas")}>
-                My Ideas
-              </Button>
+              <Button variant="primary" onPress={() => router.push("/ideas")}>Browse Ideas</Button>
+              <Button variant="outline" onPress={() => router.push("/my-ideas")}>My Ideas</Button>
             </div>
           </Card>
         ) : (
           <div className="grid gap-6 lg:grid-cols-2">
             {comments.map((comment) => (
               <article
-                key={comment._id}
+                key={comment._id ?? `${comment.idea?._id ?? comment.ideaId}-${comment.createdAt ?? comment.updatedAt ?? "unknown"}`}
                 className="flex h-full flex-col overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
               >
                 <div className="flex items-start justify-between gap-4 border-b border-slate-100 p-5">
                   <div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-700">
-                      Commented idea
-                    </p>
-                    <h2 className="mt-2 text-xl font-bold tracking-tight text-slate-900">
-                      {comment.idea?.title || "Unknown idea"}
-                    </h2>
+                    <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-700">Commented idea</p>
+                    <h2 className="mt-2 text-xl font-bold tracking-tight text-slate-900">{comment.idea?.title || "Unknown idea"}</h2>
                     <p className="mt-2 text-sm text-slate-500">
                       {comment.idea?.category || "Uncategorized"} · by {comment.idea?.authorName || "Anonymous builder"}
                     </p>
@@ -214,14 +208,14 @@ export default function MyInteractionPage() {
                   <div className="mt-auto flex gap-3 pt-5">
                     <Button
                       className="flex-1 bg-linear-to-r from-cyan-500 to-blue-600 text-white"
-                      startContent={<FaEye />}
                       onPress={() => openIdeaDetails(comment.idea?._id || comment.ideaId)}
                       isDisabled={!comment.idea?._id && !comment.ideaId}
                     >
+                      <FaEye className="mr-2" />
                       View Idea
                     </Button>
                     <Link href={comment.idea?._id ? `/ideas/${comment.idea._id}` : "/ideas"} className="flex-1">
-                      <Button variant="bordered" className="w-full border-slate-200 text-slate-700">
+                      <Button variant="outline" className="w-full border-slate-200 text-slate-700">
                         Open Discussion
                       </Button>
                     </Link>

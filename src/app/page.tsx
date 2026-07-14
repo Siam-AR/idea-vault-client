@@ -1,62 +1,63 @@
 "use client";
 
-import { Button } from "@heroui/react";
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import Loader from "@/components/Loader";
-import TrendingIdeas from "@/components/TrendingIdeas";
-import InfoHighlights from "@/components/InfoHighlights";
-import ParticipationSteps from "@/components/ParticipationSteps";
-import CommunityResources from "@/components/CommunityResources";
-import { ideasAPI } from "@/lib/api";
-import { Autoplay, EffectFade, Pagination } from "swiper/modules";
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
-import "swiper/css/effect-fade";
-import "swiper/css/pagination";
+import { Button } from '@heroui/react';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import Loader from '@/components/Loader';
+import TrendingIdeas from '@/components/TrendingIdeas';
+import InfoHighlights from '@/components/InfoHighlights';
+import ParticipationSteps from '@/components/ParticipationSteps';
+import CommunityResources from '@/components/CommunityResources';
+import { ideasAPI } from '@/lib/api';
+import { Autoplay, EffectFade, Pagination } from 'swiper/modules';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import 'swiper/css/effect-fade';
+import 'swiper/css/pagination';
+import type { Idea } from '@/types';
 
 const slides = [
   {
     image:
-      "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    title: "Turn startup ideas into real products",
+      'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    title: 'Turn startup ideas into real products',
     description:
-      "Share, validate, and refine ideas with a community built for founders, creators, and innovators.",
+      'Share, validate, and refine ideas with a community built for founders, creators, and innovators.',
     overlayOpacity: 0.5,
   },
   {
     image:
-      "https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    title: "Explore ideas that inspire action",
+      'https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    title: 'Explore ideas that inspire action',
     description:
-      "Discover trending startup concepts, learn from other builders, and gather feedback before you launch.",
+      'Discover trending startup concepts, learn from other builders, and gather feedback before you launch.',
     overlayOpacity: 0.48,
   },
   {
     image:
-      "https://images.unsplash.com/photo-1630958234938-4f6a4a9dbf3a?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    title: "Validate ideas with real community insight",
+      'https://images.unsplash.com/photo-1630958234938-4f6a4a9dbf3a?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    title: 'Validate ideas with real community insight',
     description:
-      "Use comments, discussions, and idea discovery to shape better startup decisions faster.",
+      'Use comments, discussions, and idea discovery to shape better startup decisions faster.',
     overlayOpacity: 0.52,
   },
 ];
 
 export default function Home() {
   const [loading, setLoading] = useState(true);
-  const [featuredIdeas, setFeaturedIdeas] = useState([]);
+  const [featuredIdeas, setFeaturedIdeas] = useState<Idea[]>([]);
   const [ideasLoading, setIdeasLoading] = useState(true);
-  const [ideasError, setIdeasError] = useState("");
+  const [ideasError, setIdeasError] = useState('');
 
   useEffect(() => {
     const preload = async () => {
       await Promise.all(
         slides.map(
           (slide) =>
-            new Promise((resolve) => {
+            new Promise<void>((resolve) => {
               const img = new Image();
               img.src = slide.image;
-              img.onload = img.onerror = () => resolve(null);
+              img.onload = img.onerror = () => resolve();
             }),
         ),
       );
@@ -76,11 +77,11 @@ export default function Home() {
 
         if (mounted) {
           setFeaturedIdeas(Array.isArray(data) ? data : []);
-          setIdeasError("");
+          setIdeasError('');
         }
       } catch (error) {
         if (mounted) {
-          setIdeasError(error?.message || "Failed to load trending ideas.");
+          setIdeasError(error instanceof Error ? error.message : 'Failed to load trending ideas.');
           setFeaturedIdeas([]);
         }
       } finally {
@@ -142,7 +143,7 @@ export default function Home() {
 
                     <div className="flex gap-4">
                       <Link href="/ideas">
-                        <Button color="primary">Explore Ideas</Button>
+                        <Button variant="primary">Explore Ideas</Button>
                       </Link>
                     </div>
                   </div>
@@ -153,12 +154,7 @@ export default function Home() {
         </Swiper>
       </div>
 
-      <TrendingIdeas
-        ideas={featuredIdeas}
-        loading={ideasLoading}
-        error={ideasError}
-      />
-
+      <TrendingIdeas ideas={featuredIdeas} loading={ideasLoading} error={ideasError} />
       <InfoHighlights />
       <ParticipationSteps />
       <CommunityResources />

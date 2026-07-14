@@ -12,6 +12,7 @@ interface AuthContextValue {
   register: (data: Record<string, unknown>) => Promise<AuthResponse>;
   login: (data: Record<string, unknown>) => Promise<AuthResponse>;
   googleLogin: (data: Record<string, unknown>) => Promise<AuthResponse>;
+  forgotPassword: (email: string) => Promise<void>;
   logout: () => void;
   updateProfile: (data: Partial<User>) => Promise<void>;
   isAuthenticated: boolean;
@@ -90,6 +91,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
+  const forgotPassword = async (email: string): Promise<void> => {
+    const trimmedEmail = email?.trim();
+    if (!trimmedEmail) {
+      throw new Error('Please enter your email address.');
+    }
+
+    await Promise.resolve();
+  };
+
   const logout = () => {
     localStorage.removeItem('token');
     setToken(null);
@@ -119,6 +129,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         register,
         login,
         googleLogin,
+        forgotPassword,
         logout,
         updateProfile,
         isAuthenticated: !!user,

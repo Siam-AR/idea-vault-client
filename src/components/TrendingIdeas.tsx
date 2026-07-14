@@ -1,28 +1,26 @@
 "use client";
 
-import { Button } from "@heroui/react";
-import { FaMoneyBillWave } from "react-icons/fa";
-import { FaUser } from "react-icons/fa";
-import Link from "next/link";
+import { Button } from '@heroui/react';
+import Link from 'next/link';
+import { FaMoneyBillWave, FaUser } from 'react-icons/fa';
+import type { Idea } from '@/types';
 
-export default function TrendingIdeas({
-  ideas = [],
-  loading = false,
-  error = "",
-}) {
+interface TrendingIdeasProps {
+  ideas?: Idea[];
+  loading?: boolean;
+  error?: string;
+}
+
+export default function TrendingIdeas({ ideas = [], loading = false, error = '' }: TrendingIdeasProps) {
   return (
     <section className="max-w-7xl mx-auto">
       <div className="flex items-end justify-between gap-4 mb-6">
         <div>
-          <p className="text-sm font-semibold tracking-[0.25em] uppercase text-purple-600">
-            Trending Ideas
-          </p>
-          <h2 className="mt-2 text-2xl md:text-4xl font-bold text-theme">
-            Explore ideas people are talking about right now
-          </h2>
+          <p className="text-sm font-semibold tracking-[0.25em] uppercase text-purple-600">Trending Ideas</p>
+          <h2 className="mt-2 text-2xl md:text-4xl font-bold text-theme">Explore ideas people are talking about right now</h2>
         </div>
         <Link href="/ideas" className="hidden sm:inline-flex">
-          <Button variant="bordered">View All Ideas</Button>
+          <Button variant="outline">View All Ideas</Button>
         </Link>
       </div>
 
@@ -41,7 +39,7 @@ export default function TrendingIdeas({
               tabIndex={0}
               onClick={() => window.location.assign(`/ideas/${idea._id}`)}
               onKeyDown={(event) => {
-                if (event.key === "Enter" || event.key === " ") {
+                if (event.key === 'Enter' || event.key === ' ') {
                   event.preventDefault();
                   window.location.assign(`/ideas/${idea._id}`);
                 }
@@ -61,30 +59,23 @@ export default function TrendingIdeas({
                     {idea.category}
                   </span>
                   <span className="text-xs text-theme-muted">
-                    {idea.createdAt
-                      ? new Date(idea.createdAt).toLocaleDateString()
-                      : "Recent"}
+                    {idea.createdAt ? new Date(idea.createdAt).toLocaleDateString() : 'Recent'}
                   </span>
                 </div>
 
-                <h3 className="mt-3 text-xl font-bold text-theme line-clamp-2 min-h-14">
-                  {idea.title}
-                </h3>
+                <h3 className="mt-3 text-xl font-bold text-theme line-clamp-2 min-h-14">{idea.title}</h3>
 
-                <p className="mt-3 text-sm text-theme-muted line-clamp-3 min-h-18">
-                  {idea.shortDescription}
-                </p>
+                <p className="mt-3 text-sm text-theme-muted line-clamp-3 min-h-18">{idea.shortDescription}</p>
+
                 <div className="mt-3 flex items-center justify-between text-xs">
-                  {/* Budget - Left side */}
                   <span className="inline-flex items-center gap-1 rounded-full bg-green-50 px-3 py-1 font-medium text-green-700 border border-green-100 dark:border-green-900/40 dark:bg-green-950/30 dark:text-green-200">
                     <FaMoneyBillWave className="text-green-600 text-xs" />
-                    Budget: {idea.estimatedBudget || "Not listed"}
+                    Budget: {idea.estimatedBudget || 'Not listed'}
                   </span>
 
-                  {/* Name - Right side */}
                   <span className="inline-flex items-center gap-1 rounded-full bg-blue-50 px-3 py-1 font-medium text-blue-600 border border-blue-100 dark:border-blue-900/40 dark:bg-blue-950/30 dark:text-blue-200">
                     <FaUser className="text-blue-500 text-xs" />
-                    {idea.userName || idea.userEmail || "Anonymous"}
+                    {idea.userName || idea.userEmail || 'Anonymous'}
                   </span>
                 </div>
 

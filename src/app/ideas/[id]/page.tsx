@@ -1,35 +1,36 @@
 "use client";
 
-import Loader from "@/components/Loader";
-import IdeaComments from "@/components/IdeaComments";
-import { ideasAPI } from "@/lib/api";
-import { useAuth } from "@/lib/auth-context";
-import { Button } from "@heroui/react";
-import Link from "next/link";
-import { useParams, usePathname, useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
-import { FaArrowLeft, FaCalendarAlt, FaCommentDots, FaFire, FaMoneyBillWave, FaUser } from "react-icons/fa";
+import Loader from '@/components/Loader';
+import IdeaComments from '@/components/IdeaComments';
+import { ideasAPI } from '@/lib/api';
+import { useAuth } from '@/lib/auth-context';
+import { Button } from '@heroui/react';
+import Link from 'next/link';
+import { useParams, usePathname, useRouter } from 'next/navigation';
+import { useEffect, useMemo, useState } from 'react';
+import { FaArrowLeft, FaCalendarAlt, FaCommentDots, FaFire, FaMoneyBillWave, FaUser } from 'react-icons/fa';
+import type { Idea } from '@/types';
 
-const formatDate = (value) => {
-  if (!value) return "Recently";
+const formatDate = (value?: string) => {
+  if (!value) return 'Recently';
 
   const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return "Recently";
+  if (Number.isNaN(date.getTime())) return 'Recently';
 
-  return date.toLocaleDateString("en-US", {
-    month: "long",
-    day: "numeric",
-    year: "numeric",
+  return date.toLocaleDateString('en-US', {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
   });
 };
 
-const formatBudget = (budget) => {
-  if (!budget) return "Budget not shared";
+const formatBudget = (budget?: number | string) => {
+  if (!budget) return 'Budget not shared';
 
-  if (typeof budget === "number") {
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "USD",
+  if (typeof budget === 'number') {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
       maximumFractionDigits: 0,
     }).format(budget);
   }
@@ -37,11 +38,11 @@ const formatBudget = (budget) => {
   return budget;
 };
 
-const toTagList = (tags) => {
+const toTagList = (tags?: string[] | string) => {
   if (!tags) return [];
   if (Array.isArray(tags)) return tags.filter(Boolean);
-  if (typeof tags === "string") {
-    return tags.split(",").map((tag) => tag.trim()).filter(Boolean);
+  if (typeof tags === 'string') {
+    return tags.split(',').map((tag) => tag.trim()).filter(Boolean);
   }
 
   return [];
@@ -52,11 +53,11 @@ export default function IdeaDetailsPage() {
   const params = useParams();
   const pathname = usePathname();
   const { loading: authLoading, isAuthenticated } = useAuth();
-  const [idea, setIdea] = useState(null);
+  const [idea, setIdea] = useState<Idea | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
 
-  const ideaId = params?.id;
+  const ideaId = params?.id as string | undefined;
 
   useEffect(() => {
     if (!authLoading && !isAuthenticated) {
@@ -70,17 +71,14 @@ export default function IdeaDetailsPage() {
     const loadIdea = async () => {
       try {
         setLoading(true);
-        const data = await ideasAPI.getById(ideaId);
-
+        const data = await ideasAPI.getById(ideaId as string);
         if (!active) return;
-
         setIdea(data);
-        setError("");
+        setError('');
       } catch (fetchError) {
         if (!active) return;
-
         setIdea(null);
-        setError(fetchError?.message || "Unable to load this idea right now.");
+        setError(fetchError instanceof Error ? fetchError.message : 'Unable to load this idea right now.');
       } finally {
         if (active) {
           setLoading(false);
@@ -100,29 +98,29 @@ export default function IdeaDetailsPage() {
   }, [authLoading, isAuthenticated, ideaId]);
 
   const tags = useMemo(() => toTagList(idea?.tags), [idea]);
-  const likesCount = Array.isArray(idea?.likes) ? idea.likes.length : idea?.likes || 0;
+  const likesCount = Array.isArray(idea?.likes) ? idea.likes.length : (idea?.likes as number | undefined) || 0;
 
   const details = [
-    { label: "Category", value: idea?.category || "Uncategorized" },
-    { label: "Estimated Budget", value: formatBudget(idea?.estimatedBudget) },
-    { label: "Target Audience", value: idea?.targetAudience || "Not specified" },
-    { label: "Created On", value: formatDate(idea?.createdAt) },
-    { label: "Author", value: idea?.userName || "Anonymous builder" },
-    { label: "Email", value: idea?.userEmail || "Not shared" },
+    { label: 'Category', value: idea?.category || 'Uncategorized' },
+    { label: 'Estimated Budget', value: formatBudget(idea?.estimatedBudget) },
+    { label: 'Target Audience', value: idea?.targetAudience || 'Not specified' },
+    { label: 'Created On', value: formatDate(idea?.createdAt) },
+    { label: 'Author', value: idea?.userName || 'Anonymous builder' },
+    { label: 'Email', value: idea?.userEmail || 'Not shared' },
   ];
 
   const insightCards = [
     {
-      title: "Problem Statement",
-      body: idea?.problemStatement || "This idea does not include a problem statement yet.",
+      title: 'Problem Statement',
+      body: idea?.problemStatement || 'This idea does not include a problem statement yet.',
     },
     {
-      title: "Proposed Solution",
-      body: idea?.proposedSolution || "The proposed solution has not been added yet.",
+      title: 'Proposed Solution',
+      body: idea?.proposedSolution || 'The proposed solution has not been added yet.',
     },
     {
-      title: "Detailed Description",
-      body: idea?.detailedDescription || idea?.description || "The author has not added a detailed description yet.",
+      title: 'Detailed Description',
+      body: idea?.detailedDescription || idea?.description || 'The author has not added a detailed description yet.',
     },
   ];
 
@@ -147,7 +145,7 @@ export default function IdeaDetailsPage() {
           <p className="mt-3 text-sm leading-7 text-slate-600">{error}</p>
           <div className="mt-6 flex gap-3">
             <Link href="/ideas">
-              <Button color="primary">Back to Ideas</Button>
+              <Button variant="primary">Back to Ideas</Button>
             </Link>
           </div>
         </div>
@@ -172,14 +170,14 @@ export default function IdeaDetailsPage() {
             <div
               className="min-h-80 bg-cover bg-center"
               style={{
-                backgroundImage: `linear-gradient(180deg, rgba(255,255,255,0.08), rgba(15,23,42,0.18)), url(${idea.imageURL || "https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=1200&auto=format&fit=crop"})`,
+                backgroundImage: `linear-gradient(180deg, rgba(255,255,255,0.08), rgba(15,23,42,0.18)), url(${idea.imageURL || 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=1200&auto=format&fit=crop'})`,
               }}
             />
 
             <div className="p-6 md:p-8">
               <div className="flex flex-wrap items-center gap-3">
                 <span className="inline-flex rounded-full bg-cyan-50 px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-cyan-700">
-                  {idea.category || "Uncategorized"}
+                  {idea.category || 'Uncategorized'}
                 </span>
                 <span className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-xs font-medium text-slate-600">
                   <FaCalendarAlt />
@@ -192,11 +190,11 @@ export default function IdeaDetailsPage() {
               </div>
 
               <h1 className="mt-5 text-3xl font-black tracking-tight text-slate-900 md:text-5xl">
-                {idea.title || "Untitled idea"}
+                {idea.title || 'Untitled idea'}
               </h1>
 
               <p className="mt-4 max-w-3xl text-base leading-8 text-slate-600 md:text-lg">
-                {idea.shortDescription || "No short description was provided for this idea."}
+                {idea.shortDescription || 'No short description was provided for this idea.'}
               </p>
 
               <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
@@ -240,7 +238,7 @@ export default function IdeaDetailsPage() {
               <div className="mt-5 space-y-4 text-sm text-slate-700">
                 <div className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
                   <FaUser className="text-cyan-600" />
-                  <span>{idea.userName || idea.userEmail || "Anonymous builder"}</span>
+                  <span>{idea.userName || idea.userEmail || 'Anonymous builder'}</span>
                 </div>
                 <div className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
                   <FaMoneyBillWave className="text-cyan-600" />
