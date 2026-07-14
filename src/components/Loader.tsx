@@ -1,4 +1,10 @@
-export default function Loader({ message = "Loading..." }) {
+import React from "react";
+
+interface LoaderProps {
+  message?: string;
+}
+
+export default function Loader({ message = "Loading..." }: LoaderProps) {
   return (
     <div className="h-full w-full flex items-center justify-center">
       <div className="flex flex-col items-center gap-3 text-theme-muted">

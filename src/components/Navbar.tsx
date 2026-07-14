@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { useAuth } from "@/lib/auth-context";
 import {
   Avatar,
@@ -12,11 +13,11 @@ import {
 } from "@heroui/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React from "react";
 import { MdDarkMode, MdLightMode, MdLogout, MdPerson } from "react-icons/md";
 import { useTheme } from "@/lib/theme-context";
+import type { User } from "@/types";
 
-const Navbar = () => {
+const Navbar: React.FC = () => {
   const { user, logout, isAuthenticated } = useAuth();
   const { isDarkMode, toggleTheme } = useTheme();
   const pathname = usePathname();
@@ -25,12 +26,16 @@ const Navbar = () => {
     logout();
   };
 
-  const isActive = (href) => pathname === href;
+  const isActive = (href: string) => pathname === href;
 
-  const navLinkClass = (active) => `font-medium transition-colors ${
-    active 
-      ? isDarkMode ? "text-purple-400" : "text-purple-600" 
-      : isDarkMode ? "hover:text-purple-400" : "hover:text-purple-600"
+  const navLinkClass = (active: boolean) => `font-medium transition-colors ${
+    active
+      ? isDarkMode
+        ? "text-purple-400"
+        : "text-purple-600"
+      : isDarkMode
+      ? "hover:text-purple-400"
+      : "hover:text-purple-600"
   }`;
 
   const bgClass = isDarkMode ? "bg-slate-900 text-white" : "bg-white text-slate-900";
@@ -121,7 +126,7 @@ const Navbar = () => {
                     </Avatar>
                     <div className="flex flex-col gap-0">
                       <p className="text-sm leading-5 font-medium">{user?.name}</p>
-                      <p className="text-xs leading-none text-muted">{user?.email}</p>
+                      <p className="text-xs leading-none text-muted">{(user as User | null)?.email}</p>
                     </div>
                   </div>
                 </div>
@@ -144,7 +149,7 @@ const Navbar = () => {
           ) : (
             <div className="flex items-center gap-2">
               <Link href="/login">
-                <Button variant="light" size="sm" className={isDarkMode ? "text-white" : ""}>
+                <Button variant="ghost" size="sm" className={isDarkMode ? "text-white" : ""}>
                   Login
                 </Button>
               </Link>

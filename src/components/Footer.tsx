@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { FaFacebookF, FaInstagram, FaLinkedinIn } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
+import React from "react";
 
-const Footer = () => {
+const Footer: React.FC = () => {
   return (
     <footer className="relative mt-24 overflow-hidden bg-slate-950 text-white">
       <div className="absolute top-0 left-0 h-72 w-72 rounded-full bg-cyan-500/10 blur-3xl" />
