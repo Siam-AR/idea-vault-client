@@ -79,7 +79,7 @@ function LoginPageContent() {
         showToast('Google login successful!', 'success', 2000);
 
         window.setTimeout(() => {
-          router.push(redirectTo);
+            router.replace(redirectTo);
         }, 1500);
       } catch (err) {
         const errorMsg = err instanceof Error ? err.message : 'Google sign in failed. Please try again.';
@@ -175,7 +175,7 @@ function LoginPageContent() {
       showToast('Login successful!', 'success', 2000);
 
       window.setTimeout(() => {
-        router.push(redirectTo);
+        router.replace(redirectTo);
       }, 1500);
     } catch (err) {
       const errorMsg = err instanceof Error ? err.message : 'Sign in failed. Please check your credentials and try again.';

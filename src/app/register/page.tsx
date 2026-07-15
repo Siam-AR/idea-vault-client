@@ -43,7 +43,7 @@ function RegisterPageContent() {
       showToast('Account created successfully!', 'success', 2000);
 
       window.setTimeout(() => {
-        router.push(redirectTo);
+        router.replace(redirectTo);
       }, 1500);
     } catch (err) {
       const errorMsg = err instanceof Error ? err.message : 'Registration failed. Please try again.';
