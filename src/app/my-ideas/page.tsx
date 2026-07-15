@@ -25,32 +25,30 @@ import { ChangeEvent, FormEvent, useEffect, useMemo, useState } from "react";
 import { FaCalendarAlt, FaEdit, FaEye, FaMoneyBillWave, FaTrash, FaUser } from "react-icons/fa";
 import type { Idea } from "@/types";
 
-const CATEGORY_OPTIONS = ["Tech", "Health", "AI", "Education", "Finance", "SaaS", "Environment"];
+const CATEGORY_OPTIONS = ["Education", "Environment", "Health", "Community Welfare", "Technology", "Culture"];
 
 interface IdeaForm {
   title: string;
   shortDescription: string;
-  detailedDescription: string;
+  fullDescription: string;
   category: string;
   tags: string;
   imageURL: string;
-  estimatedBudget: string;
-  targetAudience: string;
-  problemStatement: string;
-  proposedSolution: string;
+  location: string;
+  supportNeeded: string;
+  priority: string;
 }
 
 const createFormState = (idea?: Partial<Idea>): IdeaForm => ({
   title: idea?.title || "",
   shortDescription: idea?.shortDescription || "",
-  detailedDescription: idea?.detailedDescription || "",
-  category: idea?.category || "Tech",
+  fullDescription: idea?.fullDescription || idea?.detailedDescription || "",
+  category: idea?.category || "Education",
   tags: Array.isArray(idea?.tags) ? idea.tags.join(", ") : idea?.tags || "",
   imageURL: idea?.imageURL || "",
-  estimatedBudget: idea?.estimatedBudget != null ? String(idea.estimatedBudget) : "",
-  targetAudience: idea?.targetAudience || "",
-  problemStatement: idea?.problemStatement || "",
-  proposedSolution: idea?.proposedSolution || "",
+  location: idea?.location || idea?.targetAudience || "",
+  supportNeeded: idea?.supportNeeded || idea?.problemStatement || "",
+  priority: idea?.priority || idea?.proposedSolution || "Medium",
 });
 
 const formatDate = (value?: string) => {
@@ -66,9 +64,8 @@ const formatDate = (value?: string) => {
   });
 };
 
-const formatBudget = (budget?: string | number) => {
-  if (!budget) return "Budget not listed";
-  return budget;
+const formatSupportNeeded = (idea: Idea) => {
+  return idea.supportNeeded || idea.estimatedBudget || "Support not listed";
 };
 
 const fetchUserIdeas = async (): Promise<Idea[]> => {
@@ -164,20 +161,20 @@ export default function MyIdeaPage() {
 
     const trimmedTitle = editForm.title.trim();
     const trimmedShortDescription = editForm.shortDescription.trim();
-    const trimmedDetailedDescription = editForm.detailedDescription.trim();
+    const trimmedFullDescription = editForm.fullDescription.trim();
     const trimmedImageURL = editForm.imageURL.trim();
-    const trimmedTargetAudience = editForm.targetAudience.trim();
-    const trimmedProblemStatement = editForm.problemStatement.trim();
-    const trimmedProposedSolution = editForm.proposedSolution.trim();
+    const trimmedLocation = editForm.location.trim();
+    const trimmedSupportNeeded = editForm.supportNeeded.trim();
+    const trimmedPriority = editForm.priority.trim();
 
     if (
       !trimmedTitle ||
       !trimmedShortDescription ||
-      !trimmedDetailedDescription ||
+      !trimmedFullDescription ||
       !trimmedImageURL ||
-      !trimmedTargetAudience ||
-      !trimmedProblemStatement ||
-      !trimmedProposedSolution
+      !trimmedLocation ||
+      !trimmedSupportNeeded ||
+      !trimmedPriority
     ) {
       showToast("Please fill in all required fields.", "error", 3000);
       return;
@@ -189,21 +186,24 @@ export default function MyIdeaPage() {
       const payload = {
         title: trimmedTitle,
         shortDescription: trimmedShortDescription,
-        detailedDescription: trimmedDetailedDescription,
+        fullDescription: trimmedFullDescription,
+        detailedDescription: trimmedFullDescription,
         category: editForm.category,
         tags: editForm.tags
           .split(",")
           .map((tag) => tag.trim())
           .filter(Boolean),
         imageURL: trimmedImageURL,
-        estimatedBudget: editForm.estimatedBudget.trim(),
-        targetAudience: trimmedTargetAudience,
-        problemStatement: trimmedProblemStatement,
-        proposedSolution: trimmedProposedSolution,
+        location: trimmedLocation,
+        supportNeeded: trimmedSupportNeeded,
+        priority: trimmedPriority,
+        targetAudience: trimmedLocation,
+        problemStatement: trimmedSupportNeeded,
+        proposedSolution: trimmedPriority,
       };
 
       await ideasAPI.update(selectedIdea._id, payload);
-      showToast("Idea updated successfully.", "success", 2500);
+      showToast("Project updated successfully.", "success", 2500);
       setIsEditOpen(false);
       setSelectedIdea(null);
       setIdeas((prev) =>
@@ -218,7 +218,7 @@ export default function MyIdeaPage() {
         ),
       );
     } catch (updateError) {
-      const message = (updateError as Error)?.message || "Unable to update idea right now.";
+      const message = (updateError as Error)?.message || "Unable to update project right now.";
       showToast(message, "error", 3500);
     } finally {
       setSubmitting(false);
@@ -232,12 +232,12 @@ export default function MyIdeaPage() {
 
     try {
       await ideasAPI.delete(selectedIdea._id);
-      showToast("Idea deleted successfully.", "success", 2500);
+      showToast("Project deleted successfully.", "success", 2500);
       setIsDeleteOpen(false);
       setSelectedIdea(null);
       setIdeas((prev) => prev.filter((idea) => idea._id !== selectedIdea._id));
     } catch (deleteError) {
-      const message = (deleteError as Error)?.message || "Unable to delete idea right now.";
+      const message = (deleteError as Error)?.message || "Unable to delete project right now.";
       showToast(message, "error", 3500);
     } finally {
       setSubmitting(false);
@@ -264,19 +264,19 @@ export default function MyIdeaPage() {
             <div>
               <p className="inline-flex items-center gap-2 rounded-full border border-cyan-500/15 bg-cyan-50 px-4 py-2 text-xs font-semibold uppercase tracking-[0.28em] text-cyan-700">
                 <FaEdit className="text-[0.7rem]" />
-                My Ideas
+                My Projects
               </p>
               <h1 className="mt-4 text-3xl font-black tracking-tight text-slate-900 md:text-5xl">
-                Your submitted startup ideas
+                Your submitted community projects
               </h1>
               <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-600 md:text-base">
-                Review, update, or delete the ideas you created for the community.
+                Review, update, or delete the projects you created for your community.
               </p>
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-center shadow-sm">
                 <p className="text-2xl font-bold text-slate-900">{ideas.length}</p>
-                <p className="text-sm text-slate-600">Total ideas</p>
+                <p className="text-sm text-slate-600">Total projects</p>
               </div>
               <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-center shadow-sm">
                 <p className="text-2xl font-bold text-slate-900">{ideas.length}</p>
@@ -294,10 +294,10 @@ export default function MyIdeaPage() {
 
         {ideas.length === 0 ? (
           <Card className="border border-slate-200 p-8 text-center shadow-sm">
-            <h2 className="text-2xl font-bold text-slate-900">No ideas yet</h2>
-            <p className="mt-2 text-sm text-slate-600">Add your first startup idea to start managing it here.</p>
+            <h2 className="text-2xl font-bold text-slate-900">No projects yet</h2>
+            <p className="mt-2 text-sm text-slate-600">Add your first community project to start managing it here.</p>
             <div className="mt-6 flex justify-center">
-              <Button variant="primary" onPress={() => router.push("/add-idea")}>Add Idea</Button>
+              <Button variant="primary" onPress={() => router.push("/add-idea")}>Add Project</Button>
             </div>
           </Card>
         ) : (
@@ -329,7 +329,7 @@ export default function MyIdeaPage() {
                   <div className="mt-4 grid gap-3 text-sm text-slate-700">
                     <div className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
                       <FaMoneyBillWave className="text-cyan-600" />
-                      <span>{formatBudget(idea.estimatedBudget)}</span>
+                      <span>{formatSupportNeeded(idea)}</span>
                     </div>
                     <div className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
                       <FaUser className="text-cyan-600" />
@@ -384,9 +384,9 @@ export default function MyIdeaPage() {
                       <FaEdit className="text-lg" />
                     </div>
                     <div className="min-w-0">
-                      <ModalHeading className="text-3xl font-black tracking-tight text-slate-900">Update Idea</ModalHeading>
+                      <ModalHeading className="text-3xl font-black tracking-tight text-slate-900">Update Project</ModalHeading>
                       <p className="mt-1.5 text-sm leading-6 text-slate-600">
-                        Refine the details below so your idea reads clearly and professionally.
+                        Refine the details below so your project reads clearly and professionally.
                       </p>
                     </div>
                   </div>
@@ -395,7 +395,7 @@ export default function MyIdeaPage() {
                   <form onSubmit={handleUpdate} className="rounded-[1.75rem] border border-slate-200 bg-white p-5 shadow-sm md:p-6">
                     <div className="grid gap-5 md:grid-cols-2">
                       <div className="md:col-span-2">
-                        <Label className="mb-2 block text-sm font-semibold text-slate-700">Idea Title *</Label>
+                        <Label className="mb-2 block text-sm font-semibold text-slate-700">Project Title *</Label>
                         <Input
                           name="title"
                           value={editForm.title}
@@ -411,18 +411,18 @@ export default function MyIdeaPage() {
                           name="shortDescription"
                           value={editForm.shortDescription}
                           onChange={handleEditChange}
-                          placeholder="One or two lines that summarize the idea"
+                          placeholder="One or two lines that summarize the project"
                           className="w-full"
                         />
                       </div>
 
                       <div className="md:col-span-2">
-                        <Label className="mb-2 block text-sm font-semibold text-slate-700">Detailed Description *</Label>
+                        <Label className="mb-2 block text-sm font-semibold text-slate-700">Full Description *</Label>
                         <TextArea
-                          name="detailedDescription"
-                          value={editForm.detailedDescription}
+                          name="fullDescription"
+                          value={editForm.fullDescription}
                           onChange={handleEditChange}
-                          placeholder="Explain the problem, the solution, and the value"
+                          placeholder="Explain the project, beneficiaries, and expected impact"
                           className="w-full"
                         />
                       </div>
@@ -449,7 +449,7 @@ export default function MyIdeaPage() {
                           name="tags"
                           value={editForm.tags}
                           onChange={handleEditChange}
-                          placeholder="AI, SaaS, productivity"
+                          placeholder="volunteer, neighborhood, cleanup"
                           className="w-full"
                         />
                       </div>
@@ -466,45 +466,38 @@ export default function MyIdeaPage() {
                       </div>
 
                       <div>
-                        <Label className="mb-2 block text-sm font-semibold text-slate-700">Estimated Budget</Label>
+                        <Label className="mb-2 block text-sm font-semibold text-slate-700">Location *</Label>
                         <Input
-                          name="estimatedBudget"
-                          value={editForm.estimatedBudget}
+                          name="location"
+                          value={editForm.location}
                           onChange={handleEditChange}
-                          placeholder="$10,000"
+                          placeholder="Ward 12, Chittagong"
                           className="w-full"
                         />
                       </div>
 
                       <div>
-                        <Label className="mb-2 block text-sm font-semibold text-slate-700">Target Audience *</Label>
-                        <Input
-                          name="targetAudience"
-                          value={editForm.targetAudience}
+                        <Label className="mb-2 block text-sm font-semibold text-slate-700">Priority *</Label>
+                        <select
+                          name="priority"
+                          value={editForm.priority}
                           onChange={handleEditChange}
-                          placeholder="Students, founders, teams..."
-                          className="w-full"
-                        />
+                          className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-sm text-slate-900 outline-none transition focus:border-cyan-400 focus:bg-white focus:ring-4 focus:ring-cyan-500/10"
+                        >
+                          <option value="Low">Low</option>
+                          <option value="Medium">Medium</option>
+                          <option value="High">High</option>
+                          <option value="Urgent">Urgent</option>
+                        </select>
                       </div>
 
                       <div className="md:col-span-2">
-                        <Label className="mb-2 block text-sm font-semibold text-slate-700">Problem Statement *</Label>
+                        <Label className="mb-2 block text-sm font-semibold text-slate-700">Support Needed *</Label>
                         <TextArea
-                          name="problemStatement"
-                          value={editForm.problemStatement}
+                          name="supportNeeded"
+                          value={editForm.supportNeeded}
                           onChange={handleEditChange}
-                          placeholder="What pain point does this solve?"
-                          className="w-full"
-                        />
-                      </div>
-
-                      <div className="md:col-span-2">
-                        <Label className="mb-2 block text-sm font-semibold text-slate-700">Proposed Solution *</Label>
-                        <TextArea
-                          name="proposedSolution"
-                          value={editForm.proposedSolution}
-                          onChange={handleEditChange}
-                          placeholder="Describe the idea or approach"
+                          placeholder="List volunteers, materials, expertise, or funding needed"
                           className="w-full"
                         />
                       </div>
@@ -536,16 +529,16 @@ export default function MyIdeaPage() {
                       <FaTrash />
                     </div>
                     <div>
-                      <ModalHeading className="text-2xl font-black tracking-tight text-slate-900">Delete Idea</ModalHeading>
+                      <ModalHeading className="text-2xl font-black tracking-tight text-slate-900">Delete Project</ModalHeading>
                       <p className="mt-1 text-sm leading-6 text-slate-600">
-                        This action permanently removes the idea from your dashboard.
+                        This action permanently removes the project from your dashboard.
                       </p>
                     </div>
                   </div>
                 </ModalHeader>
                 <ModalBody className="px-6 py-5">
                   <p className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-4 text-sm leading-6 text-rose-800">
-                    Are you sure you want to delete <span className="font-semibold text-rose-950">{selectedIdeaPreview?.title || "this idea"}</span>? This action cannot be undone.
+                    Are you sure you want to delete <span className="font-semibold text-rose-950">{selectedIdeaPreview?.title || "this project"}</span>? This action cannot be undone.
                   </p>
                 </ModalBody>
                   <ModalFooter className="border-t border-slate-100 bg-slate-50 px-6 py-4">

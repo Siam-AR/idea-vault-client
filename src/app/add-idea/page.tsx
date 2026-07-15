@@ -8,32 +8,30 @@ import { useRouter } from "next/navigation";
 import { ChangeEvent, FormEvent, useEffect, useMemo, useState } from "react";
 import type { User } from "@/types";
 
-const CATEGORIES = ["Tech", "Health", "AI", "Education", "Finance", "SaaS", "Environment"];
+const CATEGORIES = ["Education", "Environment", "Health", "Community Welfare", "Technology", "Culture"];
 
 interface AddIdeaForm {
   title: string;
   shortDescription: string;
-  detailedDescription: string;
+  fullDescription: string;
   category: string;
   tags: string;
   imageURL: string;
-  estimatedBudget: string;
-  targetAudience: string;
-  problemStatement: string;
-  proposedSolution: string;
+  location: string;
+  supportNeeded: string;
+  priority: string;
 }
 
 const initialState: AddIdeaForm = {
   title: "",
   shortDescription: "",
-  detailedDescription: "",
-  category: "Tech",
+  fullDescription: "",
+  category: "Education",
   tags: "",
   imageURL: "",
-  estimatedBudget: "",
-  targetAudience: "",
-  problemStatement: "",
-  proposedSolution: "",
+  location: "",
+  supportNeeded: "",
+  priority: "Medium",
 };
 
 const isValidHttpUrl = (value: string): boolean => {
@@ -64,12 +62,12 @@ export default function AddIdeaPage() {
     const requiredFields: Array<keyof AddIdeaForm> = [
       "title",
       "shortDescription",
-      "detailedDescription",
+      "fullDescription",
       "category",
       "imageURL",
-      "targetAudience",
-      "problemStatement",
-      "proposedSolution",
+      "location",
+      "supportNeeded",
+      "priority",
     ];
 
     return requiredFields.some((key) => !String(form[key] || "").trim());
@@ -107,14 +105,17 @@ export default function AddIdeaPage() {
     const payload = {
       title: form.title.trim(),
       shortDescription: form.shortDescription.trim(),
-      detailedDescription: form.detailedDescription.trim(),
+      fullDescription: form.fullDescription.trim(),
+      detailedDescription: form.fullDescription.trim(),
       category: form.category,
       tags,
       imageURL: form.imageURL.trim(),
-      estimatedBudget: form.estimatedBudget.trim(),
-      targetAudience: form.targetAudience.trim(),
-      problemStatement: form.problemStatement.trim(),
-      proposedSolution: form.proposedSolution.trim(),
+      location: form.location.trim(),
+      supportNeeded: form.supportNeeded.trim(),
+      priority: form.priority,
+      targetAudience: form.location.trim(),
+      problemStatement: form.supportNeeded.trim(),
+      proposedSolution: form.priority,
       userName: (user as User | null)?.name || "Anonymous",
       userEmail: (user as User | null)?.email || "",
     };
@@ -123,7 +124,7 @@ export default function AddIdeaPage() {
       setSubmitting(true);
       await ideasAPI.create(payload);
 
-      showToast("Idea submitted successfully!", "success", 2500);
+      showToast("Project submitted successfully!", "success", 2500);
       setForm(initialState);
       router.push("/ideas");
       router.refresh();
@@ -152,8 +153,8 @@ export default function AddIdeaPage() {
     <div className="px-4 py-8 md:py-10">
       <Card className="mx-auto max-w-4xl border border-slate-200 p-6 md:p-8 shadow-sm">
         <div className="mb-6 space-y-2">
-          <h1 className="text-2xl md:text-3xl font-bold text-slate-900">Add A Startup Idea</h1>
-          <p className="text-sm text-slate-600">Share your concept with the community and get real feedback.</p>
+          <h1 className="text-2xl md:text-3xl font-bold text-slate-900">Add A Community Project</h1>
+          <p className="text-sm text-slate-600">Share a local initiative and invite your community to collaborate.</p>
         </div>
 
         {formError && (
@@ -164,12 +165,12 @@ export default function AddIdeaPage() {
 
         <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <label className="block md:col-span-2">
-            <span className="mb-2 block text-sm font-medium text-slate-700">Idea Title *</span>
+            <span className="mb-2 block text-sm font-medium text-slate-700">Project Title *</span>
             <input
               name="title"
               value={form.title}
               onChange={handleChange}
-              placeholder="Enter your startup idea title"
+              placeholder="Enter your community project title"
               className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-cyan-500"
             />
           </label>
@@ -187,13 +188,13 @@ export default function AddIdeaPage() {
           </label>
 
           <label className="block md:col-span-2">
-            <span className="mb-2 block text-sm font-medium text-slate-700">Detailed Description *</span>
+            <span className="mb-2 block text-sm font-medium text-slate-700">Full Description *</span>
             <textarea
-              name="detailedDescription"
-              value={form.detailedDescription}
+              name="fullDescription"
+              value={form.fullDescription}
               onChange={handleChange}
               rows={5}
-              placeholder="Describe your idea in depth"
+              placeholder="Describe the project scope, beneficiaries, and expected impact"
               className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-cyan-500"
             />
           </label>
@@ -220,7 +221,7 @@ export default function AddIdeaPage() {
               name="tags"
               value={form.tags}
               onChange={handleChange}
-              placeholder="AI, Startup, SaaS"
+              placeholder="volunteer, neighborhood, cleanup"
               className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-cyan-500"
             />
           </label>
@@ -237,59 +238,52 @@ export default function AddIdeaPage() {
           </label>
 
           <label className="block">
-            <span className="mb-2 block text-sm font-medium text-slate-700">Estimated Budget (optional)</span>
+            <span className="mb-2 block text-sm font-medium text-slate-700">Location *</span>
             <input
-              name="estimatedBudget"
-              value={form.estimatedBudget}
+              name="location"
+              value={form.location}
               onChange={handleChange}
-              placeholder="$15,000"
+              placeholder="Ward 12, Chittagong"
               className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-cyan-500"
             />
           </label>
 
           <label className="block">
-            <span className="mb-2 block text-sm font-medium text-slate-700">Target Audience *</span>
-            <input
-              name="targetAudience"
-              value={form.targetAudience}
+            <span className="mb-2 block text-sm font-medium text-slate-700">Priority *</span>
+            <select
+              name="priority"
+              value={form.priority}
               onChange={handleChange}
-              placeholder="Who will use this idea?"
               className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-cyan-500"
-            />
+            >
+              <option value="Low">Low</option>
+              <option value="Medium">Medium</option>
+              <option value="High">High</option>
+              <option value="Urgent">Urgent</option>
+            </select>
           </label>
 
           <label className="block md:col-span-2">
-            <span className="mb-2 block text-sm font-medium text-slate-700">Problem Statement *</span>
+            <span className="mb-2 block text-sm font-medium text-slate-700">Support Needed *</span>
             <textarea
-              name="problemStatement"
-              value={form.problemStatement}
+              name="supportNeeded"
+              value={form.supportNeeded}
               onChange={handleChange}
               rows={4}
-              placeholder="What problem does this idea solve?"
-              className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-cyan-500"
-            />
-          </label>
-
-          <label className="block md:col-span-2">
-            <span className="mb-2 block text-sm font-medium text-slate-700">Proposed Solution *</span>
-            <textarea
-              name="proposedSolution"
-              value={form.proposedSolution}
-              onChange={handleChange}
-              rows={4}
-              placeholder="How does your idea solve the problem?"
+              placeholder="List volunteers, materials, expertise, or funding needed"
               className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-cyan-500"
             />
           </label>
 
           <div className="md:col-span-2 flex flex-wrap gap-3 pt-2">
             <Button type="submit" variant="primary" isDisabled={submitting}>
-              {submitting ? "Submitting..." : "Submit Idea"}
+              {submitting ? "Submitting..." : "Submit Project"}
             </Button>
             <Button type="button" variant="outline" onPress={() => router.push("/ideas")} isDisabled={submitting}>
               Cancel
             </Button>
           </div>
+
         </form>
       </Card>
     </div>

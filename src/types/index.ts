@@ -40,9 +40,13 @@ export interface Idea {
   description?: string;
   shortDescription?: string;
   detailedDescription?: string;
+  fullDescription?: string;
   category?: string;
   tags?: string[] | string;
   imageURL?: string;
+  location?: string;
+  supportNeeded?: string;
+  priority?: string;
   estimatedBudget?: number | string;
   targetAudience?: string;
   problemStatement?: string;

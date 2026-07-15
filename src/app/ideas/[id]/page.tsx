@@ -8,7 +8,7 @@ import { Button } from '@heroui/react';
 import Link from 'next/link';
 import { useParams, usePathname, useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
-import { FaArrowLeft, FaCalendarAlt, FaCommentDots, FaFire, FaMoneyBillWave, FaUser } from 'react-icons/fa';
+import { FaArrowLeft, FaCalendarAlt, FaCommentDots, FaFire, FaUser } from 'react-icons/fa';
 import type { Idea } from '@/types';
 
 const formatDate = (value?: string) => {
@@ -24,19 +24,7 @@ const formatDate = (value?: string) => {
   });
 };
 
-const formatBudget = (budget?: number | string) => {
-  if (!budget) return 'Budget not shared';
-
-  if (typeof budget === 'number') {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      maximumFractionDigits: 0,
-    }).format(budget);
-  }
-
-  return budget;
-};
+const getSupportNeeded = (idea?: Idea | null) => idea?.supportNeeded || idea?.estimatedBudget || 'Not specified';
 
 const toTagList = (tags?: string[] | string) => {
   if (!tags) return [];
@@ -102,8 +90,9 @@ export default function IdeaDetailsPage() {
 
   const details = [
     { label: 'Category', value: idea?.category || 'Uncategorized' },
-    { label: 'Estimated Budget', value: formatBudget(idea?.estimatedBudget) },
-    { label: 'Target Audience', value: idea?.targetAudience || 'Not specified' },
+    { label: 'Location', value: idea?.location || idea?.targetAudience || 'Not specified' },
+    { label: 'Support Needed', value: getSupportNeeded(idea) },
+    { label: 'Priority', value: idea?.priority || idea?.proposedSolution || 'Not specified' },
     { label: 'Created On', value: formatDate(idea?.createdAt) },
     { label: 'Author', value: idea?.userName || 'Anonymous builder' },
     { label: 'Email', value: idea?.userEmail || 'Not shared' },
@@ -111,16 +100,16 @@ export default function IdeaDetailsPage() {
 
   const insightCards = [
     {
-      title: 'Problem Statement',
-      body: idea?.problemStatement || 'This idea does not include a problem statement yet.',
+      title: 'Community Need',
+      body: idea?.supportNeeded || idea?.problemStatement || 'This project does not include support requirements yet.',
     },
     {
-      title: 'Proposed Solution',
-      body: idea?.proposedSolution || 'The proposed solution has not been added yet.',
+      title: 'Priority',
+      body: idea?.priority || idea?.proposedSolution || 'Priority has not been set yet.',
     },
     {
-      title: 'Detailed Description',
-      body: idea?.detailedDescription || idea?.description || 'The author has not added a detailed description yet.',
+      title: 'Full Description',
+      body: idea?.fullDescription || idea?.detailedDescription || idea?.description || 'The author has not added a full description yet.',
     },
   ];
 
@@ -254,16 +243,16 @@ export default function IdeaDetailsPage() {
                   <span>{idea.userName || idea.userEmail || 'Anonymous builder'}</span>
                 </div>
                 <div className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
-                  <FaMoneyBillWave className="text-cyan-600" />
-                  <span>{formatBudget(idea.estimatedBudget)}</span>
+                  <FaCommentDots className="text-cyan-600" />
+                  <span>{getSupportNeeded(idea)}</span>
+                </div>
+                <div className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
+                  <FaUser className="text-cyan-600" />
+                  <span>{idea.location || idea.targetAudience || 'Location not specified'}</span>
                 </div>
                 <div className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
                   <FaCommentDots className="text-cyan-600" />
                   <span>{idea.commentCount ?? 0} community comments</span>
-                </div>
-                <div className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
-                  <FaCalendarAlt className="text-cyan-600" />
-                  <span>{formatDate(idea.createdAt)}</span>
                 </div>
               </div>
 

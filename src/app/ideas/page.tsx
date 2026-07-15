@@ -5,10 +5,10 @@ import { ideasAPI } from '@/lib/api';
 import { Button } from '@heroui/react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { FaCalendarAlt, FaFilter, FaMoneyBillWave, FaSearch, FaUser } from 'react-icons/fa';
+import { FaCalendarAlt, FaFilter, FaSearch, FaUser } from 'react-icons/fa';
 import type { Idea } from '@/types';
 
-const CATEGORY_OPTIONS = ['All Categories', 'Tech', 'AI', 'Health', 'Education', 'Finance', 'SaaS'];
+const CATEGORY_OPTIONS = ['All Categories', 'Education', 'Environment', 'Health', 'Community Welfare', 'Technology', 'Culture'];
 
 const formatDate = (value?: string) => {
   if (!value) return 'Recently';
@@ -23,18 +23,8 @@ const formatDate = (value?: string) => {
   });
 };
 
-const formatBudget = (budget?: number | string) => {
-  if (!budget) return 'Budget not shared';
-
-  if (typeof budget === 'number') {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      maximumFractionDigits: 0,
-    }).format(budget);
-  }
-
-  return budget;
+const formatSupportNeeded = (idea: Idea) => {
+  return idea.supportNeeded || idea.estimatedBudget || 'Support details not shared';
 };
 
 export default function IdeaPage() {
@@ -132,22 +122,22 @@ export default function IdeaPage() {
           <div className="space-y-5">
             <span className="inline-flex items-center gap-2 rounded-full border border-cyan-500/15 bg-cyan-50 px-4 py-2 text-xs font-semibold uppercase tracking-[0.28em] text-cyan-700">
               <FaFilter className="text-[0.7rem]" />
-              Browse Ideas
+              Browse Community Projects
             </span>
 
             <div className="space-y-3">
               <h1 className="max-w-3xl text-3xl font-black tracking-tight text-slate-900 md:text-5xl">
-                Discover startup ideas built for validation, feedback, and momentum.
+                Discover community projects built for local impact, support, and momentum.
               </h1>
               <p className="max-w-2xl text-sm leading-7 text-slate-600 md:text-base">
-                Search by title, filter by category, and narrow results by published date range.
+                Search by title, filter by category, and explore initiatives by published date.
               </p>
             </div>
 
             <div className="grid gap-3 sm:grid-cols-3">
               {[
-                { value: totalIdeasCount, label: 'Total ideas available', icon: FaFilter },
-                { value: ideas.length, label: 'Filtered ideas available', icon: FaSearch },
+                { value: totalIdeasCount, label: 'Total projects available', icon: FaFilter },
+                { value: ideas.length, label: 'Filtered projects available', icon: FaSearch },
               ].map((stat) => (
                 <div key={stat.label} className="ideas-hero-stat rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
                   <stat.icon className="text-cyan-600" />
@@ -169,7 +159,7 @@ export default function IdeaPage() {
                     value={searchValue}
                     onChange={(event) => setSearchValue(event.target.value)}
                     type="search"
-                    placeholder="Search startup ideas..."
+                    placeholder="Search community projects..."
                     className="w-full bg-transparent text-sm outline-none placeholder:text-slate-400"
                   />
                 </div>
@@ -227,7 +217,7 @@ export default function IdeaPage() {
       <section className="mt-8">
         {loading ? (
           <div className="h-[55vh] rounded-[2rem] border border-slate-200 bg-white shadow-sm">
-            <Loader message="Loading fresh ideas..." />
+            <Loader message="Loading community projects..." />
           </div>
         ) : error ? (
           <div className="rounded-[2rem] border border-rose-200 bg-rose-50 p-6 text-rose-900 shadow-sm">
@@ -236,7 +226,7 @@ export default function IdeaPage() {
           </div>
         ) : ideas.length === 0 ? (
           <div className="rounded-[2rem] border border-slate-200 bg-white p-8 text-center text-slate-700 shadow-sm">
-            <p className="text-2xl font-bold text-slate-900">No ideas found</p>
+            <p className="text-2xl font-bold text-slate-900">No projects found</p>
             <p className="mt-3 text-sm text-slate-600">Try a different search term, category, or date range.</p>
             <div className="mt-6 flex justify-center">
               <Button onPress={resetFilters} variant="primary">
@@ -274,17 +264,17 @@ export default function IdeaPage() {
                   </div>
 
                   <h2 className="mt-3 min-h-16 text-2xl font-bold tracking-tight text-slate-900">
-                    {idea.title || 'Untitled idea'}
+                    {idea.title || 'Untitled project'}
                   </h2>
 
                   <p className="mt-3 min-h-20 text-sm leading-7 text-slate-600">
-                    {idea.shortDescription || 'No short description was provided for this idea.'}
+                    {idea.shortDescription || 'No short description was provided for this project.'}
                   </p>
 
                   <div className="mt-4 grid gap-3 text-sm text-slate-700">
-                    <div className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
-                      <FaMoneyBillWave className="text-cyan-600" />
-                      <span>{formatBudget(idea.estimatedBudget)}</span>
+                    <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
+                      <p className="text-xs font-semibold uppercase tracking-[0.16em] text-cyan-700">Support Needed</p>
+                      <p className="mt-1 text-sm text-slate-700">{formatSupportNeeded(idea)}</p>
                     </div>
                     <div className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
                       <FaUser className="text-cyan-600" />

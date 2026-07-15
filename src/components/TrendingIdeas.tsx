@@ -70,7 +70,7 @@ export default function TrendingIdeas({ ideas = [], loading = false, error = '' 
                 <div className="mt-3 flex items-center justify-between text-xs">
                   <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-3 py-1 font-medium text-amber-700 border border-amber-100 dark:border-amber-900/40 dark:bg-amber-950/30 dark:text-amber-200">
                     <FaMoneyBillWave className="text-amber-600 text-xs" />
-                    Budget: {idea.estimatedBudget || 'Not listed'}
+                    Support: {idea.supportNeeded || idea.estimatedBudget || 'Not listed'}
                   </span>
 
                   <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-3 py-1 font-medium text-emerald-700 border border-emerald-100 dark:border-emerald-900/40 dark:bg-emerald-950/30 dark:text-emerald-200">
