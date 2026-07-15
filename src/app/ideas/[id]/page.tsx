@@ -104,7 +104,7 @@ export default function IdeaDetailsPage() {
       body: idea?.supportNeeded || idea?.problemStatement || 'This project does not include support requirements yet.',
     },
     {
-      title: 'Priority',
+      title: 'Proposed Action',
       body: idea?.priority || idea?.proposedSolution || 'Priority has not been set yet.',
     },
     {
@@ -192,11 +192,11 @@ export default function IdeaDetailsPage() {
               </div>
 
               <h1 className="mt-5 text-3xl font-black tracking-tight text-slate-900 md:text-5xl">
-                {idea.title || 'Untitled idea'}
+                {idea.title || 'Untitled project'}
               </h1>
 
               <p className="mt-4 max-w-3xl text-base leading-8 text-slate-600 md:text-lg">
-                {idea.shortDescription || 'No short description was provided for this idea.'}
+                {idea.shortDescription || 'No short description was provided for this project.'}
               </p>
 
               <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
@@ -236,7 +236,7 @@ export default function IdeaDetailsPage() {
 
           <aside className="space-y-5 lg:sticky lg:top-24">
             <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-[0_20px_70px_rgba(15,23,42,0.08)]">
-              <p className="text-sm font-semibold uppercase tracking-[0.22em] text-cyan-700">Idea Snapshot</p>
+              <p className="text-sm font-semibold uppercase tracking-[0.22em] text-cyan-700">Project Snapshot</p>
               <div className="mt-5 space-y-4 text-sm text-slate-700">
                 <div className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
                   <FaUser className="text-cyan-600" />
@@ -259,7 +259,7 @@ export default function IdeaDetailsPage() {
               <div className="mt-6 rounded-3xl border border-cyan-100 bg-cyan-50 p-5">
                 <p className="text-sm font-semibold text-cyan-700">Why it matters</p>
                 <p className="mt-3 text-sm leading-7 text-slate-600">
-                  This idea is ready for comments, validation, and iteration. Explore the concept, review the problem it solves, and use community feedback to refine it further.
+                  This project is ready for comments, validation, and iteration. Explore the concept, review the community need, and use local feedback to refine it further.
                 </p>
               </div>
             </div>

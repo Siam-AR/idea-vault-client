@@ -28,7 +28,7 @@ const slides = [
   {
     image:
       'https://charitysmith.org/wp-content/uploads/2023/09/community.webp',
-    title: 'Explore ideas that strengthen communities',
+    title: 'Explore community projects that strengthen neighborhoods',
     description:
       'Discover trending initiatives, learn from local builders, and gather support before bringing a project to life.',
     overlayOpacity: 0.48,
@@ -36,9 +36,9 @@ const slides = [
   {
     image:
       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGDokh1GOFDD4UINIHrSgHoPDhAezJwQM44ybU5k-IoTChzJQ43Z2fVKs&s=10',
-    title: 'Validate ideas with real community insight',
+    title: 'Validate projects with real community insight',
     description:
-      'Use comments, discussions, and idea discovery to shape better community decisions faster.',
+      'Use comments, discussions, and project discovery to shape better community decisions faster.',
     overlayOpacity: 0.52,
   },
 ];
@@ -81,7 +81,7 @@ export default function Home() {
         }
       } catch (error) {
         if (mounted) {
-          setIdeasError(error instanceof Error ? error.message : 'Failed to load trending ideas.');
+          setIdeasError(error instanceof Error ? error.message : 'Failed to load trending initiatives.');
           setFeaturedIdeas([]);
         }
       } finally {

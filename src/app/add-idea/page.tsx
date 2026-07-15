@@ -129,7 +129,7 @@ export default function AddIdeaPage() {
       router.push("/ideas");
       router.refresh();
     } catch (error) {
-      const message = (error as Error)?.message || "Unable to submit idea right now.";
+      const message = (error as Error)?.message || "Unable to submit project right now.";
       setFormError(message);
       showToast(message, "error", 3500);
     } finally {
@@ -140,7 +140,7 @@ export default function AddIdeaPage() {
   if (loading) {
     return (
       <div className="px-4 py-10 min-h-screen flex items-center justify-center">
-        <p className="text-sm text-slate-600">Loading add idea form...</p>
+        <p className="text-sm text-slate-600">Loading add project form...</p>
       </div>
     );
   }
@@ -182,7 +182,7 @@ export default function AddIdeaPage() {
               value={form.shortDescription}
               onChange={handleChange}
               rows={3}
-              placeholder="A short summary of your idea"
+              placeholder="A short summary of your project"
               className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-cyan-500"
             />
           </label>
@@ -232,7 +232,7 @@ export default function AddIdeaPage() {
               name="imageURL"
               value={form.imageURL}
               onChange={handleChange}
-              placeholder="https://example.com/idea-image.jpg"
+              placeholder="https://example.com/project-image.jpg"
               className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-cyan-500"
             />
           </label>

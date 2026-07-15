@@ -187,8 +187,8 @@ function LoginPageContent() {
   return (
     <Card className="border max-w-2xl mx-auto py-8 md:py-10 mt-5 px-4 md:px-8">
       <div>
-        <h1 className="text-center text-2xl md:text-3xl font-bold mb-2">Sign In to IdeaVault</h1>
-        <p className="text-center text-gray-600 mb-6">Share and explore innovative startup ideas</p>
+        <h1 className="text-center text-2xl md:text-3xl font-bold mb-2">Sign In to Community Spark</h1>
+        <p className="text-center text-gray-600 mb-6">Share and explore meaningful community projects</p>
 
         {error && (
           <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">

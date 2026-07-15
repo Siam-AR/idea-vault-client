@@ -133,7 +133,7 @@ export default function MyInteractionPage() {
                 Your comment activity
               </h1>
               <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-600 md:text-base">
-                This section shows the ideas you commented on, so you can review your feedback and jump back into any discussion.
+                This section shows the community projects you commented on, so you can review your feedback and jump back into any discussion.
               </p>
             </div>
 
@@ -161,11 +161,11 @@ export default function MyInteractionPage() {
             <FaCommentDots className="mx-auto text-3xl text-cyan-600" />
             <h2 className="mt-4 text-2xl font-bold text-slate-900">No comments yet</h2>
             <p className="mt-2 text-sm text-slate-600">
-              Start participating in idea discussions and your comments will appear here.
+              Start participating in community project discussions and your comments will appear here.
             </p>
             <div className="mt-6 flex justify-center gap-3">
-              <Button variant="primary" onPress={() => router.push("/ideas")}>Browse Ideas</Button>
-              <Button variant="outline" onPress={() => router.push("/my-ideas")}>My Ideas</Button>
+              <Button variant="primary" onPress={() => router.push("/ideas")}>Browse Community Projects</Button>
+              <Button variant="outline" onPress={() => router.push("/my-ideas")}>My Projects</Button>
             </div>
           </Card>
         ) : (
@@ -177,9 +177,9 @@ export default function MyInteractionPage() {
               >
                 <div className="flex items-start justify-between gap-4 border-b border-slate-100 p-5">
                   <div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-700">Commented idea</p>
+                    <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-700">Commented project</p>
                     <h2 className="mt-2 text-xl font-bold tracking-tight text-slate-900">
-                      {comment.idea?.title || comment.ideaTitle || "Unknown idea"}
+                      {comment.idea?.title || comment.ideaTitle || "Unknown project"}
                     </h2>
                     <p className="mt-2 text-sm text-slate-500">
                       {comment.idea?.category || comment.ideaCategory || "Uncategorized"} · by {comment.idea?.authorName || comment.ideaAuthorName || "Anonymous builder"}
@@ -214,7 +214,7 @@ export default function MyInteractionPage() {
                       isDisabled={!comment.idea?._id && !comment.ideaId}
                     >
                       <FaEye className="mr-2" />
-                      View Idea
+                      View Project
                     </Button>
                     <Link href={comment.idea?._id ? `/ideas/${comment.idea._id}` : "/ideas"} className="flex-1">
                       <Button variant="outline" className="w-full border-slate-200 text-slate-700">

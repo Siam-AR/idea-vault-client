@@ -96,13 +96,13 @@ export default function ProfilePage() {
               <h2 className="text-lg font-semibold">Quick Actions</h2>
               <div className="mt-4 flex flex-col gap-3">
                 <Button variant="primary" className="justify-start" onPress={() => router.push('/my-ideas')}>
-                  View My Ideas
+                  View My Projects
                 </Button>
                 <Button variant="outline" className="justify-start" onPress={() => router.push('/my-interactions')}>
                   View My Interactions
                 </Button>
                 <Button variant="outline" className="justify-start" onPress={() => router.push('/add-idea')}>
-                  Add a New Idea
+                  Add a New Project
                 </Button>
               </div>
             </div>

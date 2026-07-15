@@ -16,7 +16,7 @@ export default function TrendingIdeas({ ideas = [], loading = false, error = '' 
     <section className="max-w-7xl mx-auto">
       <div className="flex items-end justify-between gap-4 mb-6">
         <div>
-          <p className="text-sm font-semibold tracking-[0.25em] uppercase text-emerald-600">Trending Projects</p>
+          <p className="text-sm font-semibold tracking-[0.25em] uppercase text-emerald-600">Trending Initiatives</p>
           <h2 className="mt-2 text-2xl md:text-4xl font-bold text-theme">Explore community initiatives people are supporting right now</h2>
         </div>
         <Link href="/ideas" className="hidden sm:inline-flex">
