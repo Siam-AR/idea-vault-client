@@ -15,6 +15,7 @@ import {
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useState, useEffect, useCallback, useRef } from 'react';
+import { sanitizeRedirectPath } from '@/lib/auth-redirect';
 
 declare global {
   interface Window {
@@ -42,7 +43,7 @@ function LoginPageContent() {
   const [googleError, setGoogleError] = useState('');
   const googleButtonRef = useRef<HTMLDivElement | null>(null);
   const initializedRef = useRef(false);
-  const redirectTo = searchParams.get('redirectTo') || '/';
+  const redirectTo = sanitizeRedirectPath(searchParams.get('redirectTo'));
   const getOriginLabel = () => (typeof window !== 'undefined' ? window.location.origin : 'this site');
 
   const handleGoogleResponse = useCallback(

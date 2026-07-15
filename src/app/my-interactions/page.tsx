@@ -3,10 +3,11 @@
 import Loader from "@/components/Loader";
 import { commentsAPI } from "@/lib/api";
 import { useAuth } from "@/lib/auth-context";
+import { buildLoginRedirectUrl } from "@/lib/auth-redirect";
 import { useToast } from "@/lib/toast-context";
 import { Button, Card } from "@heroui/react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { FaCommentDots, FaEye, FaRegCommentDots, FaUserEdit } from "react-icons/fa";
 import type { Comment } from "@/types";
@@ -44,6 +45,7 @@ const normalizeCommentText = (text?: string) => {
 
 export default function MyInteractionPage() {
   const router = useRouter();
+  const pathname = usePathname();
   const { loading, isAuthenticated, user } = useAuth();
   const { showToast } = useToast();
 
@@ -53,9 +55,9 @@ export default function MyInteractionPage() {
 
   useEffect(() => {
     if (!loading && !isAuthenticated) {
-      router.push("/login");
+      router.replace(buildLoginRedirectUrl(pathname));
     }
-  }, [loading, isAuthenticated, router]);
+  }, [loading, isAuthenticated, pathname, router]);
 
   useEffect(() => {
     let active = true;

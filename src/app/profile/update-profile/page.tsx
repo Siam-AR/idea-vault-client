@@ -1,13 +1,15 @@
 "use client";
 
 import { useAuth } from '@/lib/auth-context';
+import { buildLoginRedirectUrl } from '@/lib/auth-redirect';
 import { useToast } from '@/lib/toast-context';
 import { Button, Card, Input, Label, TextField } from '@heroui/react';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 export default function UpdateProfilePage() {
   const router = useRouter();
+  const pathname = usePathname();
   const { user, updateProfile, isAuthenticated, loading } = useAuth();
   const { showToast } = useToast();
 
@@ -18,7 +20,7 @@ export default function UpdateProfilePage() {
 
   useEffect(() => {
     if (!loading && !isAuthenticated) {
-      router.push('/login');
+      router.replace(buildLoginRedirectUrl(pathname));
       return;
     }
 
@@ -26,7 +28,7 @@ export default function UpdateProfilePage() {
       setName(user.name || '');
       setImage(user.image || '');
     }
-  }, [loading, isAuthenticated, user, router]);
+  }, [loading, isAuthenticated, pathname, user, router]);
 
   const validateImageUrl = (url: string) => {
     if (!url.trim()) {

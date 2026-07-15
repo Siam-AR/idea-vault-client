@@ -2,22 +2,24 @@
 
 import Loader from '@/components/Loader';
 import { useAuth } from '@/lib/auth-context';
+import { buildLoginRedirectUrl } from '@/lib/auth-redirect';
 import { useToast } from '@/lib/toast-context';
 import { Button, Card } from '@heroui/react';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { FaEdit, FaSignOutAlt, FaUserCircle } from 'react-icons/fa';
 
 export default function ProfilePage() {
   const router = useRouter();
+  const pathname = usePathname();
   const { user, isAuthenticated, loading, logout } = useAuth();
   const { showToast } = useToast();
 
   useEffect(() => {
     if (!loading && !isAuthenticated) {
-      router.push('/login');
+      router.replace(buildLoginRedirectUrl(pathname));
     }
-  }, [loading, isAuthenticated, router]);
+  }, [loading, isAuthenticated, pathname, router]);
 
   const handleLogout = async () => {
     try {

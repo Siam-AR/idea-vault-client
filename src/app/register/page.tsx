@@ -6,13 +6,14 @@ import { Button, Card, Description, FieldError, Form, Input, Label, TextField } 
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useState } from 'react';
+import { sanitizeRedirectPath } from '@/lib/auth-redirect';
 
 function RegisterPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { register } = useAuth();
   const { showToast } = useToast();
-  const redirectTo = searchParams.get('redirectTo') || '/';
+  const redirectTo = sanitizeRedirectPath(searchParams.get('redirectTo'));
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');

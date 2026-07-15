@@ -4,6 +4,7 @@ import Loader from '@/components/Loader';
 import IdeaComments from '@/components/IdeaComments';
 import { ideasAPI } from '@/lib/api';
 import { useAuth } from '@/lib/auth-context';
+import { buildLoginRedirectUrl } from '@/lib/auth-redirect';
 import { Button } from '@heroui/react';
 import Link from 'next/link';
 import { useParams, usePathname, useRouter } from 'next/navigation';
@@ -49,7 +50,7 @@ export default function IdeaDetailsPage() {
 
   useEffect(() => {
     if (!authLoading && !isAuthenticated) {
-      router.push(`/login?redirectTo=${encodeURIComponent(pathname || `/ideas/${ideaId}`)}`);
+      router.replace(buildLoginRedirectUrl(pathname || `/ideas/${ideaId}`));
     }
   }, [authLoading, isAuthenticated, router, pathname, ideaId]);
 

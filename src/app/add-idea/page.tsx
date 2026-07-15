@@ -2,9 +2,10 @@
 
 import { ideasAPI } from "@/lib/api";
 import { useAuth } from "@/lib/auth-context";
+import { buildLoginRedirectUrl } from "@/lib/auth-redirect";
 import { useToast } from "@/lib/toast-context";
 import { Button, Card } from "@heroui/react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { ChangeEvent, FormEvent, useEffect, useMemo, useState } from "react";
 import type { User } from "@/types";
 
@@ -45,6 +46,7 @@ const isValidHttpUrl = (value: string): boolean => {
 
 export default function AddIdeaPage() {
   const router = useRouter();
+  const pathname = usePathname();
   const { user, loading, isAuthenticated } = useAuth();
   const { showToast } = useToast();
 
@@ -54,9 +56,9 @@ export default function AddIdeaPage() {
 
   useEffect(() => {
     if (!loading && !isAuthenticated) {
-      router.push("/login");
+      router.replace(buildLoginRedirectUrl(pathname));
     }
-  }, [loading, isAuthenticated, router]);
+  }, [loading, isAuthenticated, pathname, router]);
 
   const requiredMissing = useMemo(() => {
     const requiredFields: Array<keyof AddIdeaForm> = [
@@ -165,7 +167,7 @@ export default function AddIdeaPage() {
 
         <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <label className="block md:col-span-2">
-            <span className="mb-2 block text-sm font-medium text-slate-700">Project Title *</span>
+            <span className="mb-2 block text-sm font-medium text-slate-700">Community Project Title *</span>
             <input
               name="title"
               value={form.title}
@@ -264,7 +266,7 @@ export default function AddIdeaPage() {
           </label>
 
           <label className="block md:col-span-2">
-            <span className="mb-2 block text-sm font-medium text-slate-700">Support Needed *</span>
+            <span className="mb-2 block text-sm font-medium text-slate-700">Support Needed / Resources *</span>
             <textarea
               name="supportNeeded"
               value={form.supportNeeded}

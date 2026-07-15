@@ -3,6 +3,7 @@
 import Loader from "@/components/Loader";
 import { ideasAPI } from "@/lib/api";
 import { useAuth } from "@/lib/auth-context";
+import { buildLoginRedirectUrl } from "@/lib/auth-redirect";
 import { useToast } from "@/lib/toast-context";
 import {
   Button,
@@ -20,7 +21,7 @@ import {
   Label,
   TextArea,
 } from "@heroui/react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { ChangeEvent, FormEvent, useEffect, useMemo, useState } from "react";
 import { FaCalendarAlt, FaEdit, FaEye, FaMoneyBillWave, FaTrash, FaUser } from "react-icons/fa";
 import type { Idea } from "@/types";
@@ -75,6 +76,7 @@ const fetchUserIdeas = async (): Promise<Idea[]> => {
 
 export default function MyIdeaPage() {
   const router = useRouter();
+  const pathname = usePathname();
   const { loading, isAuthenticated } = useAuth();
   const { showToast } = useToast();
 
@@ -89,9 +91,9 @@ export default function MyIdeaPage() {
 
   useEffect(() => {
     if (!loading && !isAuthenticated) {
-      router.push("/login");
+      router.replace(buildLoginRedirectUrl(pathname));
     }
-  }, [loading, isAuthenticated, router]);
+  }, [loading, isAuthenticated, pathname, router]);
 
   useEffect(() => {
     let active = true;
