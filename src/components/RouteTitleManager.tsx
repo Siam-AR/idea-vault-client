@@ -9,6 +9,9 @@ const BASE_TITLE = "Community Spark";
 const ROUTE_TITLES: Record<string, string> = {
   "/": "Home",
   "/ideas": "Projects",
+  "/about": "About",
+  "/contact": "Contact",
+  "/resources": "Resources",
   "/add-idea": "Add Project",
   "/my-ideas": "My Projects",
   "/my-interactions": "My Contributions",

@@ -74,16 +74,23 @@ const Footer: React.FC = () => {
                 </Link>
               </li>
               <li>
+                <Link href="/about" className="transition hover:text-cyan-400">
+                  About
+                </Link>
+              </li>
+              <li>
                 <Link href="/ideas" className="transition hover:text-emerald-400">
                   Projects
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/my-interactions"
-                  className="transition hover:text-emerald-400"
-                >
-                  My Contributions
+                <Link href="/resources" className="transition hover:text-emerald-400">
+                  Resources
+                </Link>
+              </li>
+              <li>
+                <Link href="/contact" className="transition hover:text-emerald-400">
+                  Contact
                 </Link>
               </li>
             </ul>
@@ -107,11 +114,8 @@ const Footer: React.FC = () => {
               <p>Location: Dhaka, Bangladesh</p>
             </div>
 
-            <Link
-              href="/ideas"
-              className="mt-6 inline-flex items-center gap-2 rounded-full bg-linear-to-r from-emerald-500 to-amber-500 px-6 py-3 text-sm font-semibold shadow-lg shadow-emerald-500/20 transition duration-300 hover:scale-105"
-            >
-              Explore Projects
+            <Link href="/about" className="mt-6 inline-flex items-center gap-2 rounded-full bg-linear-to-r from-emerald-500 to-amber-500 px-6 py-3 text-sm font-semibold shadow-lg shadow-emerald-500/20 transition duration-300 hover:scale-105">
+              Learn More
             </Link>
           </div>
         </div>
@@ -124,14 +128,14 @@ const Footer: React.FC = () => {
           </p>
 
           <div className="flex items-center gap-6">
-            <Link href="/privacy" className="transition hover:text-white">
-              Privacy Policy
-            </Link>
-            <Link href="/terms" className="transition hover:text-white">
-              Terms & Conditions
+            <Link href="/about" className="transition hover:text-white">
+              About
             </Link>
             <Link href="/contact" className="transition hover:text-white">
               Contact
+            </Link>
+            <Link href="/resources" className="transition hover:text-white">
+              Resources
             </Link>
           </div>
         </div>
