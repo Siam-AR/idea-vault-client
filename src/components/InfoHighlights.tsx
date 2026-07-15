@@ -1,7 +1,7 @@
 "use client";
 
 import type { IconType } from "react-icons";
-import { FaBolt, FaChartLine, FaRocket } from "react-icons/fa";
+import { FaHandsHelping, FaHeart, FaLeaf, FaUsers } from "react-icons/fa";
 import React from "react";
 
 interface HighlightItem {
@@ -12,34 +12,34 @@ interface HighlightItem {
 
 const items: HighlightItem[] = [
   {
-    icon: FaBolt,
-    title: "Pitch Clearly",
-    desc: "Structure ideas into concise problem and solution statements.",
+    icon: FaHandsHelping,
+    title: "Start With a Need",
+    desc: "Describe the community challenge clearly so supporters understand the purpose.",
   },
   {
-    icon: FaChartLine,
-    title: "Measure Interest",
-    desc: "Track early signals like comments and saves to gauge traction.",
+    icon: FaUsers,
+    title: "Invite Local Support",
+    desc: "Share the project with volunteers, neighbors, and community leaders who can help.",
   },
   {
-    icon: FaRocket,
-    title: "Plan Experiments",
-    desc: "Design small tests to validate assumptions before building.",
+    icon: FaLeaf,
+    title: "Focus on Impact",
+    desc: "Center your idea on practical outcomes that improve daily life and shared spaces.",
   },
   {
-    icon: FaBolt,
-    title: "Iterate Fast",
-    desc: "Use feedback to refine scope and prioritize features.",
+    icon: FaHeart,
+    title: "Show Care",
+    desc: "Use warm, clear language that makes people feel connected to the mission.",
   },
   {
-    icon: FaChartLine,
+    icon: FaHandsHelping,
     title: "Share Progress",
-    desc: "Post updates to keep the community engaged and informed.",
+    desc: "Post updates so the community can follow the journey and stay involved.",
   },
   {
-    icon: FaRocket,
-    title: "Stay Concise",
-    desc: "Keep descriptions short so readers can quickly grasp the idea.",
+    icon: FaUsers,
+    title: "Build Together",
+    desc: "Keep your description short and welcoming so more people can join in.",
   },
 ];
 
@@ -48,9 +48,9 @@ export default function InfoHighlights() {
     <section className="max-w-7xl mx-auto mt-12">
       <div className="rounded-2xl surface-panel-soft p-8 shadow-sm">
         <div className="text-center">
-          <h3 className="text-2xl font-bold text-theme">Quick Tips</h3>
+          <h3 className="text-2xl font-bold text-theme">Community Tips</h3>
           <p className="mt-2 text-sm text-theme-muted">
-            Short, actionable recommendations to get more useful feedback.
+            Simple ways to present a project so it feels practical, welcoming, and worth supporting.
           </p>
         </div>
 
@@ -63,7 +63,7 @@ export default function InfoHighlights() {
                 key={idx}
                 className="group relative flex gap-4 rounded-xl surface-card p-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
               >
-                <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-gradient-to-tr from-indigo-500 to-purple-500 text-white shadow-sm">
+                <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-linear-to-tr from-emerald-500 to-amber-500 text-white shadow-sm">
                   <Icon className="h-4 w-4" />
                 </div>
 

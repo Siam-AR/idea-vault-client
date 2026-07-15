@@ -19,26 +19,26 @@ import type { Idea } from '@/types';
 const slides = [
   {
     image:
-      'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    title: 'Turn startup ideas into real products',
+      'https://distresscentre.com/wp-content/uploads/2024/03/community-service-1024x672.jpg',
+    title: 'Turn local needs into shared action',
     description:
-      'Share, validate, and refine ideas with a community built for founders, creators, and innovators.',
+      'Share community projects, invite support, and bring practical ideas to life with neighbors and changemakers.',
     overlayOpacity: 0.5,
   },
   {
     image:
-      'https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    title: 'Explore ideas that inspire action',
+      'https://charitysmith.org/wp-content/uploads/2023/09/community.webp',
+    title: 'Explore ideas that strengthen communities',
     description:
-      'Discover trending startup concepts, learn from other builders, and gather feedback before you launch.',
+      'Discover trending initiatives, learn from local builders, and gather support before bringing a project to life.',
     overlayOpacity: 0.48,
   },
   {
     image:
-      'https://images.unsplash.com/photo-1630958234938-4f6a4a9dbf3a?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGDokh1GOFDD4UINIHrSgHoPDhAezJwQM44ybU5k-IoTChzJQ43Z2fVKs&s=10',
     title: 'Validate ideas with real community insight',
     description:
-      'Use comments, discussions, and idea discovery to shape better startup decisions faster.',
+      'Use comments, discussions, and idea discovery to shape better community decisions faster.',
     overlayOpacity: 0.52,
   },
 ];
@@ -143,7 +143,7 @@ export default function Home() {
 
                     <div className="flex gap-4">
                       <Link href="/ideas">
-                        <Button variant="primary">Explore Ideas</Button>
+                        <Button variant="primary">Explore Projects</Button>
                       </Link>
                     </div>
                   </div>

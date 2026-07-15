@@ -1,7 +1,7 @@
 "use client";
 
 import type { IconType } from "react-icons";
-import { FaClipboardList, FaComments, FaThumbsUp } from "react-icons/fa";
+import { FaHandsHelping, FaHeart, FaUsers } from "react-icons/fa";
 import React from "react";
 
 interface StepItem {
@@ -12,19 +12,19 @@ interface StepItem {
 
 const steps: StepItem[] = [
   {
-    icon: FaClipboardList,
-    title: "Post Concisely",
-    text: "Create a clear title and short description so others can quickly understand your idea.",
+    icon: FaHandsHelping,
+    title: "Share a Need",
+    text: "Post a clear community challenge and explain who it affects most.",
   },
   {
-    icon: FaComments,
-    title: "Request Feedback",
-    text: "Ask specific questions in your post to get targeted suggestions from the community.",
+    icon: FaUsers,
+    title: "Invite Support",
+    text: "Ask volunteers, neighbors, and local partners to join the effort.",
   },
   {
-    icon: FaThumbsUp,
-    title: "Iterate & Share",
-    text: "Apply feedback, update your idea, and share progress to attract collaborators.",
+    icon: FaHeart,
+    title: "Grow Together",
+    text: "Use feedback and updates to strengthen the project and keep the community engaged.",
   },
 ];
 
@@ -33,9 +33,9 @@ export default function ParticipationSteps() {
     <section className="max-w-7xl mx-auto mt-10">
       <div className="rounded-2xl surface-panel-soft p-8 shadow-sm">
         <div className="text-center">
-          <h3 className="text-2xl font-semibold text-theme">Participation Steps</h3>
+          <h3 className="text-2xl font-semibold text-theme">How It Works</h3>
           <p className="mt-2 text-sm text-theme-muted">
-            A simple sequence to get meaningful engagement from the community.
+            A simple path to bring people together around a meaningful community project.
           </p>
         </div>
 

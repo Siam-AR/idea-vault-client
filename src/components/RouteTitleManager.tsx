@@ -4,14 +4,14 @@ import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import React from "react";
 
-const BASE_TITLE = "IdeaVault";
+const BASE_TITLE = "Community Spark";
 
 const ROUTE_TITLES: Record<string, string> = {
   "/": "Home",
-  "/ideas": "Ideas",
-  "/add-idea": "Add Idea",
-  "/my-ideas": "My Ideas",
-  "/my-interactions": "My Interactions",
+  "/ideas": "Projects",
+  "/add-idea": "Add Project",
+  "/my-ideas": "My Projects",
+  "/my-interactions": "My Contributions",
   "/login": "Login",
   "/register": "Register",
   "/profile": "My Profile",
@@ -31,7 +31,7 @@ const getTitleFromPath = (pathname: string) => {
   }
 
   if (pathname.startsWith("/ideas/")) {
-    return "Idea Details";
+    return "Project Details";
   }
 
   const segments = pathname.split("/").filter(Boolean);

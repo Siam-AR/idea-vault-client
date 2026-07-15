@@ -15,20 +15,20 @@ interface ResourceCard {
 const cards: ResourceCard[] = [
   {
     icon: FaBookOpen,
-    title: "Guides & Templates",
-    hint: "Templates to structure your idea and experiment plans.",
+    title: "Project Guides",
+    hint: "Helpful templates to shape a community project with clarity and purpose.",
     href: "/resources",
   },
   {
     icon: FaTools,
     title: "Starter Kits",
-    hint: "Minimal checklists for early validation and prototyping.",
+    hint: "Simple planning checklists for outreach, support, and impact tracking.",
     href: "/resources",
   },
   {
     icon: FaLink,
-    title: "External Tools",
-    hint: "Recommended tools for landing pages, surveys, and analytics.",
+    title: "Helpful Tools",
+    hint: "Useful resources for outreach, surveys, and community engagement.",
     href: "/resources",
   },
 ];
@@ -37,9 +37,9 @@ export default function CommunityResources() {
   return (
     <section className="max-w-7xl mx-auto mt-8 mb-8">
       <div className="rounded-2xl surface-panel p-6 shadow-sm">
-        <h3 className="text-lg font-semibold text-theme text-center">Resources</h3>
+        <h3 className="text-lg font-semibold text-theme text-center">Community Resources</h3>
         <p className="mt-2 text-sm text-theme-muted text-center">
-          Useful links and starting points to turn ideas into testable experiments.
+          Useful starting points to turn a local need into a well-supported community project.
         </p>
 
         <div className="mt-4 grid gap-4 sm:grid-cols-3">

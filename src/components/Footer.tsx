@@ -16,14 +16,14 @@ const Footer: React.FC = () => {
           <div>
             <div className="mb-5 flex items-center gap-3">
               <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-white text-xl font-black text-slate-900">
-                V
+                CS
               </div>
-              <h2 className="text-2xl font-black tracking-tight">IdeaVault</h2>
+              <h2 className="text-2xl font-black tracking-tight">Community Spark</h2>
             </div>
 
             <p className="text-sm leading-7 text-gray-400">
-              Share startup ideas, get thoughtful feedback, and refine concepts
-              with a collaborative community of builders.
+              Share community projects, invite support, and grow practical ideas
+              that make neighborhoods and local groups stronger.
             </p>
 
             <div className="mt-6 flex gap-4">
@@ -75,7 +75,7 @@ const Footer: React.FC = () => {
               </li>
               <li>
                 <Link href="/ideas" className="transition hover:text-cyan-400">
-                  Ideas
+                  Projects
                 </Link>
               </li>
               <li>
@@ -83,26 +83,26 @@ const Footer: React.FC = () => {
                   href="/my-interactions"
                   className="transition hover:text-cyan-400"
                 >
-                  My Interactions
+                  My Contributions
                 </Link>
               </li>
             </ul>
           </div>
 
           <div>
-            <h3 className="mb-5 text-lg font-semibold">Idea Topics</h3>
+            <h3 className="mb-5 text-lg font-semibold">Community Topics</h3>
             <ul className="space-y-4 text-sm text-gray-400">
-              <li className="cursor-pointer transition hover:text-blue-400">Tech</li>
-              <li className="cursor-pointer transition hover:text-blue-400">AI</li>
-              <li className="cursor-pointer transition hover:text-blue-400">Health</li>
-              <li className="cursor-pointer transition hover:text-blue-400">Education</li>
+              <li className="cursor-pointer transition hover:text-emerald-400">Education</li>
+              <li className="cursor-pointer transition hover:text-emerald-400">Environment</li>
+              <li className="cursor-pointer transition hover:text-emerald-400">Health</li>
+              <li className="cursor-pointer transition hover:text-emerald-400">Community Welfare</li>
             </ul>
           </div>
 
           <div>
             <h3 className="mb-5 text-lg font-semibold">Contact</h3>
             <div className="space-y-4 text-sm text-gray-400">
-              <p>Email: support@ideavault.app</p>
+              <p>Email: hello@communityspark.org</p>
               <p>Phone: +880 1234-567890</p>
               <p>Location: Dhaka, Bangladesh</p>
             </div>
@@ -111,7 +111,7 @@ const Footer: React.FC = () => {
               href="/ideas"
               className="mt-6 inline-flex items-center gap-2 rounded-full bg-linear-to-r from-cyan-500 to-blue-600 px-6 py-3 text-sm font-semibold shadow-lg shadow-cyan-500/20 transition duration-300 hover:scale-105"
             >
-              Explore Ideas
+              Explore Projects
             </Link>
           </div>
         </div>
@@ -120,7 +120,7 @@ const Footer: React.FC = () => {
 
         <div className="flex flex-col items-center justify-between gap-4 text-sm text-gray-500 md:flex-row">
           <p>
-            © {new Date().getFullYear()} IdeaVault - All rights reserved.
+            © {new Date().getFullYear()} Community Spark - All rights reserved.
           </p>
 
           <div className="flex items-center gap-6">

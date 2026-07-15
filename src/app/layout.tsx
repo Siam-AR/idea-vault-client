@@ -20,8 +20,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'IdeaVault - Startup Idea Sharing Platform',
-  description: 'Share innovative startup ideas, explore ideas posted by others, and engage through comments and discussions.',
+  title: 'Community Spark - Community Project Sharing Platform',
+  description: 'Share community initiatives, discover local projects, and support meaningful ideas that strengthen neighborhoods.',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -35,7 +35,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Script id="theme-init" strategy="beforeInteractive">
           {`(() => {
             try {
-              const storageKey = 'ideaVaultTheme';
+              const storageKey = 'communitySparkTheme';
               const savedTheme = window.localStorage.getItem(storageKey);
               const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
               const theme = savedTheme === 'dark' || savedTheme === 'light' ? savedTheme : (systemPrefersDark ? 'dark' : 'light');

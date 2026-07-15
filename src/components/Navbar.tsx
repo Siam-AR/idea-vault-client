@@ -31,11 +31,11 @@ const Navbar: React.FC = () => {
   const navLinkClass = (active: boolean) => `font-medium transition-colors ${
     active
       ? isDarkMode
-        ? "text-purple-400"
-        : "text-purple-600"
+        ? "text-emerald-400"
+        : "text-emerald-600"
       : isDarkMode
-      ? "hover:text-purple-400"
-      : "hover:text-purple-600"
+      ? "hover:text-emerald-400"
+      : "hover:text-emerald-600"
   }`;
 
   const bgClass = isDarkMode ? "bg-slate-900 text-white" : "bg-white text-slate-900";
@@ -47,10 +47,10 @@ const Navbar: React.FC = () => {
       <nav className="flex items-center justify-between max-w-7xl mx-auto px-4">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 font-bold text-2xl">
-          <div className="w-10 h-10 bg-linear-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center text-white">
-            V
+          <div className="w-10 h-10 bg-linear-to-br from-emerald-500 to-amber-500 rounded-lg flex items-center justify-center text-white">
+            CS
           </div>
-          <span>IdeaVault</span>
+          <span>Community Spark</span>
         </Link>
 
         {/* Center Navigation */}
@@ -62,7 +62,7 @@ const Navbar: React.FC = () => {
           </li>
           <li>
             <Link href="/ideas" className={navLinkClass(isActive("/ideas"))}>
-              Ideas
+              Projects
             </Link>
           </li>
 
@@ -71,17 +71,17 @@ const Navbar: React.FC = () => {
             <>
               <li>
                 <Link href="/add-idea" className={navLinkClass(isActive("/add-idea"))}>
-                  Add Idea
+                  Add Project
                 </Link>
               </li>
               <li>
                 <Link href="/my-ideas" className={navLinkClass(isActive("/my-ideas"))}>
-                  My Ideas
+                  My Projects
                 </Link>
               </li>
               <li>
                 <Link href="/my-interactions" className={navLinkClass(isActive("/my-interactions"))}>
-                  My Interactions
+                  My Contributions
                 </Link>
               </li>
             </>
@@ -154,7 +154,7 @@ const Navbar: React.FC = () => {
                 </Button>
               </Link>
               <Link href="/register">
-                <Button size="sm" className="bg-linear-to-r from-purple-500 to-pink-500 text-white">
+                <Button size="sm" className="bg-linear-to-r from-emerald-500 to-amber-500 text-white">
                   Register
                 </Button>
               </Link>
@@ -173,7 +173,7 @@ const Navbar: React.FC = () => {
           </li>
           <li>
             <Link href="/ideas" className="font-medium">
-              Ideas
+              Projects
             </Link>
           </li>
           {isAuthenticated && (
@@ -185,12 +185,12 @@ const Navbar: React.FC = () => {
               </li>
               <li>
                 <Link href="/my-ideas" className="font-medium">
-                  My Ideas
+                  My Projects
                 </Link>
               </li>
               <li>
                 <Link href="/my-interactions" className="font-medium">
-                  Interactions
+                  Contributions
                 </Link>
               </li>
             </>
