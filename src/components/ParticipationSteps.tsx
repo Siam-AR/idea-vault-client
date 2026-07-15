@@ -49,12 +49,12 @@ export default function ParticipationSteps() {
                 className="group relative flex flex-col items-center text-center rounded-xl surface-card p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
               >
                 <div className="absolute top-3 right-3 text-xs font-medium text-slate-300">0{index + 1}</div>
-                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-linear-to-tr from-indigo-500 to-blue-500 text-white shadow-sm">
+                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-linear-to-tr from-emerald-500 to-amber-500 text-white shadow-sm">
                   <Icon className="h-5 w-5" />
                 </div>
                 <h4 className="mt-4 text-sm font-semibold text-theme">{item.title}</h4>
                 <p className="mt-2 text-xs leading-relaxed text-theme-muted">{item.text}</p>
-                <div className="absolute bottom-3 opacity-0 group-hover:opacity-100 transition text-[10px] text-indigo-600 dark:text-indigo-300">
+                <div className="absolute bottom-3 opacity-0 group-hover:opacity-100 transition text-[10px] text-emerald-600 dark:text-emerald-300">
                   Learn more →
                 </div>
               </div>

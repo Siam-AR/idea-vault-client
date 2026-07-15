@@ -6,8 +6,8 @@ import React from "react";
 const Footer: React.FC = () => {
   return (
     <footer className="relative mt-24 overflow-hidden bg-slate-950 text-white">
-      <div className="absolute top-0 left-0 h-72 w-72 rounded-full bg-cyan-500/10 blur-3xl" />
-      <div className="absolute right-0 bottom-0 h-72 w-72 rounded-full bg-blue-500/10 blur-3xl" />
+      <div className="absolute top-0 left-0 h-72 w-72 rounded-full bg-emerald-500/10 blur-3xl" />
+      <div className="absolute right-0 bottom-0 h-72 w-72 rounded-full bg-amber-500/10 blur-3xl" />
 
       <div className="h-px w-full bg-linear-to-r from-transparent via-white/20 to-transparent" />
 
@@ -74,14 +74,14 @@ const Footer: React.FC = () => {
                 </Link>
               </li>
               <li>
-                <Link href="/ideas" className="transition hover:text-cyan-400">
+                <Link href="/ideas" className="transition hover:text-emerald-400">
                   Projects
                 </Link>
               </li>
               <li>
                 <Link
                   href="/my-interactions"
-                  className="transition hover:text-cyan-400"
+                  className="transition hover:text-emerald-400"
                 >
                   My Contributions
                 </Link>
@@ -109,7 +109,7 @@ const Footer: React.FC = () => {
 
             <Link
               href="/ideas"
-              className="mt-6 inline-flex items-center gap-2 rounded-full bg-linear-to-r from-cyan-500 to-blue-600 px-6 py-3 text-sm font-semibold shadow-lg shadow-cyan-500/20 transition duration-300 hover:scale-105"
+              className="mt-6 inline-flex items-center gap-2 rounded-full bg-linear-to-r from-emerald-500 to-amber-500 px-6 py-3 text-sm font-semibold shadow-lg shadow-emerald-500/20 transition duration-300 hover:scale-105"
             >
               Explore Projects
             </Link>

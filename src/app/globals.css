@@ -3,24 +3,24 @@
 
 :root {
   color-scheme: light;
-  --page-bg: #f8fafc;
-  --page-text: #0f172a;
-  --surface-bg: rgba(255, 255, 255, 0.88);
-  --surface-border: rgba(226, 232, 240, 1);
-  --surface-muted: rgba(248, 250, 252, 1);
+  --page-bg: #f6f7ef;
+  --page-text: #183a2b;
+  --surface-bg: rgba(255, 255, 255, 0.92);
+  --surface-border: rgba(209, 233, 212, 1);
+  --surface-muted: rgba(245, 247, 239, 1);
 }
 
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --page-bg: #020617;
-  --page-text: #e2e8f0;
-  --surface-bg: rgba(15, 23, 42, 0.92);
-  --surface-border: rgba(51, 65, 85, 1);
-  --surface-muted: rgba(15, 23, 42, 0.72);
+  --page-bg: #071a14;
+  --page-text: #edf7ee;
+  --surface-bg: rgba(12, 29, 22, 0.94);
+  --surface-border: rgba(62, 94, 72, 1);
+  --surface-muted: rgba(16, 35, 27, 0.82);
 }
 
 html, body {
-  background: var(--page-bg);
+  background: linear-gradient(135deg, var(--page-bg) 0%, #f2efe5 100%);
   color: var(--page-text);
 }
 

@@ -52,7 +52,7 @@ export default function CommunityResources() {
                 className="block transform rounded-lg surface-card p-4 transition hover:-translate-y-1 hover:shadow-xl"
               >
                 <div className="flex flex-col items-center gap-3 text-center">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-md bg-linear-to-r from-purple-600 to-indigo-500 text-white">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-md bg-linear-to-r from-emerald-600 to-amber-500 text-white">
                     <Icon className="w-5 h-5" />
                   </div>
                   <div>

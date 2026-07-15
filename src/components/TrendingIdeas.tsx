@@ -55,7 +55,7 @@ export default function TrendingIdeas({ ideas = [], loading = false, error = '' 
 
               <div className="flex h-full flex-1 flex-col p-5">
                 <div className="flex items-center justify-between gap-3">
-                  <span className="inline-flex rounded-full bg-purple-100 px-3 py-1 text-xs font-semibold text-purple-700">
+                  <span className="inline-flex rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700">
                     {idea.category}
                   </span>
                   <span className="text-xs text-theme-muted">
@@ -68,13 +68,13 @@ export default function TrendingIdeas({ ideas = [], loading = false, error = '' 
                 <p className="mt-3 text-sm text-theme-muted line-clamp-3 min-h-18">{idea.shortDescription}</p>
 
                 <div className="mt-3 flex items-center justify-between text-xs">
-                  <span className="inline-flex items-center gap-1 rounded-full bg-green-50 px-3 py-1 font-medium text-green-700 border border-green-100 dark:border-green-900/40 dark:bg-green-950/30 dark:text-green-200">
-                    <FaMoneyBillWave className="text-green-600 text-xs" />
+                  <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-3 py-1 font-medium text-amber-700 border border-amber-100 dark:border-amber-900/40 dark:bg-amber-950/30 dark:text-amber-200">
+                    <FaMoneyBillWave className="text-amber-600 text-xs" />
                     Budget: {idea.estimatedBudget || 'Not listed'}
                   </span>
 
-                  <span className="inline-flex items-center gap-1 rounded-full bg-blue-50 px-3 py-1 font-medium text-blue-600 border border-blue-100 dark:border-blue-900/40 dark:bg-blue-950/30 dark:text-blue-200">
-                    <FaUser className="text-blue-500 text-xs" />
+                  <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-3 py-1 font-medium text-emerald-700 border border-emerald-100 dark:border-emerald-900/40 dark:bg-emerald-950/30 dark:text-emerald-200">
+                    <FaUser className="text-emerald-600 text-xs" />
                     {idea.userName || idea.userEmail || 'Anonymous'}
                   </span>
                 </div>
