@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+analysis_scan.py
+dev-server.log
+test_file_access.txt
