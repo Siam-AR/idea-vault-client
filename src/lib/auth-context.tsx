@@ -1,8 +1,8 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { authAPI } from './api';
-import type { AuthResponse, User } from '@/types';
+import React, { createContext, useContext, useState, useEffect } from "react";
+import { authAPI } from "./api";
+import type { AuthResponse, User, UserRole } from "@/types";
 
 interface AuthContextValue {
   user: User | null;
@@ -16,6 +16,10 @@ interface AuthContextValue {
   logout: () => void;
   updateProfile: (data: Partial<User>) => Promise<void>;
   isAuthenticated: boolean;
+  isFounder: boolean;
+  isInvestor: boolean;
+  isAdmin: boolean;
+  hasRole: (role: UserRole | UserRole[]) => boolean;
 }
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
@@ -28,14 +32,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     const checkAuth = async () => {
-      const savedToken = localStorage.getItem('token');
+      const savedToken = localStorage.getItem("token");
       if (savedToken) {
         try {
           setToken(savedToken);
           const { user: userData } = await authAPI.getUser();
           setUser(userData || null);
         } catch {
-          localStorage.removeItem('token');
+          localStorage.removeItem("token");
           setToken(null);
           setUser(null);
         }
@@ -46,46 +50,54 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     checkAuth();
   }, []);
 
-  const register = async (data: Record<string, unknown>): Promise<AuthResponse> => {
+  const register = async (
+    data: Record<string, unknown>,
+  ): Promise<AuthResponse> => {
     try {
       setError(null);
       const response = await authAPI.register(data);
-      localStorage.setItem('token', response.token || '');
+      localStorage.setItem("token", response.token || "");
       setToken(response.token || null);
       setUser(response.user || null);
       return response;
     } catch (err) {
-      const errorMsg = err instanceof Error ? err.message : 'Registration failed';
+      const errorMsg =
+        err instanceof Error ? err.message : "Registration failed";
       setError(errorMsg);
       throw err;
     }
   };
 
-  const login = async (data: Record<string, unknown>): Promise<AuthResponse> => {
+  const login = async (
+    data: Record<string, unknown>,
+  ): Promise<AuthResponse> => {
     try {
       setError(null);
       const response = await authAPI.login(data);
-      localStorage.setItem('token', response.token || '');
+      localStorage.setItem("token", response.token || "");
       setToken(response.token || null);
       setUser(response.user || null);
       return response;
     } catch (err) {
-      const errorMsg = err instanceof Error ? err.message : 'Login failed';
+      const errorMsg = err instanceof Error ? err.message : "Login failed";
       setError(errorMsg);
       throw err;
     }
   };
 
-  const googleLogin = async (data: Record<string, unknown>): Promise<AuthResponse> => {
+  const googleLogin = async (
+    data: Record<string, unknown>,
+  ): Promise<AuthResponse> => {
     try {
       setError(null);
       const response = await authAPI.googleLogin(data);
-      localStorage.setItem('token', response.token || '');
+      localStorage.setItem("token", response.token || "");
       setToken(response.token || null);
       setUser(response.user || null);
       return response;
     } catch (err) {
-      const errorMsg = err instanceof Error ? err.message : 'Google login failed';
+      const errorMsg =
+        err instanceof Error ? err.message : "Google login failed";
       setError(errorMsg);
       throw err;
     }
@@ -94,14 +106,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const forgotPassword = async (email: string): Promise<void> => {
     const trimmedEmail = email?.trim();
     if (!trimmedEmail) {
-      throw new Error('Please enter your email address.');
+      throw new Error("Please enter your email address.");
     }
 
     await Promise.resolve();
   };
 
   const logout = () => {
-    localStorage.removeItem('token');
+    localStorage.removeItem("token");
     setToken(null);
     setUser(null);
     setError(null);
@@ -111,12 +123,20 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     try {
       setError(null);
       await authAPI.updateUser(data);
-      setUser((currentUser) => (currentUser ? { ...currentUser, ...data } : currentUser));
+      setUser((currentUser) =>
+        currentUser ? { ...currentUser, ...data } : currentUser,
+      );
     } catch (err) {
-      const errorMsg = err instanceof Error ? err.message : 'Update failed';
+      const errorMsg = err instanceof Error ? err.message : "Update failed";
       setError(errorMsg);
       throw err;
     }
+  };
+
+  const hasRole = (role: UserRole | UserRole[]) => {
+    if (!user) return false;
+    const allowedRoles = Array.isArray(role) ? role : [role];
+    return allowedRoles.includes(user.role);
   };
 
   return (
@@ -133,6 +153,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         logout,
         updateProfile,
         isAuthenticated: !!user,
+        isFounder: user?.role === "FOUNDER",
+        isInvestor: user?.role === "INVESTOR",
+        isAdmin: user?.role === "ADMIN",
+        hasRole,
       }}
     >
       {children}
@@ -143,7 +167,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 };

@@ -1,3 +1,5 @@
+export type UserRole = "FOUNDER" | "INVESTOR" | "ADMIN";
+
 export interface User {
   _id: string;
   id?: string;
@@ -5,7 +7,7 @@ export interface User {
   email?: string;
   image?: string;
   avatar?: string;
-  role?: string;
+  role: UserRole;
   createdAt?: string;
   updatedAt?: string;
 }
