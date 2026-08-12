@@ -18,7 +18,8 @@ import { useTheme } from "@/lib/theme-context";
 import type { User } from "@/types";
 
 const Navbar: React.FC = () => {
-  const { user, logout, isAuthenticated } = useAuth();
+  const { user, logout, isAuthenticated, isAdmin, isFounder, isInvestor } =
+    useAuth();
   const { isDarkMode, toggleTheme } = useTheme();
   const pathname = usePathname();
 
@@ -28,22 +29,29 @@ const Navbar: React.FC = () => {
 
   const isActive = (href: string) => pathname === href;
 
-  const navLinkClass = (active: boolean) => `font-medium transition-colors ${
-    active
-      ? isDarkMode
-        ? "text-purple-400"
-        : "text-purple-600"
-      : isDarkMode
-      ? "hover:text-purple-400"
-      : "hover:text-purple-600"
-  }`;
+  const navLinkClass = (active: boolean) =>
+    `font-medium transition-colors ${
+      active
+        ? isDarkMode
+          ? "text-purple-400"
+          : "text-purple-600"
+        : isDarkMode
+          ? "hover:text-purple-400"
+          : "hover:text-purple-600"
+    }`;
 
-  const bgClass = isDarkMode ? "bg-slate-900 text-white" : "bg-white text-slate-900";
+  const bgClass = isDarkMode
+    ? "bg-slate-900 text-white"
+    : "bg-white text-slate-900";
   const borderClass = isDarkMode ? "border-slate-800" : "border-slate-200";
-  const themeButtonClass = isDarkMode ? "bg-slate-800 hover:bg-slate-700" : "bg-slate-100 hover:bg-slate-200";
+  const themeButtonClass = isDarkMode
+    ? "bg-slate-800 hover:bg-slate-700"
+    : "bg-slate-100 hover:bg-slate-200";
 
   return (
-    <div className={`${bgClass} py-4 sticky top-0 z-50 border-b ${borderClass}`}>
+    <div
+      className={`${bgClass} py-4 sticky top-0 z-50 border-b ${borderClass}`}
+    >
       <nav className="flex items-center justify-between max-w-7xl mx-auto px-4">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 font-bold text-2xl">
@@ -69,18 +77,39 @@ const Navbar: React.FC = () => {
           {/* Private Routes - Only for logged in users */}
           {isAuthenticated && (
             <>
+              {!isInvestor && (
+                <li>
+                  <Link
+                    href="/add-idea"
+                    className={navLinkClass(isActive("/add-idea"))}
+                  >
+                    Add Idea
+                  </Link>
+                </li>
+              )}
+              {isAdmin && (
+                <li>
+                  <Link
+                    href="/admin"
+                    className={navLinkClass(isActive("/admin"))}
+                  >
+                    Admin
+                  </Link>
+                </li>
+              )}
               <li>
-                <Link href="/add-idea" className={navLinkClass(isActive("/add-idea"))}>
-                  Add Idea
-                </Link>
-              </li>
-              <li>
-                <Link href="/my-ideas" className={navLinkClass(isActive("/my-ideas"))}>
+                <Link
+                  href="/my-ideas"
+                  className={navLinkClass(isActive("/my-ideas"))}
+                >
                   My Ideas
                 </Link>
               </li>
               <li>
-                <Link href="/my-interactions" className={navLinkClass(isActive("/my-interactions"))}>
+                <Link
+                  href="/my-interactions"
+                  className={navLinkClass(isActive("/my-interactions"))}
+                >
                   My Interactions
                 </Link>
               </li>
@@ -91,7 +120,10 @@ const Navbar: React.FC = () => {
         {/* Right Section */}
         <div className="flex items-center gap-4">
           {/* Theme Toggle */}
-          <button onClick={toggleTheme} className={`p-2 rounded-lg transition-colors ${themeButtonClass}`}>
+          <button
+            onClick={toggleTheme}
+            className={`p-2 rounded-lg transition-colors ${themeButtonClass}`}
+          >
             {isDarkMode ? (
               <MdDarkMode className="text-white text-xl" />
             ) : (
@@ -105,10 +137,18 @@ const Navbar: React.FC = () => {
               <DropdownTrigger>
                 <div className="flex items-center gap-2 cursor-pointer">
                   <Avatar className="transition-transform" size="sm">
-                    <Avatar.Image referrerPolicy="no-referrer" alt={user?.name || "User"} src={user?.image} />
-                    <Avatar.Fallback>{user?.name?.charAt(0)?.toUpperCase()}</Avatar.Fallback>
+                    <Avatar.Image
+                      referrerPolicy="no-referrer"
+                      alt={user?.name || "User"}
+                      src={user?.image}
+                    />
+                    <Avatar.Fallback>
+                      {user?.name?.charAt(0)?.toUpperCase()}
+                    </Avatar.Fallback>
                   </Avatar>
-                  <span className="hidden sm:inline font-medium">{user?.name}</span>
+                  <span className="hidden sm:inline font-medium">
+                    {user?.name}
+                  </span>
                 </div>
               </DropdownTrigger>
               <Dropdown.Popover>
@@ -125,19 +165,32 @@ const Navbar: React.FC = () => {
                       </Avatar.Fallback>
                     </Avatar>
                     <div className="flex flex-col gap-0">
-                      <p className="text-sm leading-5 font-medium">{user?.name}</p>
-                      <p className="text-xs leading-none text-muted">{(user as User | null)?.email}</p>
+                      <p className="text-sm leading-5 font-medium">
+                        {user?.name}
+                      </p>
+                      <p className="text-xs leading-none text-muted">
+                        {(user as User | null)?.email}
+                      </p>
                     </div>
                   </div>
                 </div>
                 <Dropdown.Menu aria-label="User Actions">
-                  <DropdownItem id="profile" textValue="Profile" href="/profile">
+                  <DropdownItem
+                    id="profile"
+                    textValue="Profile"
+                    href="/profile"
+                  >
                     <div className="flex w-full items-center justify-between gap-2">
                       <Label>Profile</Label>
                       <MdPerson className="size-3.5 text-muted" />
                     </div>
                   </DropdownItem>
-                  <DropdownItem id="logout" textValue="Logout" variant="danger" onClick={handleSignOut}>
+                  <DropdownItem
+                    id="logout"
+                    textValue="Logout"
+                    variant="danger"
+                    onClick={handleSignOut}
+                  >
                     <div className="flex w-full items-center justify-between gap-2">
                       <Label>Logout</Label>
                       <MdLogout className="size-3.5 text-danger" />
@@ -149,12 +202,19 @@ const Navbar: React.FC = () => {
           ) : (
             <div className="flex items-center gap-2">
               <Link href="/login">
-                <Button variant="ghost" size="sm" className={isDarkMode ? "text-white" : ""}>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className={isDarkMode ? "text-white" : ""}
+                >
                   Login
                 </Button>
               </Link>
               <Link href="/register">
-                <Button size="sm" className="bg-linear-to-r from-purple-500 to-pink-500 text-white">
+                <Button
+                  size="sm"
+                  className="bg-linear-to-r from-purple-500 to-pink-500 text-white"
+                >
                   Register
                 </Button>
               </Link>
@@ -178,11 +238,20 @@ const Navbar: React.FC = () => {
           </li>
           {isAuthenticated && (
             <>
-              <li>
-                <Link href="/add-idea" className="font-medium">
-                  Add
-                </Link>
-              </li>
+              {!isInvestor && (
+                <li>
+                  <Link href="/add-idea" className="font-medium">
+                    Add
+                  </Link>
+                </li>
+              )}
+              {isAdmin && (
+                <li>
+                  <Link href="/admin" className="font-medium">
+                    Admin
+                  </Link>
+                </li>
+              )}
               <li>
                 <Link href="/my-ideas" className="font-medium">
                   My Ideas

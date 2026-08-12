@@ -7,8 +7,17 @@ import { Button, Card } from "@heroui/react";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, FormEvent, useEffect, useMemo, useState } from "react";
 import type { User } from "@/types";
+import RoleGuard from "@/components/auth/RoleGuard";
 
-const CATEGORIES = ["Tech", "Health", "AI", "Education", "Finance", "SaaS", "Environment"];
+const CATEGORIES = [
+  "Tech",
+  "Health",
+  "AI",
+  "Education",
+  "Finance",
+  "SaaS",
+  "Environment",
+];
 
 interface AddIdeaForm {
   title: string;
@@ -75,7 +84,11 @@ export default function AddIdeaPage() {
     return requiredFields.some((key) => !String(form[key] || "").trim());
   }, [form]);
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleChange = (
+    event: ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >,
+  ) => {
     const { name, value } = event.target;
     const key = name as keyof AddIdeaForm;
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -128,7 +141,8 @@ export default function AddIdeaPage() {
       router.push("/ideas");
       router.refresh();
     } catch (error) {
-      const message = (error as Error)?.message || "Unable to submit idea right now.";
+      const message =
+        (error as Error)?.message || "Unable to submit idea right now.";
       setFormError(message);
       showToast(message, "error", 3500);
     } finally {
@@ -148,12 +162,16 @@ export default function AddIdeaPage() {
     return null;
   }
 
-  return (
+  const pageContent = (
     <div className="px-4 py-8 md:py-10">
       <Card className="mx-auto max-w-4xl border border-slate-200 p-6 md:p-8 shadow-sm">
         <div className="mb-6 space-y-2">
-          <h1 className="text-2xl md:text-3xl font-bold text-slate-900">Add A Startup Idea</h1>
-          <p className="text-sm text-slate-600">Share your concept with the community and get real feedback.</p>
+          <h1 className="text-2xl md:text-3xl font-bold text-slate-900">
+            Add A Startup Idea
+          </h1>
+          <p className="text-sm text-slate-600">
+            Share your concept with the community and get real feedback.
+          </p>
         </div>
 
         {formError && (
@@ -162,9 +180,14 @@ export default function AddIdeaPage() {
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <form
+          onSubmit={handleSubmit}
+          className="grid grid-cols-1 gap-4 md:grid-cols-2"
+        >
           <label className="block md:col-span-2">
-            <span className="mb-2 block text-sm font-medium text-slate-700">Idea Title *</span>
+            <span className="mb-2 block text-sm font-medium text-slate-700">
+              Idea Title *
+            </span>
             <input
               name="title"
               value={form.title}
@@ -175,7 +198,9 @@ export default function AddIdeaPage() {
           </label>
 
           <label className="block md:col-span-2">
-            <span className="mb-2 block text-sm font-medium text-slate-700">Short Description *</span>
+            <span className="mb-2 block text-sm font-medium text-slate-700">
+              Short Description *
+            </span>
             <textarea
               name="shortDescription"
               value={form.shortDescription}
@@ -187,7 +212,9 @@ export default function AddIdeaPage() {
           </label>
 
           <label className="block md:col-span-2">
-            <span className="mb-2 block text-sm font-medium text-slate-700">Detailed Description *</span>
+            <span className="mb-2 block text-sm font-medium text-slate-700">
+              Detailed Description *
+            </span>
             <textarea
               name="detailedDescription"
               value={form.detailedDescription}
@@ -199,7 +226,9 @@ export default function AddIdeaPage() {
           </label>
 
           <label className="block">
-            <span className="mb-2 block text-sm font-medium text-slate-700">Category *</span>
+            <span className="mb-2 block text-sm font-medium text-slate-700">
+              Category *
+            </span>
             <select
               name="category"
               value={form.category}
@@ -215,7 +244,9 @@ export default function AddIdeaPage() {
           </label>
 
           <label className="block">
-            <span className="mb-2 block text-sm font-medium text-slate-700">Tags (optional)</span>
+            <span className="mb-2 block text-sm font-medium text-slate-700">
+              Tags (optional)
+            </span>
             <input
               name="tags"
               value={form.tags}
@@ -226,7 +257,9 @@ export default function AddIdeaPage() {
           </label>
 
           <label className="block md:col-span-2">
-            <span className="mb-2 block text-sm font-medium text-slate-700">Image URL *</span>
+            <span className="mb-2 block text-sm font-medium text-slate-700">
+              Image URL *
+            </span>
             <input
               name="imageURL"
               value={form.imageURL}
@@ -237,7 +270,9 @@ export default function AddIdeaPage() {
           </label>
 
           <label className="block">
-            <span className="mb-2 block text-sm font-medium text-slate-700">Estimated Budget (optional)</span>
+            <span className="mb-2 block text-sm font-medium text-slate-700">
+              Estimated Budget (optional)
+            </span>
             <input
               name="estimatedBudget"
               value={form.estimatedBudget}
@@ -248,7 +283,9 @@ export default function AddIdeaPage() {
           </label>
 
           <label className="block">
-            <span className="mb-2 block text-sm font-medium text-slate-700">Target Audience *</span>
+            <span className="mb-2 block text-sm font-medium text-slate-700">
+              Target Audience *
+            </span>
             <input
               name="targetAudience"
               value={form.targetAudience}
@@ -259,7 +296,9 @@ export default function AddIdeaPage() {
           </label>
 
           <label className="block md:col-span-2">
-            <span className="mb-2 block text-sm font-medium text-slate-700">Problem Statement *</span>
+            <span className="mb-2 block text-sm font-medium text-slate-700">
+              Problem Statement *
+            </span>
             <textarea
               name="problemStatement"
               value={form.problemStatement}
@@ -271,7 +310,9 @@ export default function AddIdeaPage() {
           </label>
 
           <label className="block md:col-span-2">
-            <span className="mb-2 block text-sm font-medium text-slate-700">Proposed Solution *</span>
+            <span className="mb-2 block text-sm font-medium text-slate-700">
+              Proposed Solution *
+            </span>
             <textarea
               name="proposedSolution"
               value={form.proposedSolution}
@@ -286,7 +327,12 @@ export default function AddIdeaPage() {
             <Button type="submit" variant="primary" isDisabled={submitting}>
               {submitting ? "Submitting..." : "Submit Idea"}
             </Button>
-            <Button type="button" variant="outline" onPress={() => router.push("/ideas")} isDisabled={submitting}>
+            <Button
+              type="button"
+              variant="outline"
+              onPress={() => router.push("/ideas")}
+              isDisabled={submitting}
+            >
               Cancel
             </Button>
           </div>
@@ -294,4 +340,6 @@ export default function AddIdeaPage() {
       </Card>
     </div>
   );
+
+  return <RoleGuard allowedRoles={["FOUNDER"]}>{pageContent}</RoleGuard>;
 }
