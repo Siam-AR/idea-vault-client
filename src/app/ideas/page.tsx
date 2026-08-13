@@ -1,35 +1,44 @@
 "use client";
 
-import Loader from '@/components/Loader';
-import { ideasAPI } from '@/lib/api';
-import { Button } from '@heroui/react';
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { FaCalendarAlt, FaFilter, FaMoneyBillWave, FaSearch, FaUser } from 'react-icons/fa';
-import type { Idea } from '@/types';
+import IdeaCard from "@/components/IdeaCard";
+import Loader from "@/components/Loader";
+import { ideasAPI } from "@/lib/api";
+import { Button } from "@heroui/react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { FaFilter, FaSearch } from "react-icons/fa";
+import type { Idea } from "@/types";
 
-const CATEGORY_OPTIONS = ['All Categories', 'Tech', 'AI', 'Health', 'Education', 'Finance', 'SaaS'];
+const CATEGORY_OPTIONS = [
+  "All Categories",
+  "Tech",
+  "AI",
+  "Health",
+  "Education",
+  "Finance",
+  "SaaS",
+];
 
 const formatDate = (value?: string) => {
-  if (!value) return 'Recently';
+  if (!value) return "Recently";
 
   const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return 'Recently';
+  if (Number.isNaN(date.getTime())) return "Recently";
 
-  return date.toLocaleDateString('en-US', {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
+  return date.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
   });
 };
 
 const formatBudget = (budget?: number | string) => {
-  if (!budget) return 'Budget not shared';
+  if (!budget) return "Budget not shared";
 
-  if (typeof budget === 'number') {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
+  if (typeof budget === "number") {
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
       maximumFractionDigits: 0,
     }).format(budget);
   }
@@ -41,13 +50,14 @@ export default function IdeaPage() {
   const router = useRouter();
   const [totalIdeasCount, setTotalIdeasCount] = useState(0);
   const [ideas, setIdeas] = useState<Idea[]>([]);
+  const [savedIdeaIds, setSavedIdeaIds] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-  const [searchValue, setSearchValue] = useState('');
-  const [debouncedSearch, setDebouncedSearch] = useState('');
-  const [category, setCategory] = useState('All Categories');
-  const [dateFrom, setDateFrom] = useState('');
-  const [dateTo, setDateTo] = useState('');
+  const [error, setError] = useState("");
+  const [searchValue, setSearchValue] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [category, setCategory] = useState("All Categories");
+  const [dateFrom, setDateFrom] = useState("");
+  const [dateTo, setDateTo] = useState("");
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
@@ -78,18 +88,22 @@ export default function IdeaPage() {
 
         const filters: Record<string, string> = {};
         if (debouncedSearch) filters.search = debouncedSearch;
-        if (category !== 'All Categories') filters.category = category;
+        if (category !== "All Categories") filters.category = category;
         if (dateFrom) filters.dateFrom = dateFrom;
         if (dateTo) filters.dateTo = dateTo;
 
         const data = await ideasAPI.getAll(filters);
         if (!active) return;
         setIdeas(Array.isArray(data) ? data : []);
-        setError('');
+        setError("");
       } catch (fetchError) {
         if (!active) return;
         setIdeas([]);
-        setError(fetchError instanceof Error ? fetchError.message : 'Unable to load ideas right now.');
+        setError(
+          fetchError instanceof Error
+            ? fetchError.message
+            : "Unable to load ideas right now.",
+        );
       } finally {
         if (active) {
           setLoading(false);
@@ -106,21 +120,45 @@ export default function IdeaPage() {
   }, [debouncedSearch, category, dateFrom, dateTo]);
 
   const resetFilters = () => {
-    setSearchValue('');
-    setDebouncedSearch('');
-    setCategory('All Categories');
-    setDateFrom('');
-    setDateTo('');
+    setSearchValue("");
+    setDebouncedSearch("");
+    setCategory("All Categories");
+    setDateFrom("");
+    setDateTo("");
   };
 
   const openIdeaDetails = (ideaId?: string) => {
     if (ideaId) router.push(`/ideas/${ideaId}`);
   };
 
-  const handleCardKeyDown = (event: React.KeyboardEvent<HTMLElement>, ideaId?: string) => {
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault();
-      openIdeaDetails(ideaId);
+  const handleToggleSave = async (ideaId: string) => {
+    const normalizedId = ideaId || "";
+    if (!normalizedId) return false;
+
+    setSavedIdeaIds((previous) => {
+      const next = new Set(previous);
+      if (next.has(normalizedId)) {
+        next.delete(normalizedId);
+      } else {
+        next.add(normalizedId);
+      }
+      return next;
+    });
+
+    try {
+      const result = await ideasAPI.bookmarkIdea(normalizedId);
+      return result.saved;
+    } catch (saveError) {
+      setSavedIdeaIds((previous) => {
+        const next = new Set(previous);
+        if (next.has(normalizedId)) {
+          next.delete(normalizedId);
+        } else {
+          next.add(normalizedId);
+        }
+        return next;
+      });
+      throw saveError;
     }
   };
 
@@ -137,21 +175,36 @@ export default function IdeaPage() {
 
             <div className="space-y-3">
               <h1 className="max-w-3xl text-3xl font-black tracking-tight text-slate-900 md:text-5xl">
-                Discover startup ideas built for validation, feedback, and momentum.
+                Discover startup ideas built for validation, feedback, and
+                momentum.
               </h1>
               <p className="max-w-2xl text-sm leading-7 text-slate-600 md:text-base">
-                Search by title, filter by category, and narrow results by published date range.
+                Search by title, filter by category, and narrow results by
+                published date range.
               </p>
             </div>
 
             <div className="grid gap-3 sm:grid-cols-3">
               {[
-                { value: totalIdeasCount, label: 'Total ideas available', icon: FaFilter },
-                { value: ideas.length, label: 'Filtered ideas available', icon: FaSearch },
+                {
+                  value: totalIdeasCount,
+                  label: "Total ideas available",
+                  icon: FaFilter,
+                },
+                {
+                  value: ideas.length,
+                  label: "Filtered ideas available",
+                  icon: FaSearch,
+                },
               ].map((stat) => (
-                <div key={stat.label} className="ideas-hero-stat rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+                <div
+                  key={stat.label}
+                  className="ideas-hero-stat rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"
+                >
                   <stat.icon className="text-cyan-600" />
-                  <p className="mt-3 text-2xl font-bold text-slate-900">{stat.value}</p>
+                  <p className="mt-3 text-2xl font-bold text-slate-900">
+                    {stat.value}
+                  </p>
                   <p className="text-sm text-slate-600">{stat.label}</p>
                 </div>
               ))}
@@ -159,10 +212,14 @@ export default function IdeaPage() {
           </div>
 
           <div className="ideas-hero-filters rounded-3xl border border-slate-200 bg-slate-50 p-5 shadow-sm md:p-6">
-            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-cyan-700">Filters</p>
+            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-cyan-700">
+              Filters
+            </p>
             <div className="mt-4 space-y-4">
               <label className="block">
-                <span className="mb-2 block text-sm font-medium text-slate-700">Search by title</span>
+                <span className="mb-2 block text-sm font-medium text-slate-700">
+                  Search by title
+                </span>
                 <div className="ideas-hero-input flex items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-slate-700 shadow-sm">
                   <FaSearch className="shrink-0 text-slate-400" />
                   <input
@@ -177,7 +234,9 @@ export default function IdeaPage() {
 
               <div className="grid gap-4 sm:grid-cols-2">
                 <label className="block">
-                  <span className="mb-2 block text-sm font-medium text-slate-700">Category</span>
+                  <span className="mb-2 block text-sm font-medium text-slate-700">
+                    Category
+                  </span>
                   <select
                     value={category}
                     onChange={(event) => setCategory(event.target.value)}
@@ -192,7 +251,9 @@ export default function IdeaPage() {
                 </label>
 
                 <label className="block">
-                  <span className="mb-2 block text-sm font-medium text-slate-700">Date from</span>
+                  <span className="mb-2 block text-sm font-medium text-slate-700">
+                    Date from
+                  </span>
                   <input
                     value={dateFrom}
                     onChange={(event) => setDateFrom(event.target.value)}
@@ -204,7 +265,9 @@ export default function IdeaPage() {
 
               <div className="grid gap-4 sm:grid-cols-2">
                 <label className="block">
-                  <span className="mb-2 block text-sm font-medium text-slate-700">Date to</span>
+                  <span className="mb-2 block text-sm font-medium text-slate-700">
+                    Date to
+                  </span>
                   <input
                     value={dateTo}
                     onChange={(event) => setDateTo(event.target.value)}
@@ -214,7 +277,11 @@ export default function IdeaPage() {
                 </label>
 
                 <div className="flex items-end">
-                  <Button onPress={resetFilters} className="h-12.5 w-full border border-slate-200 bg-white text-slate-700 shadow-sm" variant="outline">
+                  <Button
+                    onPress={resetFilters}
+                    className="h-12.5 w-full border border-slate-200 bg-white text-slate-700 shadow-sm"
+                    variant="outline"
+                  >
                     Reset Filters
                   </Button>
                 </div>
@@ -237,7 +304,9 @@ export default function IdeaPage() {
         ) : ideas.length === 0 ? (
           <div className="rounded-[2rem] border border-slate-200 bg-white p-8 text-center text-slate-700 shadow-sm">
             <p className="text-2xl font-bold text-slate-900">No ideas found</p>
-            <p className="mt-3 text-sm text-slate-600">Try a different search term, category, or date range.</p>
+            <p className="mt-3 text-sm text-slate-600">
+              Try a different search term, category, or date range.
+            </p>
             <div className="mt-6 flex justify-center">
               <Button onPress={resetFilters} variant="primary">
                 Clear Filters
@@ -247,62 +316,13 @@ export default function IdeaPage() {
         ) : (
           <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
             {ideas.map((idea) => (
-              <article
+              <IdeaCard
                 key={idea._id}
-                role="button"
-                tabIndex={0}
-                onClick={() => openIdeaDetails(idea._id)}
-                onKeyDown={(event) => handleCardKeyDown(event, idea._id)}
-                className="group flex h-full cursor-pointer flex-col overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-cyan-200 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-cyan-400/30"
-              >
-                <div className="relative h-56 overflow-hidden bg-slate-100">
-                  <div
-                    className="h-full w-full bg-cover bg-center transition duration-500 group-hover:scale-105"
-                    style={{
-                      backgroundImage: `linear-gradient(180deg, rgba(255,255,255,0.08), rgba(15,23,42,0.12)), url(${idea.imageURL || 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1200&auto=format&fit=crop'})`,
-                    }}
-                  />
-                  <div className="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-cyan-700 shadow-sm backdrop-blur-sm">
-                    {idea.category || 'Uncategorized'}
-                  </div>
-                </div>
-
-                <div className="flex flex-1 flex-col p-5 text-slate-900">
-                  <div className="flex items-center justify-between gap-3 text-xs text-slate-500">
-                    <span>{formatDate(idea.createdAt)}</span>
-                    <span>{idea.commentCount ?? 0} comments</span>
-                  </div>
-
-                  <h2 className="mt-3 min-h-16 text-2xl font-bold tracking-tight text-slate-900">
-                    {idea.title || 'Untitled idea'}
-                  </h2>
-
-                  <p className="mt-3 min-h-20 text-sm leading-7 text-slate-600">
-                    {idea.shortDescription || 'No short description was provided for this idea.'}
-                  </p>
-
-                  <div className="mt-4 grid gap-3 text-sm text-slate-700">
-                    <div className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
-                      <FaMoneyBillWave className="text-cyan-600" />
-                      <span>{formatBudget(idea.estimatedBudget)}</span>
-                    </div>
-                    <div className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
-                      <FaUser className="text-cyan-600" />
-                      <span>{idea.userName || idea.userEmail || 'Anonymous builder'}</span>
-                    </div>
-                  </div>
-
-                  <div className="mt-auto pt-5">
-                    <div className="flex items-center justify-between rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-500">
-                      <span className="inline-flex items-center gap-2">
-                        <FaCalendarAlt className="text-cyan-600" />
-                        {formatDate(idea.createdAt)}
-                      </span>
-                      <span className="font-semibold text-cyan-700">Open details →</span>
-                    </div>
-                  </div>
-                </div>
-              </article>
+                idea={idea}
+                saved={savedIdeaIds.has(idea._id || idea.id || "")}
+                onToggleSave={handleToggleSave}
+                onOpenDetails={openIdeaDetails}
+              />
             ))}
           </div>
         )}
