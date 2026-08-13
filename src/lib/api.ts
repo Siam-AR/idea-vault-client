@@ -180,3 +180,10 @@ export const commentsAPI = {
       method: "DELETE",
     }),
 };
+
+export const interestsAPI = {
+  getReceivedInterests: async () => {
+    const response = await apiCall<{ interests: import("@/types").Interest[] }>("/interests/received");
+    return response.interests || [];
+  },
+};

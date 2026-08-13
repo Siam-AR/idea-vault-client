@@ -83,6 +83,14 @@ const Navbar: React.FC = () => {
           My Interactions
         </Link>
       </li>
+      <li>
+        <Link
+          href="/received-interests"
+          className={navLinkClass(isActive("/received-interests"))}
+        >
+          Received Interests
+        </Link>
+      </li>
     </>
   );
 

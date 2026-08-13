@@ -71,3 +71,20 @@ export interface ApiErrorResponse {
   message: string;
   error?: string;
 }
+
+export interface Interest {
+  _id: string;
+  message: string;
+  createdAt: string;
+  investor: {
+    _id: string;
+    name?: string;
+    email?: string;
+    image?: string;
+  };
+  idea: {
+    _id: string;
+    title?: string;
+    category?: string;
+  };
+}
