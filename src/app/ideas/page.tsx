@@ -147,7 +147,7 @@ export default function IdeaPage() {
 
     try {
       const result = await ideasAPI.bookmarkIdea(normalizedId);
-      return result.saved;
+      return result.isBookmarked;
     } catch (saveError) {
       setSavedIdeaIds((previous) => {
         const next = new Set(previous);

@@ -23,10 +23,6 @@ const Navbar: React.FC = () => {
   const { isDarkMode, toggleTheme } = useTheme();
   const pathname = usePathname();
 
-  const handleSignOut = () => {
-    logout();
-  };
-
   const isActive = (href: string) => pathname === href;
 
   const navLinkClass = (active: boolean) =>
@@ -39,6 +35,119 @@ const Navbar: React.FC = () => {
           ? "hover:text-purple-400"
           : "hover:text-purple-600"
     }`;
+
+  const role = user?.role;
+
+  const guestLinks = (
+    <>
+      <li>
+        <Link href="/" className={navLinkClass(isActive("/"))}>
+          Home
+        </Link>
+      </li>
+      <li>
+        <Link href="/ideas" className={navLinkClass(isActive("/ideas"))}>
+          Ideas
+        </Link>
+      </li>
+    </>
+  );
+
+  const founderLinks = (
+    <>
+      <li>
+        <Link href="/" className={navLinkClass(isActive("/"))}>
+          Home
+        </Link>
+      </li>
+      <li>
+        <Link href="/ideas" className={navLinkClass(isActive("/ideas"))}>
+          Ideas
+        </Link>
+      </li>
+      <li>
+        <Link href="/add-idea" className={navLinkClass(isActive("/add-idea"))}>
+          Add Idea
+        </Link>
+      </li>
+      <li>
+        <Link href="/my-ideas" className={navLinkClass(isActive("/my-ideas"))}>
+          My Ideas
+        </Link>
+      </li>
+      <li>
+        <Link
+          href="/my-interactions"
+          className={navLinkClass(isActive("/my-interactions"))}
+        >
+          My Interactions
+        </Link>
+      </li>
+    </>
+  );
+
+  const investorLinks = (
+    <>
+      <li>
+        <Link href="/" className={navLinkClass(isActive("/"))}>
+          Home
+        </Link>
+      </li>
+      <li>
+        <Link href="/ideas" className={navLinkClass(isActive("/ideas"))}>
+          Ideas
+        </Link>
+      </li>
+      <li>
+        <Link
+          href="/saved-ideas"
+          className={navLinkClass(isActive("/saved-ideas"))}
+        >
+          My Bookmarks
+        </Link>
+      </li>
+      <li>
+        <Link
+          href="/my-interactions"
+          className={navLinkClass(isActive("/my-interactions"))}
+        >
+          My Interactions
+        </Link>
+      </li>
+    </>
+  );
+
+  const adminLinks = (
+    <>
+      <li>
+        <Link href="/" className={navLinkClass(isActive("/"))}>
+          Home
+        </Link>
+      </li>
+      <li>
+        <Link href="/ideas" className={navLinkClass(isActive("/ideas"))}>
+          Ideas
+        </Link>
+      </li>
+      <li>
+        <Link href="/admin" className={navLinkClass(isActive("/admin"))}>
+          Admin Dashboard
+        </Link>
+      </li>
+      <li>
+        <Link
+          href="/my-interactions"
+          className={navLinkClass(isActive("/my-interactions"))}
+        >
+          My Interactions
+        </Link>
+      </li>
+    </>
+  );
+
+  const handleSignOut = () => {
+    logout();
+  };
 
   const bgClass = isDarkMode
     ? "bg-slate-900 text-white"
@@ -63,58 +172,11 @@ const Navbar: React.FC = () => {
 
         {/* Center Navigation */}
         <ul className="hidden md:flex items-center gap-8">
-          <li>
-            <Link href="/" className={navLinkClass(isActive("/"))}>
-              Home
-            </Link>
-          </li>
-          <li>
-            <Link href="/ideas" className={navLinkClass(isActive("/ideas"))}>
-              Ideas
-            </Link>
-          </li>
+          {!isAuthenticated && guestLinks}
 
-          {/* Private Routes - Only for logged in users */}
-          {isAuthenticated && (
-            <>
-              {!isInvestor && (
-                <li>
-                  <Link
-                    href="/add-idea"
-                    className={navLinkClass(isActive("/add-idea"))}
-                  >
-                    Add Idea
-                  </Link>
-                </li>
-              )}
-              {isAdmin && (
-                <li>
-                  <Link
-                    href="/admin"
-                    className={navLinkClass(isActive("/admin"))}
-                  >
-                    Admin
-                  </Link>
-                </li>
-              )}
-              <li>
-                <Link
-                  href="/my-ideas"
-                  className={navLinkClass(isActive("/my-ideas"))}
-                >
-                  My Ideas
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/my-interactions"
-                  className={navLinkClass(isActive("/my-interactions"))}
-                >
-                  My Interactions
-                </Link>
-              </li>
-            </>
-          )}
+          {isAuthenticated && role === "FOUNDER" && founderLinks}
+          {isAuthenticated && role === "INVESTOR" && investorLinks}
+          {isAuthenticated && role === "ADMIN" && adminLinks}
         </ul>
 
         {/* Right Section */}
@@ -226,44 +288,11 @@ const Navbar: React.FC = () => {
       {/* Mobile Menu */}
       <div className="md:hidden flex items-center justify-between px-4 mt-4">
         <ul className="flex gap-4 text-sm">
-          <li>
-            <Link href="/" className="font-medium">
-              Home
-            </Link>
-          </li>
-          <li>
-            <Link href="/ideas" className="font-medium">
-              Ideas
-            </Link>
-          </li>
-          {isAuthenticated && (
-            <>
-              {!isInvestor && (
-                <li>
-                  <Link href="/add-idea" className="font-medium">
-                    Add
-                  </Link>
-                </li>
-              )}
-              {isAdmin && (
-                <li>
-                  <Link href="/admin" className="font-medium">
-                    Admin
-                  </Link>
-                </li>
-              )}
-              <li>
-                <Link href="/my-ideas" className="font-medium">
-                  My Ideas
-                </Link>
-              </li>
-              <li>
-                <Link href="/my-interactions" className="font-medium">
-                  Interactions
-                </Link>
-              </li>
-            </>
-          )}
+          {!isAuthenticated && guestLinks}
+
+          {isAuthenticated && role === "FOUNDER" && founderLinks}
+          {isAuthenticated && role === "INVESTOR" && investorLinks}
+          {isAuthenticated && role === "ADMIN" && adminLinks}
         </ul>
       </div>
     </div>

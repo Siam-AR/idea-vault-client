@@ -139,11 +139,14 @@ export const ideasAPI = {
   getUserIdeas: () => apiCall<Idea[]>("/user/ideas"),
 
   bookmarkIdea: (id: string) =>
-    apiCall<{ message: string; saved: boolean }>(`/ideas/${id}/bookmark`, {
+    apiCall<{ success: boolean; message: string; isBookmarked: boolean }>(`/ideas/${id}/bookmark`, {
       method: "POST",
     }),
 
-  getSavedIdeas: () => apiCall<Idea[]>("/user/saved-ideas"),
+  getSavedIdeas: async () => {
+    const response = await apiCall<{ ideas: Idea[] }>("/user/saved-ideas");
+    return response.ideas || [];
+  },
 
   expressInterest: (id: string, message: string) =>
     apiCall<{ success: boolean; message: string }>(

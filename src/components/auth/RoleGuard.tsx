@@ -46,7 +46,7 @@ export default function RoleGuard({
 
   if (loading) {
     return (
-      <div className="flex min-h-[200px] items-center justify-center px-4 py-10 text-sm text-slate-600">
+      <div className="flex min-h-50 items-center justify-center px-4 py-10 text-sm text-slate-600">
         Loading...
       </div>
     );

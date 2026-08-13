@@ -68,7 +68,7 @@ export default function IdeaCard({
 
     try {
       const result = await onToggleSave?.(ideaId);
-      if (result === false) {
+      if (result === undefined) {
         setIsSaved(previousState);
       }
     } catch (error) {

@@ -6,7 +6,6 @@ import { AuthProvider } from '@/lib/auth-context';
 import { ThemeProvider } from '@/lib/theme-context';
 import { ToastProvider } from '@/lib/toast-context';
 import './globals.css';
-import Script from 'next/script';
 import type { Metadata } from 'next';
 
 const geistSans = Geist({
@@ -25,6 +24,19 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const themeInitScript = `
+    (() => {
+      try {
+        const storageKey = 'ideaVaultTheme';
+        const savedTheme = window.localStorage.getItem(storageKey);
+        const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const theme = savedTheme === 'dark' || savedTheme === 'light' ? savedTheme : (systemPrefersDark ? 'dark' : 'light');
+        document.documentElement.dataset.theme = theme;
+        document.documentElement.style.colorScheme = theme;
+      } catch (error) {}
+    })();
+  `;
+
   return (
     <html
       lang="en"
@@ -32,18 +44,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       suppressHydrationWarning
     >
       <body className="min-h-full container mx-auto" suppressHydrationWarning>
-        <Script id="theme-init" strategy="beforeInteractive">
-          {`(() => {
-            try {
-              const storageKey = 'ideaVaultTheme';
-              const savedTheme = window.localStorage.getItem(storageKey);
-              const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-              const theme = savedTheme === 'dark' || savedTheme === 'light' ? savedTheme : (systemPrefersDark ? 'dark' : 'light');
-              document.documentElement.dataset.theme = theme;
-              document.documentElement.style.colorScheme = theme;
-            } catch (error) {}
-          })();`}
-        </Script>
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
         <ThemeProvider>
           <AuthProvider>
             <ToastProvider>

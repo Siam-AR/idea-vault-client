@@ -50,6 +50,22 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     checkAuth();
   }, []);
 
+  const hydrateUserFromServer = async (
+    fallbackUser?: User | null,
+  ): Promise<User | null> => {
+    const savedToken = localStorage.getItem("token");
+    if (!savedToken) {
+      return fallbackUser ?? null;
+    }
+
+    try {
+      const { user: serverUser } = await authAPI.getUser();
+      return serverUser ?? fallbackUser ?? null;
+    } catch {
+      return fallbackUser ?? null;
+    }
+  };
+
   const register = async (
     data: Record<string, unknown>,
   ): Promise<AuthResponse> => {
@@ -58,7 +74,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const response = await authAPI.register(data);
       localStorage.setItem("token", response.token || "");
       setToken(response.token || null);
-      setUser(response.user || null);
+
+      const userData = await hydrateUserFromServer(response.user ?? null);
+      setUser(userData || null);
       return response;
     } catch (err) {
       const errorMsg =
@@ -76,7 +94,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const response = await authAPI.login(data);
       localStorage.setItem("token", response.token || "");
       setToken(response.token || null);
-      setUser(response.user || null);
+
+      const userData = await hydrateUserFromServer(response.user ?? null);
+      setUser(userData || null);
       return response;
     } catch (err) {
       const errorMsg = err instanceof Error ? err.message : "Login failed";
@@ -93,7 +113,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const response = await authAPI.googleLogin(data);
       localStorage.setItem("token", response.token || "");
       setToken(response.token || null);
-      setUser(response.user || null);
+
+      const userData = await hydrateUserFromServer(response.user ?? null);
+      setUser(userData || null);
       return response;
     } catch (err) {
       const errorMsg =

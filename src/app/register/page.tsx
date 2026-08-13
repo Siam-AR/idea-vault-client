@@ -26,6 +26,10 @@ function RegisterPageContent() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [role, setRole] = useState<UserRole>("FOUNDER");
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -34,22 +38,19 @@ function RegisterPageContent() {
     setIsLoading(true);
 
     try {
-      const form = e.currentTarget as HTMLFormElement & {
-        name: { value: string };
-        email: { value: string };
-        password: { value: string };
-        role: { value: string };
-      };
-      const name = form.name.value.trim();
-      const email = form.email.value.trim();
-      const password = form.password.value;
-      const role = (form.role.value || "FOUNDER") as UserRole;
+      const trimmedName = name.trim();
+      const trimmedEmail = email.trim();
 
-      if (!name || !email || !password) {
+      if (!trimmedName || !trimmedEmail || !password) {
         throw new Error("Please fill in all required fields.");
       }
 
-      await register({ name, email, password, role });
+      await register({
+        name: trimmedName,
+        email: trimmedEmail,
+        password,
+        role,
+      });
       setSuccess("Account created successfully! Redirecting...");
       showToast("Account created successfully!", "success", 2000);
 
@@ -96,6 +97,8 @@ function RegisterPageContent() {
           <TextField isRequired name="name" type="text">
             <Label>Full Name</Label>
             <Input
+              value={name}
+              onChange={(event) => setName(event.target.value)}
               placeholder="John Doe"
               disabled={isLoading}
               className="w-full"
@@ -116,6 +119,9 @@ function RegisterPageContent() {
           >
             <Label>Email Address</Label>
             <Input
+              suppressHydrationWarning
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
               placeholder="john@example.com"
               disabled={isLoading}
               className="w-full"
@@ -143,6 +149,8 @@ function RegisterPageContent() {
           >
             <Label>Password</Label>
             <Input
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
               placeholder="Create a strong password"
               disabled={isLoading}
               className="w-full"
@@ -161,12 +169,19 @@ function RegisterPageContent() {
                   type="radio"
                   name="role"
                   value="FOUNDER"
-                  defaultChecked
+                  checked={role === "FOUNDER"}
+                  onChange={() => setRole("FOUNDER")}
                 />
                 Founder
               </label>
               <label className="flex items-center gap-2 text-sm text-slate-700">
-                <input type="radio" name="role" value="INVESTOR" />
+                <input
+                  type="radio"
+                  name="role"
+                  value="INVESTOR"
+                  checked={role === "INVESTOR"}
+                  onChange={() => setRole("INVESTOR")}
+                />
                 Investor
               </label>
             </div>
