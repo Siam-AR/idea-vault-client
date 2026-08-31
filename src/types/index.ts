@@ -8,6 +8,7 @@ export interface User {
   image?: string;
   avatar?: string;
   role: UserRole;
+  isBlocked?: boolean;
   createdAt?: string;
   updatedAt?: string;
 }

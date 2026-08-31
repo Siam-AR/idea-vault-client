@@ -1,0 +1,50 @@
+[33m1b3a728[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mRABC[m[33m)[m feat(client): add investor interest flow and founder interest dashboard
+[33m9fd4e6b[m feat(client): add role-based auth flow and protected UI
+[33me06ebca[m feat: add role-aware auth, investor actions, and protected UI flows
+[33m9798b49[m feat(rbac): add reusable role guard and founder-only route protections
+[33m0e4ebec[m feat(auth): add client-side role model and signup role selection
+[33m4e3735c[m[33m ([m[1;31morigin/main[m[33m, [m[1;32mmain[m[33m)[m fix: resolve Next.js build crash and OOM memory allocation issues
+[33m4cabfa7[m update .gitignore
+[33mfb0e17a[m refactor: improve comment card idea metadata rendering on My Interactions page
+[33m6e42d97[m fix(client): ensure idea comments and navbar type safety for stable production build
+[33m4bfc2eb[m[33m ([m[1;32mapplyTS[m[33m)[m fix(client): prevent hydration mismatch by deferring theme resolution until mount
+[33m3e74627[m fix(client): normalize API base URL and build fetch URL safely
+[33m9a9e420[m feat(client): convert reusable components and auth route to TypeScript
+[33ma7bd7a4[m feat(ui): migrate core components to TypeScript
+[33mf376b2b[m refactor: migrate app layouts, routes, and pages to TypeScript
+[33m10cd26b[m refactor: migrate shared library files to TypeScript
+[33m9fed7f4[m Enable TypeScript and configure Next.js app
+[33m31a4eb5[m[33m ([m[1;32midea-vault-js[m[33m, [m[1;32mfix/prod[m[33m)[m update readme with live site link
+[33m1d19f6a[m Fix deployment env fallbacks, dynamic origins, and CORS for production
+[33m81e61b9[m make changes for deployment
+[33mcc4abaa[m[33m ([m[1;32mtest[m[33m)[m feat(UI): implement global dark/white theme toggling
+[33me11feb0[m feat: add readme file & global not-found page
+[33ma153ee4[m[33m ([m[1;32mfeature/auth-routing-2.0[m[33m)[m feat(route): protect idea details page and redirect unauthenticated users to login with return path
+[33m7d82ee3[m[33m ([m[1;32mfeature/private-route[m[33m)[m feat(idea-details): make idea-details page private
+[33m52d969f[m[33m ([m[1;32mfeature/ui[m[33m, [m[1;32mfeature/login-redirect[m[33m, [m[1;32mfeature/auth-redirect[m[33m)[m feat(UI): add forget-password button
+[33m369749b[m[33m ([m[1;32mfeature/my-interaction[m[33m)[m feat(my-interaction): add user interaction history and comment activity section
+[33m50d25ce[m[33m ([m[1;32mfeature/my-ideas-2[m[33m)[m feat(my-ideas): add view-details to ideas card
+[33m252709c[m fix: resolve google sign in popup issue
+[33ma1d0dc6[m[33m ([m[1;32mfeature/comment[m[33m)[m fix(comments): fix comment displaying issue
+[33m682e852[m feat(comments): integrate comment CRUD operations
+[33m524f9d6[m[33m ([m[1;32mfeature/my-ideas[m[33m)[m feat(my-idea): enhance my-idea update-info modal
+[33m403dc07[m fix(add-idea): fix add-idea update & delete operation issue
+[33m3cf9c65[m feat(my-ideas): implement my-idea section with update & delete functionality
+[33m34a475e[m[33m ([m[1;32mfeature/add-idea[m[33m)[m feat(add-idea): implement add-idea section
+[33m483e605[m[33m ([m[1;32mfeature/ideas[m[33m)[m feat(ideas): enhance ideas section filtering and info showing
+[33m4bae06c[m feat(ideas-details): implement trending ideas redirects to Idea Details page
+[33mcb4b429[m feat(ideas): implement ideas section with details page
+[33m1d0c0f5[m[33m ([m[1;32mfix/failed-fetch[m[33m, [m[1;32mfeature/ideas-2[m[33m)[m fix: merge conflict
+[33m9c5a00d[m[33m ([m[1;32mfeature/footer[m[33m)[m feat(footer): implement footer section
+[33m9f89021[m feat(info-card): implement 3 info-card on home page
+[33mdd62304[m feat(trending-ideas): implement trending ideas section
+[33m659e312[m feat(trending-ideas): implement trending ideas section
+[33m4e40bac[m[33m ([m[1;32mfeature/banner[m[33m)[m feat(banner): implement banner section
+[33meb15965[m[33m ([m[1;32mfeature/profile[m[33m)[m feat: add centralized route-title mapping
+[33m40dcef1[m[33m ([m[1;32mfix/navbar[m[33m)[m feat(navbar): update navbar profile dropdown
+[33m234b111[m[33m ([m[1;32mfeature/auth[m[33m)[m fix(auth) : resolve Google OAuth non-JSON error
+[33mfab6550[m fix: resolve Google OAuth hoisting error using useCallback
+[33m982ab10[m feat: implement Google OAuth login/signup with auth context integration
+[33maa7fc62[m feat: implement complete authentication system with JWT and custom auth context
+[33mb514ffe[m feat(navbar): implement navbar with theme toggle
+[33md7b8109[m[33m ([m[1;32mcopilot/idea-vault-project-analysis-planning[m[33m)[m init: initialize project with base configuration

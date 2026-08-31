@@ -187,3 +187,20 @@ export const interestsAPI = {
     return response.interests || [];
   },
 };
+
+export const adminAPI = {
+  getStats: () =>
+    apiCall<{
+      totalUsers: number;
+      totalIdeas: number;
+      totalFounders: number;
+      totalInvestors: number;
+    }>("/admin/stats"),
+
+  getUsers: () => apiCall<User[]>("/admin/users"),
+
+  toggleBlockUser: (id: string) =>
+    apiCall<{ message: string; isBlocked: boolean }>(`/admin/users/${id}/block`, {
+      method: "PATCH",
+    }),
+};
