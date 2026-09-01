@@ -63,7 +63,7 @@ export const apiCall = async <T = unknown>(
 
     if (contentType.includes("application/json")) {
       const error = (await response.json()) as ApiErrorResponse;
-      message = error.message || message;
+      message = error.error || error.message || message;
     } else {
       const errorText = await response.text();
       if (errorText) {
