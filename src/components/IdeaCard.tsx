@@ -14,6 +14,7 @@ import type { Idea } from "@/types";
 interface IdeaCardProps {
   idea: Idea;
   saved?: boolean;
+  isAdmin?: boolean;
   onToggleSave?: (ideaId: string) => Promise<boolean | void>;
   onOpenDetails?: (ideaId?: string) => void;
 }
@@ -48,6 +49,7 @@ const formatBudget = (budget?: number | string) => {
 export default function IdeaCard({
   idea,
   saved = false,
+  isAdmin = false,
   onToggleSave,
   onOpenDetails,
 }: IdeaCardProps) {
@@ -112,19 +114,21 @@ export default function IdeaCard({
         <div className="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-cyan-700 shadow-sm backdrop-blur-sm">
           {idea.category || "Uncategorized"}
         </div>
-        <button
-          type="button"
-          aria-label={isSaved ? "Remove idea from saved list" : "Save idea"}
-          onClick={handleSaveToggle}
-          disabled={saving}
-          className={`absolute right-4 top-4 flex h-11 w-11 items-center justify-center rounded-full border text-lg shadow-lg backdrop-blur-sm transition ${
-            isSaved
-              ? "border-amber-200 bg-amber-100 text-amber-600"
-              : "border-slate-200 bg-white/90 text-slate-600 hover:text-amber-500"
-          }`}
-        >
-          {isSaved ? <FaStar /> : <FaHeart />}
-        </button>
+        {!isAdmin && (
+          <button
+            type="button"
+            aria-label={isSaved ? "Remove idea from saved list" : "Save idea"}
+            onClick={handleSaveToggle}
+            disabled={saving}
+            className={`absolute right-4 top-4 flex h-11 w-11 items-center justify-center rounded-full border text-lg shadow-lg backdrop-blur-sm transition ${
+              isSaved
+                ? "border-amber-200 bg-amber-100 text-amber-600"
+                : "border-slate-200 bg-white/90 text-slate-600 hover:text-amber-500"
+            }`}
+          >
+            {isSaved ? <FaStar /> : <FaHeart />}
+          </button>
+        )}
       </div>
 
       <div className="flex flex-1 flex-col p-5 text-slate-900">

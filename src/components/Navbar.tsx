@@ -150,14 +150,6 @@ const Navbar: React.FC = () => {
           Admin Dashboard
         </Link>
       </li>
-      <li>
-        <Link
-          href="/my-interactions"
-          className={navLinkClass(isActive("/my-interactions"))}
-        >
-          My Interactions
-        </Link>
-      </li>
     </>
   );
 

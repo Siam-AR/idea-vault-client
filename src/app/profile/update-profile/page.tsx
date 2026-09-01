@@ -135,29 +135,29 @@ export default function UpdateProfilePage() {
           <div className="flex flex-col gap-2">
             <Label>Profile Photo</Label>
             <div className="flex gap-2 mb-2">
-              <Button 
-                type="button" 
-                size="sm" 
-                variant={imageMode === 'url' ? 'primary' : 'outline'} 
+              <Button
+                type="button"
+                size="sm"
+                variant={imageMode === 'url' ? 'primary' : 'outline'}
                 onPress={() => setImageMode('url')}
               >
                 Image URL
               </Button>
-              <Button 
-                type="button" 
-                size="sm" 
-                variant={imageMode === 'upload' ? 'primary' : 'outline'} 
+              <Button
+                type="button"
+                size="sm"
+                variant={imageMode === 'upload' ? 'primary' : 'outline'}
                 onPress={() => setImageMode('upload')}
               >
                 Upload Photo
               </Button>
             </div>
-            
+
             {imageMode === 'url' ? (
-              <Input 
-                value={image} 
-                onChange={(event) => setImage(event.target.value)} 
-                placeholder="https://example.com/image.jpg" 
+              <Input
+                value={image}
+                onChange={(event) => setImage(event.target.value)}
+                placeholder="https://example.com/image.jpg"
               />
             ) : (
               <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-slate-200 p-6">
@@ -182,10 +182,10 @@ export default function UpdateProfilePage() {
                 ) : (
                   <div className="flex flex-col items-center gap-3">
                     <img src={imagePreview} alt="Preview" className="h-24 w-24 rounded-full object-cover border border-slate-200" />
-                    <Button 
-                      type="button" 
-                      size="sm" 
-                      variant="ghost" 
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="ghost"
                       className="text-red-500"
                       onPress={() => setImagePreview('')}
                     >
@@ -198,11 +198,11 @@ export default function UpdateProfilePage() {
           </div>
 
           <div className="flex items-center gap-3 pt-2">
-            <Button type="submit" variant="primary" isDisabled={isSubmitting || isUploading}>
-              Update Information
-            </Button>
             <Button type="button" variant="outline" onPress={() => router.push('/profile')}>
               Back to profile
+            </Button>
+            <Button type="submit" variant="primary" isDisabled={isSubmitting || isUploading}>
+              Update Information
             </Button>
           </div>
         </form>

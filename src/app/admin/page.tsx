@@ -19,6 +19,7 @@ import {
   FaSignOutAlt 
 } from "react-icons/fa";
 import { Button } from "@heroui/react";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 
 interface AdminStats {
   totalUsers: number;
@@ -110,55 +111,93 @@ export default function AdminDashboardPage() {
   };
 
   const renderOverview = () => (
-    <div className="space-y-8">
-      <section className="overflow-hidden rounded-[2rem] border border-slate-200 bg-white px-6 py-8 shadow-sm md:px-8">
-        <h1 className="text-3xl font-black tracking-tight text-slate-900 md:text-4xl">
+    <div className="space-y-4">
+      <section className="overflow-hidden rounded-[1.5rem] border border-slate-200 bg-white px-5 py-4 shadow-sm md:px-6">
+        <h1 className="text-2xl font-black tracking-tight text-slate-900 md:text-3xl">
           Dashboard Overview
         </h1>
-        <p className="mt-3 text-sm leading-7 text-slate-600 md:text-base">
+        <p className="mt-1 text-sm leading-6 text-slate-600">
           Platform overview and metrics.
         </p>
       </section>
 
-      <section className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        <div className="flex flex-col gap-2 rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
-          <div className="flex items-center gap-3 text-slate-600">
-            <div className="rounded-xl bg-blue-50 p-2 text-blue-600">
-              <FaUsers size={20} />
+      <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="flex flex-col gap-1 rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm">
+          <div className="flex items-center gap-2 text-slate-600">
+            <div className="rounded-xl bg-blue-50 p-1.5 text-blue-600">
+              <FaUsers size={16} />
             </div>
-            <h3 className="font-semibold">Total Users</h3>
+            <h3 className="font-semibold text-sm">Total Users</h3>
           </div>
-          <p className="text-3xl font-bold text-slate-900">{stats?.totalUsers || 0}</p>
+          <p className="text-2xl font-bold text-slate-900">{stats?.totalUsers || 0}</p>
         </div>
 
-        <div className="flex flex-col gap-2 rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
-          <div className="flex items-center gap-3 text-slate-600">
-            <div className="rounded-xl bg-amber-50 p-2 text-amber-600">
-              <FaLightbulb size={20} />
+        <div className="flex flex-col gap-1 rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm">
+          <div className="flex items-center gap-2 text-slate-600">
+            <div className="rounded-xl bg-amber-50 p-1.5 text-amber-600">
+              <FaLightbulb size={16} />
             </div>
-            <h3 className="font-semibold">Total Ideas</h3>
+            <h3 className="font-semibold text-sm">Total Ideas</h3>
           </div>
-          <p className="text-3xl font-bold text-slate-900">{stats?.totalIdeas || 0}</p>
+          <p className="text-2xl font-bold text-slate-900">{stats?.totalIdeas || 0}</p>
         </div>
 
-        <div className="flex flex-col gap-2 rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
-          <div className="flex items-center gap-3 text-slate-600">
-            <div className="rounded-xl bg-purple-50 p-2 text-purple-600">
-              <FaUserAstronaut size={20} />
+        <div className="flex flex-col gap-1 rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm">
+          <div className="flex items-center gap-2 text-slate-600">
+            <div className="rounded-xl bg-purple-50 p-1.5 text-purple-600">
+              <FaUserAstronaut size={16} />
             </div>
-            <h3 className="font-semibold">Founders</h3>
+            <h3 className="font-semibold text-sm">Founders</h3>
           </div>
-          <p className="text-3xl font-bold text-slate-900">{stats?.totalFounders || 0}</p>
+          <p className="text-2xl font-bold text-slate-900">{stats?.totalFounders || 0}</p>
         </div>
 
-        <div className="flex flex-col gap-2 rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
-          <div className="flex items-center gap-3 text-slate-600">
-            <div className="rounded-xl bg-emerald-50 p-2 text-emerald-600">
-              <FaUserTie size={20} />
+        <div className="flex flex-col gap-1 rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm">
+          <div className="flex items-center gap-2 text-slate-600">
+            <div className="rounded-xl bg-emerald-50 p-1.5 text-emerald-600">
+              <FaUserTie size={16} />
             </div>
-            <h3 className="font-semibold">Investors</h3>
+            <h3 className="font-semibold text-sm">Investors</h3>
           </div>
-          <p className="text-3xl font-bold text-slate-900">{stats?.totalInvestors || 0}</p>
+          <p className="text-2xl font-bold text-slate-900">{stats?.totalInvestors || 0}</p>
+        </div>
+      </section>
+
+      {/* Chart Section */}
+      <section className="rounded-[1.5rem] border border-slate-200 bg-white p-5 md:p-6 shadow-sm">
+        <h2 className="mb-4 text-lg font-bold text-slate-900">Platform Metrics Distribution</h2>
+        <div className="h-64 w-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart
+              data={[
+                { name: 'Founders', value: stats?.totalFounders || 0, color: '#9333ea' },
+                { name: 'Investors', value: stats?.totalInvestors || 0, color: '#059669' },
+                { name: 'Ideas', value: stats?.totalIdeas || 0, color: '#d97706' },
+                { name: 'Total Users', value: stats?.totalUsers || 0, color: '#2563eb' }
+              ]}
+              margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+            >
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
+              <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#64748b' }} dy={10} />
+              <YAxis axisLine={false} tickLine={false} tick={{ fill: '#64748b' }} dx={-10} />
+              <Tooltip
+                cursor={{ fill: '#f8fafc' }}
+                contentStyle={{ borderRadius: '1rem', border: '1px solid #e2e8f0', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
+              />
+              <Bar dataKey="value" radius={[6, 6, 0, 0]} maxBarSize={60}>
+                {
+                  [
+                    { name: 'Founders', value: stats?.totalFounders || 0, color: '#9333ea' },
+                    { name: 'Investors', value: stats?.totalInvestors || 0, color: '#059669' },
+                    { name: 'Ideas', value: stats?.totalIdeas || 0, color: '#d97706' },
+                    { name: 'Total Users', value: stats?.totalUsers || 0, color: '#2563eb' }
+                  ].map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.color} />
+                  ))
+                }
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
         </div>
       </section>
     </div>
@@ -333,21 +372,21 @@ export default function AdminDashboardPage() {
           <nav className="flex flex-col gap-2">
             <Button
               variant={activeTab === 'overview' ? "primary" : "ghost"}
-              className="justify-start font-medium"
+              className="w-full justify-start font-medium"
               onPress={() => setActiveTab('overview')}
             >
               <FaTachometerAlt className="mr-2" /> Overview
             </Button>
             <Button
               variant={activeTab === 'users' ? "primary" : "ghost"}
-              className="justify-start font-medium"
+              className="w-full justify-start font-medium"
               onPress={() => setActiveTab('users')}
             >
               <FaUsers className="mr-2" /> Manage Users
             </Button>
             <Button
               variant={activeTab === 'ideas' ? "primary" : "ghost"}
-              className="justify-start font-medium"
+              className="w-full justify-start font-medium"
               onPress={() => setActiveTab('ideas')}
             >
               <FaLightbulb className="mr-2" /> Manage Ideas
@@ -377,7 +416,7 @@ export default function AdminDashboardPage() {
       </aside>
 
       {/* Main Content Area */}
-      <main className="flex-1 overflow-y-auto p-8">
+      <main className="flex-1 overflow-y-auto px-4 py-4 md:px-8 md:pb-8 md:pt-4">
         <div className="mx-auto max-w-7xl relative">
           {renderContent()}
         </div>

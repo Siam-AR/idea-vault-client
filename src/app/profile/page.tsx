@@ -63,7 +63,7 @@ export default function ProfilePage() {
                 </div>
               </div>
               <div className="flex gap-3">
-                <Button variant="secondary" className="text-white" onPress={() => router.push('/profile/update-profile')}>
+                <Button variant="secondary" className="text-black" onPress={() => router.push('/profile/update-profile')}>
                   Update Profile
                 </Button>
                 <Button variant="danger" className="border-white/30 text-white" onPress={handleLogout}>

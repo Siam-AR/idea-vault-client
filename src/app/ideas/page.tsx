@@ -4,6 +4,7 @@ import IdeaCard from "@/components/IdeaCard";
 import Loader from "@/components/Loader";
 import { ideasAPI } from "@/lib/api";
 import { Button } from "@heroui/react";
+import { useAuth } from "@/lib/auth-context";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaFilter, FaSearch } from "react-icons/fa";
@@ -48,6 +49,7 @@ const formatBudget = (budget?: number | string) => {
 
 export default function IdeaPage() {
   const router = useRouter();
+  const { isAdmin } = useAuth();
   const [totalIdeasCount, setTotalIdeasCount] = useState(0);
   const [ideas, setIdeas] = useState<Idea[]>([]);
   const [savedIdeaIds, setSavedIdeaIds] = useState<Set<string>>(new Set());
@@ -320,6 +322,7 @@ export default function IdeaPage() {
                 key={idea._id}
                 idea={idea}
                 saved={savedIdeaIds.has(idea._id || idea.id || "")}
+                isAdmin={isAdmin}
                 onToggleSave={handleToggleSave}
                 onOpenDetails={openIdeaDetails}
               />
