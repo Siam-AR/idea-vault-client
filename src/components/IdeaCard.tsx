@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useToast } from "@/lib/toast-context";
 import {
-  FaCalendarAlt,
+
   FaHeart,
   FaMoneyBillWave,
   FaStar,
@@ -147,19 +147,13 @@ export default function IdeaCard({
             <FaMoneyBillWave className="text-cyan-600" />
             <span>{formatBudget(idea.estimatedBudget)}</span>
           </div>
-          <div className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
-            <FaUser className="text-cyan-600" />
-            <span>
-              {idea.userName || idea.userEmail || "Anonymous builder"}
-            </span>
-          </div>
         </div>
 
         <div className="mt-auto pt-5">
-          <div className="flex items-center justify-between rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-500">
+          <div className="flex items-center justify-between rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700 transition-colors hover:bg-slate-100">
             <span className="inline-flex items-center gap-2">
-              <FaCalendarAlt className="text-cyan-600" />
-              {formatDate(idea.createdAt)}
+              <FaUser className="text-cyan-600" />
+              {idea.userName || idea.userEmail || "Anonymous builder"}
             </span>
             <span className="font-semibold text-cyan-700">Open details →</span>
           </div>

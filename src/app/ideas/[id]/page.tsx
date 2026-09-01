@@ -254,7 +254,7 @@ export default function IdeaDetailsPage() {
           Back to Ideas
         </Link>
 
-        <div className="mt-6 grid gap-6 lg:grid-cols-[1.35fr_0.65fr] lg:items-start">
+        <div className="mt-6 mx-auto max-w-4xl">
           <article className="overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-[0_20px_70px_rgba(15,23,42,0.08)]">
             <div
               className="min-h-80 bg-cover bg-center"
@@ -271,10 +271,6 @@ export default function IdeaDetailsPage() {
                 <span className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-xs font-medium text-slate-600">
                   <FaCalendarAlt />
                   {formatDate(idea.createdAt)}
-                </span>
-                <span className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-xs font-medium text-slate-600">
-                  <FaFire />
-                  {likesCount} likes
                 </span>
               </div>
 
@@ -307,7 +303,9 @@ export default function IdeaDetailsPage() {
                 {insightCards.map((card) => (
                   <div
                     key={card.title}
-                    className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm"
+                    className={`rounded-3xl border border-slate-200 bg-white p-5 shadow-sm ${
+                      card.title === "Detailed Description" ? "md:col-span-2" : ""
+                    }`}
                   >
                     <p className="text-sm font-semibold uppercase tracking-[0.22em] text-cyan-700">
                       {card.title}
@@ -343,53 +341,6 @@ export default function IdeaDetailsPage() {
               />
             </div>
           </article>
-
-          <aside className="space-y-5 lg:sticky lg:top-24">
-            <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-[0_20px_70px_rgba(15,23,42,0.08)]">
-              <p className="text-sm font-semibold uppercase tracking-[0.22em] text-cyan-700">
-                Idea Snapshot
-              </p>
-              <div className="mt-5 space-y-4 text-sm text-slate-700">
-                <div className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
-                  <FaUser className="text-cyan-600" />
-                  <span>
-                    {idea.userName || idea.userEmail || "Anonymous builder"}
-                  </span>
-                </div>
-                <div className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
-                  <FaMoneyBillWave className="text-cyan-600" />
-                  <span>{formatBudget(idea.estimatedBudget)}</span>
-                </div>
-                {isInvestor && (
-                  <Button
-                    className="w-full bg-linear-to-r from-cyan-500 to-blue-600 text-white"
-                    onPress={() => setIsInterestModalOpen(true)}
-                  >
-                    Express Interest
-                  </Button>
-                )}
-                <div className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
-                  <FaCommentDots className="text-cyan-600" />
-                  <span>{idea.commentCount ?? 0} community comments</span>
-                </div>
-                <div className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
-                  <FaCalendarAlt className="text-cyan-600" />
-                  <span>{formatDate(idea.createdAt)}</span>
-                </div>
-              </div>
-
-              <div className="mt-6 rounded-3xl border border-cyan-100 bg-cyan-50 p-5">
-                <p className="text-sm font-semibold text-cyan-700">
-                  Why it matters
-                </p>
-                <p className="mt-3 text-sm leading-7 text-slate-600">
-                  This idea is ready for comments, validation, and iteration.
-                  Explore the concept, review the problem it solves, and use
-                  community feedback to refine it further.
-                </p>
-              </div>
-            </div>
-          </aside>
         </div>
       </div>
 
