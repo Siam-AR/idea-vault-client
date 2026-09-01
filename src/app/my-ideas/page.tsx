@@ -471,7 +471,7 @@ export default function MyIdeaPage() {
                           name="estimatedBudget"
                           value={editForm.estimatedBudget}
                           onChange={handleEditChange}
-                          placeholder="$10,000"
+                          placeholder="BDT 10,000"
                           className="w-full"
                         />
                       </div>

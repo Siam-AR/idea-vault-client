@@ -8,6 +8,8 @@ import { useRouter } from "next/navigation";
 import { ChangeEvent, FormEvent, useEffect, useMemo, useState } from "react";
 import type { User } from "@/types";
 import RoleGuard from "@/components/auth/RoleGuard";
+import "@uploadthing/react/styles.css";
+import { UploadButton } from "@/utils/uploadthing";
 
 const CATEGORIES = [
   "Tech",
@@ -62,6 +64,9 @@ export default function AddIdeaPage() {
   const [form, setForm] = useState<AddIdeaForm>(initialState);
   const [submitting, setSubmitting] = useState(false);
   const [formError, setFormError] = useState("");
+  const [imageMode, setImageMode] = useState<'url' | 'upload'>('url');
+  const [imagePreview, setImagePreview] = useState('');
+  const [isUploading, setIsUploading] = useState(false);
 
   useEffect(() => {
     if (!loading && !isAuthenticated) {
@@ -75,14 +80,18 @@ export default function AddIdeaPage() {
       "shortDescription",
       "detailedDescription",
       "category",
-      "imageURL",
       "targetAudience",
       "problemStatement",
       "proposedSolution",
     ];
 
-    return requiredFields.some((key) => !String(form[key] || "").trim());
-  }, [form]);
+    const hasMissingText = requiredFields.some((key) => !String(form[key] || "").trim());
+    
+    // Check image depending on mode
+    const hasMissingImage = imageMode === 'url' ? !form.imageURL.trim() : !imagePreview.trim();
+    
+    return hasMissingText || hasMissingImage;
+  }, [form, imageMode, imagePreview]);
 
   const handleChange = (
     event: ChangeEvent<
@@ -105,8 +114,10 @@ export default function AddIdeaPage() {
       return;
     }
 
-    if (!isValidHttpUrl(form.imageURL.trim())) {
-      const message = "Please provide a valid Image URL (http/https).";
+    const finalImageURL = imageMode === 'url' ? form.imageURL.trim() : imagePreview.trim();
+
+    if (!isValidHttpUrl(finalImageURL)) {
+      const message = "Please provide a valid Image URL (http/https) or upload a photo.";
       setFormError(message);
       showToast(message, "error", 3000);
       return;
@@ -123,7 +134,7 @@ export default function AddIdeaPage() {
       detailedDescription: form.detailedDescription.trim(),
       category: form.category,
       tags,
-      imageURL: form.imageURL.trim(),
+      imageURL: finalImageURL,
       estimatedBudget: form.estimatedBudget.trim(),
       targetAudience: form.targetAudience.trim(),
       problemStatement: form.problemStatement.trim(),
@@ -138,6 +149,8 @@ export default function AddIdeaPage() {
 
       showToast("Idea submitted successfully!", "success", 2500);
       setForm(initialState);
+      setImagePreview("");
+      setImageMode("url");
       router.push("/ideas");
       router.refresh();
     } catch (error) {
@@ -256,18 +269,74 @@ export default function AddIdeaPage() {
             />
           </label>
 
-          <label className="block md:col-span-2">
+          <div className="block md:col-span-2">
             <span className="mb-2 block text-sm font-medium text-slate-700">
-              Image URL *
+              Idea Image *
             </span>
-            <input
-              name="imageURL"
-              value={form.imageURL}
-              onChange={handleChange}
-              placeholder="https://example.com/idea-image.jpg"
-              className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-cyan-500"
-            />
-          </label>
+            <div className="flex flex-col gap-3">
+              <div className="flex gap-2 mb-2">
+                <Button 
+                  type="button" 
+                  size="sm" 
+                  variant={imageMode === 'url' ? 'primary' : 'outline'} 
+                  onPress={() => setImageMode('url')}
+                >
+                  Image URL
+                </Button>
+                <Button 
+                  type="button" 
+                  size="sm" 
+                  variant={imageMode === 'upload' ? 'primary' : 'outline'} 
+                  onPress={() => setImageMode('upload')}
+                >
+                  Upload Photo
+                </Button>
+              </div>
+
+              {imageMode === 'url' ? (
+                <input
+                  name="imageURL"
+                  value={form.imageURL}
+                  onChange={handleChange}
+                  placeholder="https://example.com/idea-image.jpg"
+                  className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-cyan-500"
+                />
+              ) : (
+                <div className="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-slate-200 p-6 bg-slate-50">
+                  {!imagePreview ? (
+                    <UploadButton
+                      endpoint="imageUploader"
+                      onUploadBegin={() => setIsUploading(true)}
+                      onClientUploadComplete={(res) => {
+                        setIsUploading(false);
+                        if (res && res.length > 0) {
+                          setImagePreview(res[0].url);
+                          showToast("Upload completed!", "success");
+                        }
+                      }}
+                      onUploadError={(error: Error) => {
+                        setIsUploading(false);
+                        showToast(`Upload failed: ${error.message}`, "error");
+                      }}
+                    />
+                  ) : (
+                    <div className="flex flex-col items-center gap-3">
+                      <img src={imagePreview} alt="Preview" className="h-32 w-auto object-contain rounded-md border border-slate-200" />
+                      <Button 
+                        type="button" 
+                        size="sm" 
+                        variant="ghost" 
+                        className="text-red-500 hover:bg-red-50"
+                        onPress={() => setImagePreview('')}
+                      >
+                        Remove image
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
 
           <label className="block">
             <span className="mb-2 block text-sm font-medium text-slate-700">
@@ -277,7 +346,7 @@ export default function AddIdeaPage() {
               name="estimatedBudget"
               value={form.estimatedBudget}
               onChange={handleChange}
-              placeholder="$15,000"
+              placeholder="BDT 15,000"
               className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-cyan-500"
             />
           </label>
@@ -324,7 +393,7 @@ export default function AddIdeaPage() {
           </label>
 
           <div className="md:col-span-2 flex flex-wrap gap-3 pt-2">
-            <Button type="submit" variant="primary" isDisabled={submitting}>
+            <Button type="submit" variant="primary" isDisabled={submitting || isUploading}>
               {submitting ? "Submitting..." : "Submit Idea"}
             </Button>
             <Button

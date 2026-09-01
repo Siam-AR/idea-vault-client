@@ -37,7 +37,7 @@ const formatBudget = (budget?: number | string) => {
   if (typeof budget === "number") {
     return new Intl.NumberFormat("en-US", {
       style: "currency",
-      currency: "USD",
+      currency: "BDT",
       maximumFractionDigits: 0,
     }).format(budget);
   }
