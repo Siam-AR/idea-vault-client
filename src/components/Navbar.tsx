@@ -189,17 +189,7 @@ const Navbar: React.FC = () => {
 
         {/* Right Section */}
         <div className="flex items-center gap-4">
-          {/* Theme Toggle */}
-          <button
-            onClick={toggleTheme}
-            className={`p-2 rounded-lg transition-colors ${themeButtonClass}`}
-          >
-            {isDarkMode ? (
-              <MdDarkMode className="text-white text-xl" />
-            ) : (
-              <MdLightMode className="text-yellow-500 text-xl" />
-            )}
-          </button>
+          {/* Theme Toggle Removed */}
 
           {/* User Dropdown or Auth Links */}
           {isAuthenticated && user ? (

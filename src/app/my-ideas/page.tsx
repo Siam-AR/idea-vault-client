@@ -273,14 +273,10 @@ export default function MyIdeaPage() {
                 Review, update, or delete the ideas you created for the community.
               </p>
             </div>
-            <div className="grid grid-cols-2 gap-3">
-              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-center shadow-sm">
+            <div className="flex justify-end">
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-center shadow-sm min-w-32">
                 <p className="text-2xl font-bold text-slate-900">{ideas.length}</p>
                 <p className="text-sm text-slate-600">Total ideas</p>
-              </div>
-              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-center shadow-sm">
-                <p className="text-2xl font-bold text-slate-900">{ideas.length}</p>
-                <p className="text-sm text-slate-600">Owned by you</p>
               </div>
             </div>
           </div>
@@ -301,7 +297,7 @@ export default function MyIdeaPage() {
             </div>
           </Card>
         ) : (
-          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {ideas.map((idea) => (
               <article
                 key={idea._id ?? idea.title}
@@ -326,18 +322,14 @@ export default function MyIdeaPage() {
 
                   <p className="mt-3 min-h-20 text-sm leading-7 text-slate-600">{idea.shortDescription}</p>
 
-                  <div className="mt-4 grid gap-3 text-sm text-slate-700">
-                    <div className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
-                      <FaMoneyBillWave className="text-cyan-600" />
-                      <span>{formatBudget(idea.estimatedBudget)}</span>
+                  <div className="mt-4 flex gap-3 text-sm text-slate-700">
+                    <div className="flex flex-1 items-center gap-2 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 min-w-0">
+                      <FaMoneyBillWave className="text-cyan-600 shrink-0" />
+                      <span className="truncate">{formatBudget(idea.estimatedBudget)}</span>
                     </div>
-                    <div className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
-                      <FaUser className="text-cyan-600" />
-                      <span>{idea.userName || idea.userEmail || "Anonymous"}</span>
-                    </div>
-                    <div className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
-                      <FaCalendarAlt className="text-cyan-600" />
-                      <span>{idea.commentCount ?? 0} comments</span>
+                    <div className="flex flex-1 items-center gap-2 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 min-w-0">
+                      <FaCalendarAlt className="text-cyan-600 shrink-0" />
+                      <span className="truncate">{idea.commentCount ?? 0} comments</span>
                     </div>
                   </div>
 
