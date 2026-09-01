@@ -30,6 +30,7 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
       ? 'dark'
       : 'light';
 
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setThemeState(resolvedTheme);
     setMounted(true);
   }, []);
