@@ -320,7 +320,7 @@ function LoginPageContent() {
         </Form>
 
         <div className="text-center my-4 text-gray-600">Or continue with</div>
-        <div ref={googleButtonRef} id="google-signin-btn" className="mt-3" />
+        <div ref={googleButtonRef} id="google-signin-btn" className="mt-3 flex justify-center" />
 
         {googleError && (
           <p className="mt-3 text-sm text-amber-700 bg-amber-50 border border-amber-200 rounded-lg p-3">
