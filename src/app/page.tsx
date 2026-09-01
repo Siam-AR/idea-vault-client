@@ -5,9 +5,9 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import Loader from '@/components/Loader';
 import TrendingIdeas from '@/components/TrendingIdeas';
-import InfoHighlights from '@/components/InfoHighlights';
+import CategoryChart from '@/components/CategoryChart';
 import ParticipationSteps from '@/components/ParticipationSteps';
-import CommunityResources from '@/components/CommunityResources';
+import ShareIdeaCTA from '@/components/ShareIdeaCTA';
 import { ideasAPI } from '@/lib/api';
 import { Autoplay, EffectFade, Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -155,9 +155,9 @@ export default function Home() {
       </div>
 
       <TrendingIdeas ideas={featuredIdeas} loading={ideasLoading} error={ideasError} />
-      <InfoHighlights />
+      <CategoryChart />
       <ParticipationSteps />
-      <CommunityResources />
+      <ShareIdeaCTA />
     </div>
   );
 }
