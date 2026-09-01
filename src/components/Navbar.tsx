@@ -26,14 +26,14 @@ const Navbar: React.FC = () => {
   const isActive = (href: string) => pathname === href;
 
   const navLinkClass = (active: boolean) =>
-    `font-medium transition-colors ${
+    `font-medium transition-all duration-200 px-3 py-1.5 rounded-full ${
       active
         ? isDarkMode
-          ? "text-purple-400"
-          : "text-purple-600"
+          ? "text-[#1591DC] bg-[#2C5EAD]/20"
+          : "text-[#1591DC] bg-[#C4E2F5]/40"
         : isDarkMode
-          ? "hover:text-purple-400"
-          : "hover:text-purple-600"
+          ? "text-slate-400 hover:text-white"
+          : "text-slate-600 hover:text-[#1591DC]"
     }`;
 
   const role = user?.role;
@@ -158,9 +158,9 @@ const Navbar: React.FC = () => {
   };
 
   const bgClass = isDarkMode
-    ? "bg-slate-900 text-white"
-    : "bg-white text-slate-900";
-  const borderClass = isDarkMode ? "border-slate-800" : "border-slate-200";
+    ? "bg-[#090D16]/80 backdrop-blur-md text-white shadow-lg shadow-black/20"
+    : "bg-white/80 backdrop-blur-md text-slate-900 shadow-sm";
+  const borderClass = isDarkMode ? "border-white/10" : "border-[#C4E2F5]/70";
   const themeButtonClass = isDarkMode
     ? "bg-slate-800 hover:bg-slate-700"
     : "bg-slate-100 hover:bg-slate-200";
@@ -172,7 +172,7 @@ const Navbar: React.FC = () => {
       <nav className="flex items-center justify-between max-w-7xl mx-auto px-4">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 font-bold text-2xl">
-          <div className="w-10 h-10 bg-linear-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center text-white">
+          <div className="w-10 h-10 bg-linear-to-br from-[var(--brand-deep)] to-[var(--brand-mid)] rounded-lg flex items-center justify-center text-white">
             V
           </div>
           <span>IdeaVault</span>
@@ -283,7 +283,7 @@ const Navbar: React.FC = () => {
               <Link href="/register">
                 <Button
                   size="sm"
-                  className="bg-linear-to-r from-purple-500 to-pink-500 text-white"
+                  className="bg-[var(--action-primary)] hover:bg-[var(--action-hover)] text-white"
                 >
                   Register
                 </Button>

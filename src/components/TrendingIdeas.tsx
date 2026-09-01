@@ -32,7 +32,7 @@ export default function TrendingIdeas({ ideas = [], loading = false, error = '' 
           {error}
         </div>
       ) : (
-        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3 items-stretch">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 items-stretch">
           {ideas.map((idea) => (
             <article
               key={idea._id}

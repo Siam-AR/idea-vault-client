@@ -60,4 +60,19 @@ html, body {
 .text-theme-muted {
   color: var(--text-muted);
 }
+
+/* Swiper Pagination Overrides for Hero */
+.swiper-pagination-bullet {
+  width: 10px !important;
+  height: 10px !important;
+  background-color: rgba(255, 255, 255, 0.4) !important;
+  border-radius: 9999px !important;
+  opacity: 1 !important;
+  transition: all 0.3s ease !important;
+}
+
+.swiper-pagination-bullet-active {
+  width: 32px !important;
+  background-color: var(--brand-bright) !important;
+}
  
