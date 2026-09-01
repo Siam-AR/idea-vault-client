@@ -63,7 +63,7 @@ export default function CategoryChart() {
   }, []);
 
   return (
-    <section className="max-w-7xl mx-auto mt-12 px-4 sm:px-6 lg:px-8">
+    <section className="max-w-7xl mx-auto w-full">
       <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
         <div className="text-center mb-8">
           <h3 className="text-2xl font-bold text-slate-900">Ideas by Category</h3>

@@ -13,7 +13,7 @@ interface TrendingIdeasProps {
 
 export default function TrendingIdeas({ ideas = [], loading = false, error = '' }: TrendingIdeasProps) {
   return (
-    <section className="max-w-7xl mx-auto">
+    <section className="max-w-7xl mx-auto w-full">
       <div className="flex items-end justify-between gap-4 mb-6">
         <div>
           <p className="text-sm font-semibold tracking-[0.25em] uppercase text-purple-600">Trending Ideas</p>

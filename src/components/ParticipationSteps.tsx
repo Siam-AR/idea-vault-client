@@ -30,7 +30,7 @@ const steps: StepItem[] = [
 
 export default function ParticipationSteps() {
   return (
-    <section className="max-w-7xl mx-auto mt-10">
+    <section className="max-w-7xl mx-auto w-full">
       <div className="rounded-2xl surface-panel-soft p-8 shadow-sm">
         <div className="text-center">
           <h3 className="text-2xl font-semibold text-theme">Participation Steps</h3>

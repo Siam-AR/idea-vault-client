@@ -5,7 +5,7 @@ import { FaLightbulb } from "react-icons/fa";
 
 export default function ShareIdeaCTA() {
   return (
-    <section className="max-w-7xl mx-auto mt-12 mb-16 px-4 sm:px-6 lg:px-8">
+    <section className="max-w-7xl mx-auto w-full">
       <div className="relative overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-indigo-900 via-slate-900 to-cyan-900 px-6 py-16 sm:px-12 sm:py-20 lg:px-16 lg:py-24 shadow-2xl">
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1200&auto=format&fit=crop')] bg-cover bg-center opacity-10 mix-blend-overlay"></div>
         <div className="absolute inset-0 bg-gradient-to-t from-slate-900/50 to-transparent"></div>
