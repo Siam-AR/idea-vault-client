@@ -32,7 +32,7 @@ export default function TrendingIdeas({ ideas = [], loading = false, error = '' 
             <h2 className="mt-2 text-2xl md:text-4xl font-bold text-theme">Explore ideas people are talking about right now</h2>
           </div>
           <Link href="/ideas" className="hidden sm:inline-flex">
-            <Button className="border-[var(--brand-deep)] text-[var(--brand-deep)] dark:border-[var(--brand-bright)] dark:text-[var(--brand-bright)] bg-transparent hover:bg-[var(--accent-bg)]" variant="bordered">View All Ideas</Button>
+            <Button className="border border-[var(--border-card)] text-[var(--text-primary)] bg-transparent hover:bg-[var(--accent-bg)]" variant="outline">View All Ideas</Button>
           </Link>
         </div>
 

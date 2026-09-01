@@ -259,7 +259,6 @@ function LoginPageContent() {
             <Input
               value={email}
               onChange={(event) => setEmail(event.target.value)}
-              placeholder="john@example.com"
               disabled={isLoading}
               className="w-full"
               suppressHydrationWarning
@@ -289,7 +288,6 @@ function LoginPageContent() {
             <Input
               value={password}
               onChange={(event) => setPassword(event.target.value)}
-              placeholder="Enter your password"
               disabled={isLoading}
               className="w-full"
               suppressHydrationWarning
@@ -304,7 +302,7 @@ function LoginPageContent() {
           <div className="text-right">
             <Link
               href="/forgot-password"
-              className="text-sm text-purple-600 hover:text-purple-700 font-medium"
+              className="text-sm text-blue-600 hover:text-blue-700 font-medium"
             >
               Forgot Password?
             </Link>
@@ -313,7 +311,7 @@ function LoginPageContent() {
           <div className="flex gap-2">
             <Button
               type="submit"
-              className="w-full bg-linear-to-r from-purple-500 to-pink-500 text-white"
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white"
               isDisabled={isLoading}
             >
               {isLoading ? "LOGGING IN..." : "LOG IN"}
@@ -342,7 +340,7 @@ function LoginPageContent() {
             {"Don't have an account?"}
             <Link
               href={`/register${redirectTo !== "/" ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""}`}
-              className="text-purple-600 hover:text-purple-700 font-semibold ml-1"
+              className="text-blue-600 hover:text-blue-700 font-semibold ml-1"
             >
               Sign Up
             </Link>
