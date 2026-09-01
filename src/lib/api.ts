@@ -186,6 +186,11 @@ export const interestsAPI = {
     const response = await apiCall<{ interests: import("@/types").Interest[] }>("/interests/received");
     return response.interests || [];
   },
+
+  getSentInterests: async () => {
+    const response = await apiCall<{ interests: import("@/types").Interest[] }>("/interests/sent");
+    return response.interests || [];
+  },
 };
 
 export const adminAPI = {

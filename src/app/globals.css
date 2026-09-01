@@ -76,3 +76,6 @@ html, body {
   background-color: var(--brand-bright) !important;
 }
  
+/* Hide scrollbar */
+.hidden-scrollbar::-webkit-scrollbar { display: none; }
+.hidden-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }

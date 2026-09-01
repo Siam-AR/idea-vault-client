@@ -26,7 +26,7 @@ const Navbar: React.FC = () => {
   const isActive = (href: string) => pathname === href;
 
   const navLinkClass = (active: boolean) =>
-    `font-medium transition-all duration-200 px-3 py-1.5 rounded-full ${
+    `whitespace-nowrap font-medium transition-all duration-200 px-2 lg:px-3 py-1.5 rounded-full text-sm lg:text-base ${
       active
         ? isDarkMode
           ? "text-[#1591DC] bg-[#2C5EAD]/20"
@@ -122,6 +122,14 @@ const Navbar: React.FC = () => {
           My Interactions
         </Link>
       </li>
+      <li>
+        <Link
+          href="/my-interests"
+          className={navLinkClass(isActive("/my-interests"))}
+        >
+          My Interests
+        </Link>
+      </li>
     </>
   );
 
@@ -179,13 +187,15 @@ const Navbar: React.FC = () => {
         </Link>
 
         {/* Center Navigation */}
-        <ul className="hidden md:flex items-center gap-2">
-          {!isAuthenticated && guestLinks}
+        <div className="flex-1 overflow-x-auto mx-4 hidden-scrollbar flex justify-center">
+          <ul className="flex items-center gap-1 lg:gap-2 min-w-max">
+            {!isAuthenticated && guestLinks}
 
-          {isAuthenticated && role === "FOUNDER" && founderLinks}
-          {isAuthenticated && role === "INVESTOR" && investorLinks}
-          {isAuthenticated && role === "ADMIN" && adminLinks}
-        </ul>
+            {isAuthenticated && role === "FOUNDER" && founderLinks}
+            {isAuthenticated && role === "INVESTOR" && investorLinks}
+            {isAuthenticated && role === "ADMIN" && adminLinks}
+          </ul>
+        </div>
 
         {/* Right Section */}
         <div className="flex items-center gap-4">
@@ -283,16 +293,7 @@ const Navbar: React.FC = () => {
         </div>
       </nav>
 
-      {/* Mobile Menu */}
-      <div className="md:hidden flex items-center justify-between px-4 mt-4">
-        <ul className="flex gap-4 text-sm">
-          {!isAuthenticated && guestLinks}
 
-          {isAuthenticated && role === "FOUNDER" && founderLinks}
-          {isAuthenticated && role === "INVESTOR" && investorLinks}
-          {isAuthenticated && role === "ADMIN" && adminLinks}
-        </ul>
-      </div>
     </div>
   );
 };

@@ -283,6 +283,18 @@ export default function IdeaDetailsPage() {
                   "No short description was provided for this idea."}
               </p>
 
+              {isInvestor && user?.email !== idea.userEmail && (
+                <div className="mt-6">
+                  <Button
+                    size="lg"
+                    className="bg-linear-to-r from-cyan-500 to-blue-600 font-semibold text-white shadow-md transition-transform hover:-translate-y-0.5"
+                    onPress={() => setIsInterestModalOpen(true)}
+                  >
+                    Express Interest
+                  </Button>
+                </div>
+              )}
+
               <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
                 {details.map((detail) => (
                   <div

@@ -77,7 +77,13 @@ export interface Interest {
   _id: string;
   message: string;
   createdAt: string;
-  investor: {
+  investor?: {
+    _id: string;
+    name?: string;
+    email?: string;
+    image?: string;
+  };
+  founder?: {
     _id: string;
     name?: string;
     email?: string;
