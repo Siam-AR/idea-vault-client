@@ -169,7 +169,7 @@ const Navbar: React.FC = () => {
     <div
       className={`${bgClass} py-4 sticky top-0 z-50 border-b ${borderClass}`}
     >
-      <nav className="flex items-center justify-between max-w-7xl mx-auto px-4">
+      <nav className="flex items-center justify-between max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 font-bold text-2xl">
           <div className="w-10 h-10 bg-linear-to-br from-[var(--brand-deep)] to-[var(--brand-mid)] rounded-lg flex items-center justify-center text-white">
@@ -179,7 +179,7 @@ const Navbar: React.FC = () => {
         </Link>
 
         {/* Center Navigation */}
-        <ul className="hidden md:flex items-center gap-8">
+        <ul className="hidden md:flex items-center gap-2">
           {!isAuthenticated && guestLinks}
 
           {isAuthenticated && role === "FOUNDER" && founderLinks}
