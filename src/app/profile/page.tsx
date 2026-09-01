@@ -89,6 +89,10 @@ export default function ProfilePage() {
                   <span>Avatar</span>
                   <span className="font-medium">{user?.image ? 'Configured' : 'Not set'}</span>
                 </div>
+                <div className="flex items-center justify-between rounded-2xl border border-slate-200 bg-white px-4 py-3">
+                  <span>Role</span>
+                  <span className="font-medium capitalize text-[var(--brand-deep)]">{(user as any)?.role?.toLowerCase() || 'User'}</span>
+                </div>
               </div>
             </div>
 

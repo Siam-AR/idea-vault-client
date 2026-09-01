@@ -230,8 +230,11 @@ const Navbar: React.FC = () => {
                       <p className="text-sm leading-5 font-medium">
                         {user?.name}
                       </p>
-                      <p className="text-xs leading-none text-muted">
+                      <p className="text-xs leading-none text-muted mb-1">
                         {(user as User | null)?.email}
+                      </p>
+                      <p className="text-[10px] font-bold tracking-wider text-[var(--brand-deep)] dark:text-[var(--brand-bright)] uppercase">
+                        {(user as User | null)?.role}
                       </p>
                     </div>
                   </div>
