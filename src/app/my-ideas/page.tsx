@@ -66,9 +66,15 @@ const formatDate = (value?: string) => {
   });
 };
 
-const formatBudget = (budget?: string | number) => {
+const formatBudget = (budget?: number | string) => {
   if (!budget) return "Budget not listed";
-  return budget;
+
+  const num = Number(String(budget).replace(/[^0-9.]/g, ''));
+  if (!isNaN(num) && num > 0) {
+    return `BDT ${num.toLocaleString('en-US')}`;
+  }
+
+  return String(budget).replace(/\$/g, 'BDT ').trim();
 };
 
 const fetchUserIdeas = async (): Promise<Idea[]> => {

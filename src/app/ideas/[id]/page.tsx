@@ -35,15 +35,12 @@ const formatDate = (value?: string) => {
 const formatBudget = (budget?: number | string) => {
   if (!budget) return "Budget not shared";
 
-  if (typeof budget === "number") {
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "BDT",
-      maximumFractionDigits: 0,
-    }).format(budget);
+  const num = Number(String(budget).replace(/[^0-9.]/g, ''));
+  if (!isNaN(num) && num > 0) {
+    return `BDT ${num.toLocaleString('en-US')}`;
   }
 
-  return budget;
+  return String(budget).replace(/\$/g, 'BDT ').trim();
 };
 
 const toTagList = (tags?: string[] | string) => {

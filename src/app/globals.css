@@ -79,3 +79,5 @@ html, body {
 /* Hide scrollbar */
 .hidden-scrollbar::-webkit-scrollbar { display: none; }
 .hidden-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+body { font-family: var(--font-sans), sans-serif; }

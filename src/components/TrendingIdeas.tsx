@@ -11,6 +11,17 @@ interface TrendingIdeasProps {
   error?: string;
 }
 
+const formatBudget = (budget?: number | string) => {
+  if (!budget) return "Not listed";
+
+  const num = Number(String(budget).replace(/[^0-9.]/g, ''));
+  if (!isNaN(num) && num > 0) {
+    return `BDT ${num.toLocaleString('en-US')}`;
+  }
+
+  return String(budget).replace(/\$/g, 'BDT ').trim();
+};
+
 export default function TrendingIdeas({ ideas = [], loading = false, error = '' }: TrendingIdeasProps) {
   return (
     <section className="w-full bg-[var(--surface-elevated)] py-16">
@@ -71,7 +82,7 @@ export default function TrendingIdeas({ ideas = [], loading = false, error = '' 
                 <div className="mt-4 flex items-center justify-between text-xs">
                   <span className="inline-flex items-center gap-1.5 rounded-full bg-[var(--accent-bg)]/50 px-3 py-1 font-medium text-theme border border-[var(--border-card)]">
                     <FaMoneyBillWave className="text-[var(--brand-mid)] text-xs" />
-                    Budget: {idea.estimatedBudget || 'Not listed'}
+                    Budget: {formatBudget(idea.estimatedBudget)}
                   </span>
 
                   <span className="inline-flex items-center gap-1.5 rounded-full bg-[var(--accent-bg)]/50 px-3 py-1 font-medium text-theme border border-[var(--border-card)]">
