@@ -20,13 +20,13 @@ interface CategoryData {
 }
 
 const COLORS = [
-  "#0ea5e9", // cyan-500
-  "#8b5cf6", // violet-500
-  "#f43f5e", // rose-500
-  "#10b981", // emerald-500
-  "#f59e0b", // amber-500
-  "#6366f1", // indigo-500
-  "#ec4899", // pink-500
+  "#2C5EAD", // Color 1 (Deep)
+  "#1591DC", // Color 2 (Mid)
+  "#4BB8FA", // Color 3 (Bright)
+  "#81C7F7", // Tinted Bright
+  "#62A9E5", // Tinted Mid
+  "#3D77BE", // Tinted Deep
+  "#C4E2F5", // Color 4 (Soft)
 ];
 
 export default function CategoryChart() {
@@ -63,14 +63,15 @@ export default function CategoryChart() {
   }, []);
 
   return (
-    <section className="max-w-7xl mx-auto w-full">
-      <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-        <div className="text-center mb-8">
-          <h3 className="text-2xl font-bold text-slate-900">Ideas by Category</h3>
-          <p className="mt-2 text-sm text-slate-500">
-            A visual breakdown of the startup ideas shared by our community.
-          </p>
-        </div>
+    <section className="w-full bg-[var(--surface-base)] py-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 w-full">
+        <div className="rounded-2xl border border-[var(--border-card)] bg-[var(--surface-card)] p-6 shadow-[0_4px_20px_rgba(44,94,173,0.05)]">
+          <div className="text-center mb-8">
+            <h3 className="text-2xl font-bold text-[var(--text-primary)]">Ideas by Category</h3>
+            <p className="mt-2 text-sm text-[var(--text-muted)]">
+              A visual breakdown of the startup ideas shared by our community.
+            </p>
+          </div>
 
         <div className="h-[400px] w-full">
           {loading ? (
@@ -119,6 +120,7 @@ export default function CategoryChart() {
           )}
         </div>
       </div>
-    </section>
+    </div>
+  </section>
   );
 }

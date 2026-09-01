@@ -107,8 +107,11 @@ export default function Home() {
   }
 
   return (
-    <div className="px-4 py-6 md:py-8 space-y-10">
-      <div className="relative rounded-xl overflow-hidden">
+    <div className="w-full flex flex-col">
+      {/* SECTION A: Hero (Base Background) */}
+      <section className="w-full bg-[var(--surface-base)] pt-6 pb-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 w-full">
+          <div className="relative rounded-2xl overflow-hidden shadow-xl border border-[var(--border-card)]">
         <Swiper
           modules={[Autoplay, Pagination, EffectFade]}
           effect="fade"
@@ -143,7 +146,9 @@ export default function Home() {
 
                     <div className="flex gap-4">
                       <Link href="/ideas">
-                        <Button variant="primary">Explore Ideas</Button>
+                        <Button className="bg-[var(--action-primary)] text-white hover:bg-[var(--action-hover)] font-medium border-none">
+                          Explore Ideas
+                        </Button>
                       </Link>
                     </div>
                   </div>
@@ -152,7 +157,9 @@ export default function Home() {
             </SwiperSlide>
           ))}
         </Swiper>
-      </div>
+          </div>
+        </div>
+      </section>
 
       <TrendingIdeas ideas={featuredIdeas} loading={ideasLoading} error={ideasError} />
       <CategoryChart />

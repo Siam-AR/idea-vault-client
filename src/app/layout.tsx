@@ -43,8 +43,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
       suppressHydrationWarning
     >
-      <body className="min-h-full" suppressHydrationWarning>
+      <body className="min-h-full bg-[var(--surface-base)] text-[var(--text-primary)] transition-colors duration-200" suppressHydrationWarning>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+        
         <ThemeProvider>
           <AuthProvider>
             <ToastProvider>
