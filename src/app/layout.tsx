@@ -20,18 +20,16 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const themeInitScript = `
-    (() => {
-      try {
-        const storageKey = 'ideaVaultTheme';
-        const savedTheme = window.localStorage.getItem(storageKey);
-        const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        const theme = savedTheme === 'dark' || savedTheme === 'light' ? savedTheme : (systemPrefersDark ? 'dark' : 'light');
-        document.documentElement.dataset.theme = theme;
-        document.documentElement.style.colorScheme = theme;
-      } catch (error) {}
-    })();
-  `;
+    const themeInitScript = `
+      (() => {
+        try {
+          // Temporarily force light mode
+          const theme = 'light';
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (error) {}
+      })();
+    `;
 
   return (
     <html

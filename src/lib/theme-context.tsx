@@ -22,6 +22,9 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    // Temporarily force light mode
+    const resolvedTheme: ThemeMode = 'light';
+    /* 
     const savedTheme = window.localStorage.getItem(THEME_STORAGE_KEY);
     const systemPrefersDark = window.matchMedia?.('(prefers-color-scheme: dark)')?.matches;
     const resolvedTheme: ThemeMode = savedTheme === 'dark' || savedTheme === 'light'
@@ -29,6 +32,7 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
       : systemPrefersDark
       ? 'dark'
       : 'light';
+    */
 
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setThemeState(resolvedTheme);
@@ -45,11 +49,13 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
   }, [theme, mounted]);
 
   const toggleTheme = () => {
-    setThemeState((currentTheme) => (currentTheme === 'dark' ? 'light' : 'dark'));
+    // Temporarily disabled
+    // setThemeState((currentTheme) => (currentTheme === 'dark' ? 'light' : 'dark'));
   };
 
   const setTheme = (nextTheme: ThemeMode) => {
-    setThemeState(nextTheme);
+    // Temporarily disabled
+    // setThemeState(nextTheme);
   };
 
   const value = useMemo<ThemeContextValue>(
