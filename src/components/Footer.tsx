@@ -5,11 +5,11 @@ import React from "react";
 
 const Footer: React.FC = () => {
   return (
-    <footer className="relative overflow-hidden bg-slate-950 text-white min-h-[100vh] flex flex-col justify-center">
+    <footer className="relative overflow-hidden bg-slate-950 text-white">
       <div className="absolute top-0 left-0 h-72 w-72 rounded-full bg-cyan-500/10 blur-3xl" />
       <div className="absolute right-0 bottom-0 h-72 w-72 rounded-full bg-blue-500/10 blur-3xl" />
 
-      <div className="h-px w-full bg-linear-to-r from-transparent via-white/20 to-transparent" />
+      <div className="h-px w-full bg-gradient-to-r from-transparent via-white/20 to-transparent" />
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 py-8 md:px-6 md:py-16">
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-4 md:gap-12">
