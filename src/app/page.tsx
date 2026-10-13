@@ -113,7 +113,7 @@ export default function Home() {
         {/* Light Mode Depth */}
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#C4E2F5]/40 via-[#F8FAFC] to-white dark:hidden z-[-2]"></div>
         <div className="absolute inset-0 bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] [background-size:20px_20px] opacity-40 dark:hidden z-[-1]"></div>
-        
+
         {/* Dark Mode Depth */}
         <div className="hidden dark:block absolute inset-0 bg-[#070B14] z-[-3]"></div>
         <div className="hidden dark:block absolute top-0 -left-20 w-96 h-96 rounded-full bg-[#2C5EAD]/25 blur-[120px] pointer-events-none z-[-2]"></div>
@@ -121,58 +121,59 @@ export default function Home() {
 
         <div className="w-full relative z-10">
           <div className="relative overflow-hidden shadow-xl shadow-blue-900/5 dark:shadow-2xl dark:shadow-black/60 border-y border-[#C4E2F5] dark:border-white/10">
-        <Swiper
-          modules={[Autoplay, Pagination, EffectFade]}
-          effect="fade"
-          fadeEffect={{ crossFade: true }}
-          autoplay={{ delay: 4500, disableOnInteraction: false }}
-          pagination={{ clickable: true }}
-          loop
-          className="h-[calc(100vh-73px)]"
-        >
-          {slides.map((slide, index) => (
-            <SwiperSlide key={index}>
-              <div
-                className="h-[calc(100vh-73px)] bg-cover bg-center bg-no-repeat relative w-full"
-                style={{
-                  backgroundImage: `url(${slide.image})`,
-                }}
-              >
-                <div
-                  className="absolute inset-0 flex items-center bg-gradient-to-r from-slate-950/90 via-slate-950/65 to-slate-950/20"
-                >
-                  <div className="max-w-7xl mx-auto px-4 sm:px-6 text-left p-8 md:p-14 w-full">
-                    {/* Feature Pill Badge */}
-                    <div className="bg-white/10 backdrop-blur-md border border-white/20 text-blue-200 text-xs font-semibold px-3.5 py-1 rounded-full inline-flex items-center gap-2 mb-4">
-                      ✨ Discover, Validate & Build
-                    </div>
+            <Swiper
+              modules={[Autoplay, Pagination, EffectFade]}
+              effect="fade"
+              fadeEffect={{ crossFade: true }}
+              autoplay={{ delay: 4500, disableOnInteraction: false }}
+              pagination={{ clickable: true }}
+              loop
+              className="h-[calc(100vh-73px)]"
+            >
+              {slides.map((slide, index) => (
+                <SwiperSlide key={index}>
+                  <div
+                    className="h-[calc(100vh-73px)] bg-cover bg-center bg-no-repeat relative w-full"
+                    style={{
+                      backgroundImage: `url(${slide.image})`,
+                    }}
+                  >
+                    <div className="absolute inset-0 flex items-center bg-gradient-to-r from-slate-950/90 via-slate-950/65 to-slate-950/20">
+                      <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 text-left p-6 sm:p-10 md:p-14 lg:p-16 w-full">
+                        {/* Feature Pill Badge */}
+                        <div className="bg-white/10 backdrop-blur-md border border-white/20 text-blue-200 text-xs sm:text-sm font-semibold px-3.5 py-1.5 rounded-full inline-flex items-center gap-2 mb-4 md:mb-5">
+                          ✨ Discover, Validate & Build
+                        </div>
 
-                    <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight leading-tight text-white mb-3">
-                      {slide.title}
-                    </h1>
+                        {/* Responsive Title */}
+                        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold tracking-tight leading-[1.15] text-white mb-4 max-w-2xl lg:max-w-4xl xl:max-w-5xl [text-wrap:balance]">
+                          {slide.title}
+                        </h1>
 
-                    <p className="text-slate-300 text-base md:text-lg max-w-xl mt-3 mb-6">
-                      {slide.description}
-                    </p>
+                        {/* Responsive Description */}
+                        <p className="text-slate-300 text-base sm:text-lg md:text-xl lg:text-2xl font-normal leading-relaxed max-w-xl md:max-w-2xl lg:max-w-3xl xl:max-w-4xl mb-8 [text-wrap:pretty]">
+                          {slide.description}
+                        </p>
 
-                    <div className="flex flex-wrap gap-3">
-                      <Link href="/ideas">
-                        <Button className="bg-[#1591DC] hover:bg-[#2C5EAD] text-white font-medium px-6 py-2.5 rounded-lg shadow-lg shadow-blue-500/25 border-none inline-flex items-center gap-2">
-                          Explore Ideas
-                        </Button>
-                      </Link>
-                      <Link href="/add-idea">
-                        <Button className="bg-white/10 hover:bg-white/20 border border-white/20 text-white px-5 py-2.5 rounded-lg font-medium backdrop-blur-sm ml-3">
-                          Share Your Idea
-                        </Button>
-                      </Link>
+                        {/* CTA Buttons */}
+                        <div className="flex flex-wrap items-center gap-3.5 sm:gap-4">
+                          <Link href="/ideas">
+                            <Button className="bg-[#1591DC] hover:bg-[#2C5EAD] text-white font-medium px-6 sm:px-8 py-3 rounded-lg shadow-lg shadow-blue-500/25 border-none inline-flex items-center gap-2 text-sm sm:text-base h-auto">
+                              Explore Ideas
+                            </Button>
+                          </Link>
+                          <Link href="/add-idea">
+                            <Button className="bg-white/10 hover:bg-white/20 border border-white/20 text-white px-5 sm:px-7 py-3 rounded-lg font-medium backdrop-blur-sm text-sm sm:text-base h-auto">
+                              Share Your Idea
+                            </Button>
+                          </Link>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </div>
-            </SwiperSlide>
-          ))}
-        </Swiper>
+                </SwiperSlide>
+              ))}
+            </Swiper>
           </div>
         </div>
       </section>
